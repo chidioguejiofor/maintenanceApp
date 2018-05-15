@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title> Sign In</title>
+    <script src= "../js/shared-functions.js">
+    </script>
+    <script src= "../js/signinNavigations.js">
+    </script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/signup-signin.css">
 </head>
-<body class = "engineer reset ">
-    
+<body class = "">
+
+    <input id= 'user-type' type="hidden" value =''>
     
             <div class ="reset-group" hidden>
 
@@ -26,8 +31,8 @@
                         </div>
                 
                         <ul class="links">
-                                <li>  Already have an account?  <a href="#">Login</a></li>
-                               <li>   Create account<a href="#"> Here </a></li>
+                                <li>  Already have an account?  <a href="?action=signin">Login</a></li>
+                               <li class ="signup-link-li">   Create account<a href="?action=signup"> Here </a></li>
                         </ul>
                       
                 </div>     
@@ -49,8 +54,8 @@
                                 </div>
                         
                                 <ul class="links">
-                                        <li>  Having trouble?  <a href="#">Reset Password</a></li>
-                                       <li>  Create Account <a href="#"> Here </a></li>
+                                        <li>  Having trouble?  <a href="?action=reset">Reset Password</a></li>
+                                       <li class ="signup-link-li">  Create Account <a href="?action=signup"> Here </a></li>
                                 </ul>
                               
                 </div>
@@ -79,8 +84,8 @@
                                 </div>
                         
                                 <ul class="links">
-                                        <li>  Having trouble?  <a href="#">Reset Password</a></li>
-                                       <li>   Prove that we know you<a href="#"> Login </a></li>
+                                        <li>  Having trouble?  <a href="?action=reset">Reset Password</a></li>
+                                       <li>   Prove that we know you<a href="?action=signin"> Login </a></li>
                                 </ul>
                               
                 </div>

@@ -18,6 +18,10 @@
       url('../images/engineer-login.jpg');
      
 }
+
+.engineer .signup-link-li{
+    display: none;
+}
 .main-flex{
     display: flex;
 
