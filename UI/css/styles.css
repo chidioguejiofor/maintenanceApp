@@ -131,16 +131,8 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     background-blend-mode: darken;
-    
-    
-    
 }
 
-body{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 main{
     display: flex;

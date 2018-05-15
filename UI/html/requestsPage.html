@@ -6,26 +6,47 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Request Page</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/requestPage.css">
 </head>
 <body>
     
-    <main>
-        <div class="side-bar box-3">
-            <ul>
-                <li><a href="#">Create Request</a></li>
-                <li><a href="#">View All Requests</a></li>
-                <li><a href="index.html">Sign Out</a></li>
-            </ul>
 
-        </div>
+        <div class="top-nav">
+                <div>
+                    <a href="#">Create Request</a>
+                </div>
+                <div class="selected">
+                        <a href="#">View All Requests</a>
+                    </div>
+                    <div>
+                            <a href="index.html">Sign Out</a>
+                    </div>
+                    
+        
+            </div>
 
-        <div class ="requests box-9">
-            <ul>
-                <li>Broken Glass</li>
-                <li>Pipe failure</li>
-                <li>Electrical Explosion</li>
-            </ul>
+           
+    <div class = "main">
+        <div class ="requests box-11">
+                
+
+            <div>
+                   <h3>Previous Requests  <select name="filter" id="filter">
+                        <option value="name">Resonded</option>
+                        <option value="name">Pending</option>
+                        <option value="name">Sent</option>
+                        <option value="name">All</option>
+            
+                    </select>  </h3> 
+                    
+                    <ul>
+                            <li>Broken Glass</li>
+                            <li>Pipe failure</li>
+                            <li>Electrical Explosion</li>
+                        </ul>
+            </div>
+            
         </div>
-    </main>
+    </div>
 </body>
 </html>
