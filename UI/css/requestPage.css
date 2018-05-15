@@ -1,6 +1,7 @@
 .main{
     display: flex;
     padding: 3px;
+    margin-top: 20px;
 }
 
 @media( min-width: 414px){
@@ -76,9 +77,9 @@
     background-color: inherit;
 }
 
-.request-details img{
-    width: 50%;
-    height: 50%;
+img{
+    width: 200px;
+    height: 200px;
     margin-left: 1%;
     
 }
@@ -98,16 +99,21 @@ select{
     margin:0;
     margin-bottom: 10px;
 }
-.create-fields li input, .create-fields li textarea{
+.create-fields li input, .create-fields li textarea, .create-fields li label{
     margin:0;
     width: 50%;
     padding: 8px;
     border-radius: 6px;
     border: solid 1px rgba(0, 0, 0, 0.212);
-
-    
 }
+.create-fields li label{
+    width: 100%;
+    color: rgb(208, 78,  5);
+    font-weight: bold;
+    font-family: 'Kelly Slab', cursive;
+    margin-bottom: 10px;
 
+}
 
 
 

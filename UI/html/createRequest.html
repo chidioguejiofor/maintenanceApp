@@ -33,7 +33,7 @@
                 
 
             <div>
-                <input type="file" hidden>
+                <input id ="image-file" type="file" onchange =" handleImageChange(event)" hidden>
                 <div>
 
                         <div class = "box" > 
@@ -42,11 +42,14 @@
                        
                         <div >
                             <ul class= "create-fields">
-                                <li><input type="email" placeholder="Email Address"></li>
+                                <li><img src="../images/no-image.png" alt=""></li>
+                                    <li><label for="image-file">Click to Add image</label></li>
                                 <li><input type="text" placeholder="Title"></li>
                                 <li><input type="text" placeholder="Location"></li>
+                              
                                 <li><textarea name="" id="" cols="30" rows="10" placeholder="Description"></textarea></li>
                                 <li><button class ="primary-btn">Make Request</button></li>
+                               
                             </ul>
                             
                         </div>
