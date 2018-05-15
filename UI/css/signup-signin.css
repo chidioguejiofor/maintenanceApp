@@ -1,0 +1,101 @@
+
+.user{
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url('../images/user-login.jpg');
+     
+}
+
+
+
+.engineer{
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.8), 
+        rgba(0, 0, 0, 0.8)
+      ),
+      url('../images/engineer-login.jpg');
+     
+}
+.main-flex{
+    display: flex;
+
+}
+
+.signup-group{
+  
+    padding: 3px 0;
+}
+
+.signup-group, .reset-group, .signin-group  {
+    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+   
+}
+
+.signup-group, .reset-group, .signin-group{
+   display: none;
+}
+
+.signup .signup-group, .reset .reset-group, .signin .signin-group{
+    display: flex;
+}
+
+.box{
+    
+    margin-bottom: 10px;
+    align-self: center;
+}
+
+
+.box-8{
+    flex: 8;
+}
+input{
+    height: 80%;
+    width: 100%;
+    padding-left: 10px;
+    
+}
+button{
+  font-size: 18px;
+  
+
+}
+
+.links  li{
+    text-align:  left;
+    list-style-type: none;
+    font-size: 18px;
+    font-family: 'Port Lligat Slab', serif;
+    margin: 0;
+    margin-top: 3px;
+    font-size: calc(1.5em - 5px);
+  
+}
+
+.links  li a {
+    font-size: calc(1.5em - 3px);
+    color: rgb(248, 155, 101);
+}
+
+.links li a:hover {
+    text-decoration: underline;
+}
+ul{
+    margin-left: 0;
+    padding: 0;
+}
+input{
+    height: 100%;
+    width: 100%;
+    flex-basis: 100%;
+    font-size: 1.5em;
+    padding: 10px;
+    border-radius: 10px;
+    font-family:  'Shadows Into Light', cursive, serif;
+}
