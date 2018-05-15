@@ -101,9 +101,7 @@ input, select {
     vertical-align:middle;
 }
 /* end reset browser styles */
-
-@import url('https://fonts.googleapis.com/css?family=Lobster|Oswald|Shadows+Into+Light|Ultra|Vidaloka');
-
+@import url('https://fonts.googleapis.com/css?family=Lobster|Oswald|Port+Lligat+Slab|Shadows+Into+Light|Ultra|Vidaloka');
 *{
     text-decoration: none;
     margin: 0;
@@ -130,7 +128,7 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     background-blend-mode: darken;
-    display: flex;
+    display: flex; display: flex;
     align-items: center;
     justify-content: center;
     color: white;
@@ -180,6 +178,7 @@ h3{
     padding: 6px;
     border-radius: 5px;
     flex-basis: 10%;
+    border-style: none;
 }
 
 .secondary-btn{
@@ -202,3 +201,4 @@ h3{
     flex-basis: 200px;
     display: block;
 }
+
