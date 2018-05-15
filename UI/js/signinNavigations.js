@@ -1,6 +1,10 @@
-window.addEventListener('load', (event)=> {
-    let user = getParameterByName('user'); 
-    let action = getParameterByName('action'); 
+window.addEventListener('load', (event) => {
+    initPage();
+});
+
+function initPage(url){
+    let user = getParameterByName('user', url); 
+    let action = getParameterByName('action', url); 
 
     user = user === 'engineer' ? user : 'client';
     action =  action === 'signup' || action === 'reset' ?action : 'signin';
@@ -13,4 +17,13 @@ window.addEventListener('load', (event)=> {
     }
 
     document.getElementById('user-type').value = user;
-});
+}
+
+function handleClick(event){
+    if(event.target.tagName.toLowerCase() === 'a'){
+        event.stopPropagation(); 
+        event.preventDefault();
+        initPage(event.target.href);
+    }
+  
+}
