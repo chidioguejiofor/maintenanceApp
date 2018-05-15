@@ -124,6 +124,9 @@ html, body{
         rgba(0, 0, 0, 0.5)
       ),
       url('../images/background.jpg');
+      display: flex;
+      justify-content: center;
+      align-items: center;
 }
 body{
     
