@@ -101,7 +101,8 @@ input, select {
     vertical-align:middle;
 }
 /* end reset browser styles */
-@import url('https://fonts.googleapis.com/css?family=Lobster|Oswald|Port+Lligat+Slab|Shadows+Into+Light|Ultra|Vidaloka');
+@import url('https://fonts.googleapis.com/css?family=Kelly+Slab|Lobster|Oswald|Port+Lligat+Slab|Shadows+Into+Light|Ultra|Vidaloka');
+
 *{
     text-decoration: none;
     margin: 0;
@@ -218,3 +219,6 @@ h3{
 .box-10{flex: 10;}
 .box-11{flex: 11;}
 
+input, textarea{
+    font-family:  'Shadows Into Light', cursive, serif;
+}
