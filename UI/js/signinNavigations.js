@@ -5,8 +5,8 @@ window.addEventListener('load', (event) => {
 function initPage(url){
     let user = getParameterByName('user', url); 
     let action = getParameterByName('action', url); 
-
     user = user === 'engineer' ? user : 'user';
+
     action =  action === 'signup' || action === 'reset' ?action : 'signin';
 
 
@@ -15,7 +15,6 @@ function initPage(url){
     for(let anchor of document.querySelectorAll('a[href]')){
         anchor.href += `&user=${user}`;
     }
-
 }
 
 function handleClick(event){

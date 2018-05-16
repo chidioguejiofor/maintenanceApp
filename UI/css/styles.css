@@ -103,6 +103,7 @@ input, select {
 /* end reset browser styles */
 @import url('https://fonts.googleapis.com/css?family=Kelly+Slab|Lobster|Oswald|Port+Lligat+Slab|Shadows+Into+Light|Ultra|Vidaloka');
 
+
 *{
     text-decoration: none;
     margin: 0;
@@ -140,6 +141,7 @@ body{
 
 main{
     display: flex;
+
     align-items: center;
     justify-content: center;
     color: white;
@@ -225,3 +227,4 @@ h3{
 input, textarea{
     font-family:  'Shadows Into Light', cursive, serif;
 }
+
