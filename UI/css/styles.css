@@ -101,7 +101,9 @@ input, select {
     vertical-align:middle;
 }
 /* end reset browser styles */
-@import url('https://fonts.googleapis.com/css?family=Lobster|Oswald|Port+Lligat+Slab|Shadows+Into+Light|Ultra|Vidaloka');
+@import url('https://fonts.googleapis.com/css?family=Kelly+Slab|Lobster|Oswald|Port+Lligat+Slab|Shadows+Into+Light|Ultra|Vidaloka');
+
+
 *{
     text-decoration: none;
     margin: 0;
@@ -117,23 +119,33 @@ html, body{
      
 }
 
-body{
+.welcome-page{
     background-image: linear-gradient(
-      rgba(0, 0, 0, 0.5), 
-      rgba(0, 0, 0, 0.5)
-    ),
-    url('../images/background.jpg');
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url('../images/background.jpg');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+body{
+    
     /* background-image: url('../images/background.jpg'); */
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-blend-mode: darken;
-    display: flex; display: flex;
+}
+
+
+main{
+    display: flex;
+
     align-items: center;
     justify-content: center;
     color: white;
     font-family: NonStop;
-    
 }
 
 @media  screen and (max-width: 414px){
@@ -149,7 +161,6 @@ body{
     }
 
     .box-1{
-       
         margin-bottom: 10px;
     }
 }
@@ -199,6 +210,21 @@ h3{
 
 .box-1{
     flex-basis: 200px;
-    display: block;
+    flex: 1;
+}
+
+.box-2{flex: 2;}
+.box-3{flex: 3;}
+.box-4{flex: 4;}
+.box-5{flex: 5;}
+.box-6{flex: 6;}
+.box-7{flex: 7;}
+.box-8{flex: 8;}
+.box-9{flex: 9;}
+.box-10{flex: 10;}
+.box-11{flex: 11;}
+
+input, textarea{
+    font-family:  'Shadows Into Light', cursive, serif;
 }
 

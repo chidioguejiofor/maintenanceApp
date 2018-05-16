@@ -1,0 +1,119 @@
+.main{
+    display: flex;
+    padding: 3px;
+    margin-top: 20px;
+}
+
+@media( min-width: 414px){
+    .top-nav div{
+       padding: 10px;
+       
+    }
+}
+
+.top-nav a{
+    font-size: 1.2em;
+    color: white;
+    font-family: 'Kelly Slab', cursive;
+ 
+}
+
+.top-nav div{
+    border: solid 0 white;
+    border-right-width: 2px;
+    margin-left: 20px;
+   
+}
+
+.top-nav div:last-of-type{
+    border-right-width: 0;
+}
+.top-nav{
+    display: flex;
+    text-align: center;
+    padding: 10px;
+   
+    background-color:  rgb( 79,152, 43);
+    box-shadow: 3px 1px 3px rgba(0 , 0 ,0 ,0.6);
+}
+.requests{
+   
+    justify-self: flex-start;
+    align-self: flex-start;
+}
+
+.requests div{
+    margin-top: 1%;
+}
+
+.selected{
+   font-size: 1.3em;
+   font-weight: bold;
+}
+.requests div li{
+    margin-top: 15px;
+    background-color:rgba( 67,207,  0, 0.3);
+    color: black;
+    text-align: left;
+    list-style: none;
+    padding: 14px;
+    font-size: 20px;
+    font-family: 'Shadows Into Light', cursive, serif;
+
+}
+
+.requests div li:hover{
+    background-color:rgba( 67,207,  0, 0.6);
+  
+}
+
+
+.requests .request-details  li:hover{
+    background-color: inherit;
+  
+}
+.requests .request-details li {
+    text-align: center;
+    background-color: inherit;
+}
+
+img{
+    width: 200px;
+    height: 200px;
+    margin-left: 1%;
+    
+}
+select{
+    height: 100%;
+    width: 10%;
+    font-size:18px;
+
+}
+
+.create-fields{
+    margin:0;
+
+}
+
+.create-fields li{
+    margin:0;
+    margin-bottom: 10px;
+}
+.create-fields li input, .create-fields li textarea, .create-fields li label{
+    margin:0;
+    width: 50%;
+    padding: 8px;
+    border-radius: 6px;
+    border: solid 1px rgba(0, 0, 0, 0.212);
+}
+.create-fields li label{
+    width: 100%;
+    color: rgb(208, 78,  5);
+    font-weight: bold;
+    font-family: 'Kelly Slab', cursive;
+    margin-bottom: 10px;
+
+}
+
+
+
