@@ -1,0 +1,41 @@
+{
+  "name": "maintenanceapp",
+  "version": "1.0.0",
+  "description": "This API functionality that make it easy for a user to remotely send a maintenanec request to an admin",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "babel-node  server/app.js --presets env",
+    "test": "  nyc mocha  --reporter progress --require babel-core/register \"server/test/**/*.test.js\" --exit || true",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "build": "babel ./server/ -d build --copy-files -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chidioguejiofor/maintenanceApp.git"
+  },
+  "author": "Oguejiofor Chidiebere",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chidioguejiofor/maintenanceApp/issues"
+  },
+  "homepage": "https://github.com/chidioguejiofor/maintenanceApp#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.6.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "nodemon": "^1.17.4",
+    "supertest": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.8.2",
+    "mocha": "^5.1.1",
+    "nyc": "^11.7.1"
+  }
+}
