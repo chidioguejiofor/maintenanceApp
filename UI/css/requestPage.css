@@ -4,6 +4,7 @@
     margin-top: 20px;
 }
 
+
 @media( min-width: 414px){
     .top-nav div{
        padding: 10px;
@@ -36,13 +37,14 @@
     background-color:  rgb( 79,152, 43);
     box-shadow: 3px 1px 3px rgba(0 , 0 ,0 ,0.6);
 }
-.requests{
+.requests, .statistics{
    
     justify-self: flex-start;
     align-self: flex-start;
 }
 
-.requests div{
+
+.requests div, .statistics div{
     margin-top: 1%;
 }
 
@@ -50,7 +52,9 @@
    font-size: 1.3em;
    font-weight: bold;
 }
-.requests div li{
+
+
+.statistics div li, .requests div li{
     margin-top: 15px;
     background-color:rgba( 67,207,  0, 0.3);
     color: black;
@@ -60,6 +64,13 @@
     font-size: 20px;
     font-family: 'Shadows Into Light', cursive, serif;
 
+}
+
+.statistics div li {
+    text-align: center;
+    background-color: inherit;
+    margin-left: 20%;
+    text-align: left;
 }
 
 .requests div li:hover{
@@ -75,6 +86,48 @@
 .requests .request-details li {
     text-align: center;
     background-color: inherit;
+}
+.manage-request .requests .request-details li:nth-child(n+2){
+   align-self: flex-start;
+   text-align: left;
+} 
+
+.manage-request .controls li, .manage-request .controls li:hover{
+    background-color: inherit;
+    text-align: center;
+}
+.manage-request .request-details  li span{
+    color: rgb(240, 86,  0);
+
+}
+.manage-request .controls {
+    align-self:center;
+    justify-self: center;
+    border: solid 0 black;
+    border-left-width: 1px;
+ }
+.controls-li{
+    opacity: 0;
+    transition: opacity 400ms ease-in;
+}
+.danger{
+    background-color: rgb(240, 89, 80);
+}
+
+.danger-text{
+    color: rgb(240, 89, 80);
+}
+.danger:hover{
+    background-color: rgb(250, 29, 80);
+}
+.okay{
+    background-color: rgb( 79,152, 43);
+}
+ 
+
+
+.control-group, #approved-controls{
+    transition:  opacity 400ms ease-in;
 }
 
 img{

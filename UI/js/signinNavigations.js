@@ -15,6 +15,10 @@ function initPage(url){
     for(let anchor of document.querySelectorAll('a[href]')){
         anchor.href += `&user=${user}`;
     }
+    if(user ==='engineer'){
+        document.querySelector('form').action =  'engineerRequestsPage.html' ;
+    }
+   
 }
 
 function handleClick(event){
