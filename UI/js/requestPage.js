@@ -36,8 +36,19 @@ function handleControlsClick(event){
             .opacity = currentOpacity %2; 
 
     } else if( button.name === 'approve'){
-        document.getElementById('approved-controls').style.opacity = 1;
+        const controls =document.getElementById('approved-controls');
+        console.dir(controls);
+        controls.hidden = false;
         document.getElementById('initial-controls').hidden = 'hidden';
+        controls.style.opacity = 01;
         
+        
+    } else if (button.name ==='begin'){
+        button.hidden = true;
+        const beginControls = document.getElementById('begin-controls');
+        beginControls.hidden= false;
+        beginControls.opacity =1;
+    } else if( button.name == 'reject'){
+        window.location.href = 'rejectRequest.html';
     }
 }

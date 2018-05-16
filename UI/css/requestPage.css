@@ -37,13 +37,14 @@
     background-color:  rgb( 79,152, 43);
     box-shadow: 3px 1px 3px rgba(0 , 0 ,0 ,0.6);
 }
-.requests{
+.requests, .statistics{
    
     justify-self: flex-start;
     align-self: flex-start;
 }
 
-.requests div{
+
+.requests div, .statistics div{
     margin-top: 1%;
 }
 
@@ -51,7 +52,9 @@
    font-size: 1.3em;
    font-weight: bold;
 }
-.requests div li{
+
+
+.statistics div li, .requests div li{
     margin-top: 15px;
     background-color:rgba( 67,207,  0, 0.3);
     color: black;
@@ -61,6 +64,13 @@
     font-size: 20px;
     font-family: 'Shadows Into Light', cursive, serif;
 
+}
+
+.statistics div li {
+    text-align: center;
+    background-color: inherit;
+    margin-left: 20%;
+    text-align: left;
 }
 
 .requests div li:hover{
@@ -116,9 +126,8 @@
  
 
 
-#approved-controls{
+.control-group, #approved-controls{
     transition:  opacity 400ms ease-in;
-    opacity: 0;
 }
 
 img{

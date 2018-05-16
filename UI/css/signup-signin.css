@@ -2,8 +2,8 @@
 .user{
 
     background-image: linear-gradient(
-      rgba(0, 0, 0, 0.5), 
-      rgba(0, 0, 0, 0.5)
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.8)
     ),
     url('../images/background.jpg');
   
@@ -65,12 +65,7 @@ body{
 .box-8{
     flex: 8;
 }
-input{
-    height: 80%;
-    width: 100%;
-    padding-left: 10px;
-    
-}
+
 button{
   font-size: 18px;
   
