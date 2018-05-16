@@ -190,6 +190,7 @@ h3{
     border-radius: 5px;
     flex-basis: 10%;
     border-style: none;
+    margin-left: 4px;
 }
 
 .secondary-btn{

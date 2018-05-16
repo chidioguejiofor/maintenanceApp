@@ -4,6 +4,7 @@
     margin-top: 20px;
 }
 
+
 @media( min-width: 414px){
     .top-nav div{
        padding: 10px;
@@ -75,6 +76,49 @@
 .requests .request-details li {
     text-align: center;
     background-color: inherit;
+}
+.manage-request .requests .request-details li:nth-child(n+2){
+   align-self: flex-start;
+   text-align: left;
+} 
+
+.manage-request .controls li, .manage-request .controls li:hover{
+    background-color: inherit;
+    text-align: center;
+}
+.manage-request .request-details  li span{
+    color: rgb(240, 86,  0);
+
+}
+.manage-request .controls {
+    align-self:center;
+    justify-self: center;
+    border: solid 0 black;
+    border-left-width: 1px;
+ }
+.controls-li{
+    opacity: 0;
+    transition: opacity 400ms ease-in;
+}
+.danger{
+    background-color: rgb(240, 89, 80);
+}
+
+.danger-text{
+    color: rgb(240, 89, 80);
+}
+.danger:hover{
+    background-color: rgb(250, 29, 80);
+}
+.okay{
+    background-color: rgb( 79,152, 43);
+}
+ 
+
+
+#approved-controls{
+    transition:  opacity 400ms ease-in;
+    opacity: 0;
 }
 
 img{

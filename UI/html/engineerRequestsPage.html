@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Request Page</title>
+    <script src ="../js/requestPage.js">
+    </script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/requestPage.css">
+</head>
+<body>
+    
+
+        <div class="top-nav">
+                <div>
+                    <a href="engineerStats.html">Statistics</a>
+                </div>
+                <div class="selected">
+                        <a href="#">View All Requests</a>
+                    </div>
+                    <div>
+                            <a href="index.html">Sign Out</a>
+                    </div>
+            </div>
+
+           
+    <div class = "main">
+        <div class ="requests box-11">
+            <div>
+                   <h3>Filter By:  <select name="filter" id="filter">
+                        <option value="name">Responded</option>
+                        <option value="name">Pending</option>
+                        <option value="name">Sent</option>
+                        <option value="name">All</option>
+            
+                    </select>  </h3> 
+                    
+                    <ul onclick="handleItemClick(event, 'engineer')">
+                            <li data-id="broken-glass">Broken Glass</li>
+                            <li data-id="pipe-failure">Pipe failure</li>
+                            <li data-id="electrical-explosion">Electrical Explosion</li>
+                    </ul>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
