@@ -1,12 +1,12 @@
 /*  eslint no-unused-expressions: off */
 /*  eslint no-undef: off */
 
-import { expect } from 'chai';
+import { expect, assert } from 'chai';
 import userService from '../../services/userService';
 import DummyData from '../../dummys/DummyData';
 import User from '../../models/User';
 
-DummyData.createAdmin(new User('super', 'super', 'super@email.com', 'engineer'));
+DummyData.addUser(new User('super', 'super', 'super@email.com', 'engineer'));
 
 
 describe('userService', () => {
@@ -26,16 +26,16 @@ describe('userService', () => {
     });
 
     it('should be of userType = "engineer"', () => {
-      expect(admin).to.have.property('userType')
-        .to.be.equal.to('engineer');
+      expect(admin).property('userType')
+        .equal('engineer');
     });
   });
 
   describe('createUser method ', () => {
-    const badUserName = '';
+    const badUsername = '';
     const badPassword = 'chi';
     const badCallResult =
-        userService.createUser(new User(badUserName, badPassword, 'chmail.com', 'client'));
+        userService.createUser(new User(badUsername, badPassword, 'chmail.com', 'client'));
     const goodCallResult =
         userService.createUser(new User('username', 'password', 'e@emaol.com', 'client'));
 
@@ -76,15 +76,15 @@ describe('userService', () => {
     const engineer = userService.getByCredentials(username, password);
     describe('bad call', () => {
       it('should return undefined when an empty string is passed', () => {
-        expect(userService.getById('')).to.be.undefineds;
+        expect(userService.getById('')).to.be.undefined;
       });
 
       it('should return undefined when an noting is passed', () => {
-        expect(userService.getById()).to.be.undefineds;
+        expect(userService.getById()).to.be.undefined;
       });
 
       it('should return undefined when an invalid objects is passed', () => {
-        expect(userService.getById({})).to.be.undefineds;
+        expect(userService.getById({})).to.be.undefined;
       });
     });
 
