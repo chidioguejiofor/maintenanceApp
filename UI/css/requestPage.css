@@ -1,7 +1,10 @@
 .main{
     display: flex;
     padding: 3px;
-    margin-top: 20px;
+    height: 90%;
+  
+    justify-content: center;
+   
 }
 
 
@@ -15,7 +18,7 @@
 .top-nav a{
     font-size: 1.2em;
     color: white;
-    font-family: 'Kelly Slab', cursive;
+    font-family: 'Kelly Slab';
  
 }
 
@@ -33,14 +36,19 @@
     display: flex;
     text-align: center;
     padding: 10px;
-   
-    background-color:  rgb( 79,152, 43);
-    box-shadow: 3px 1px 3px rgba(0 , 0 ,0 ,0.6);
+    justify-content: center;
+    background-color:rgba(208, 79, 5, 0.877);
+    box-shadow: 3px 1px 9px rgba(255, 255, 255, 0.6);
+    color: white;
+}
+
+h3{
+    color:white;
 }
 .requests, .statistics{
    
-    justify-self: flex-start;
-    align-self: flex-start;
+    width: 70%;
+
 }
 
 
@@ -56,14 +64,30 @@
 
 .statistics div li, .requests div li{
     margin-top: 15px;
-    background-color:rgba( 67,207,  0, 0.3);
-    color: black;
+    color: white;
+    
     text-align: left;
+    background-color: rgba(253, 252, 252, 0.199);
+    color: rgb(255, 242, 242);
     list-style: none;
     padding: 14px;
-    font-size: 20px;
-    font-family: 'Shadows Into Light', cursive, serif;
+    font-size: 25px;
+    font-family: 'Shadows Into Light', serif;
+    border-radius: 10px;
 
+
+}
+.requests div .brief-requests li{
+    margin-left: 20%;
+    width: 60%;
+}
+
+h1,h2,h3,h4{
+    color: white;
+}
+
+.controls{
+    background-color: rgba(176, 94, 50, 0.048);
 }
 
 .statistics div li {
@@ -73,14 +97,11 @@
     text-align: left;
 }
 
-.requests div li:hover{
-    background-color:rgba( 67,207,  0, 0.6);
-  
-}
 
 
 .requests .request-details  li:hover{
     background-color: inherit;
+   
   
 }
 .requests .request-details li {
@@ -92,13 +113,26 @@
    text-align: left;
 } 
 
+.manage-request .request-details li:nth-child(n+2){
+    background-color: rgba(253, 252, 252, 0.199);
+    color: rgb(255, 242, 242);
+    font-weight: bold;
+}
 .manage-request .controls li, .manage-request .controls li:hover{
     background-color: inherit;
     text-align: center;
 }
 .manage-request .request-details  li span{
-    color: rgb(240, 86,  0);
+    
+    font-weight: lighter    ;
 
+}
+
+
+input[type =text], textarea{
+    background-color: rgba(253, 252, 252, 0.199);
+    color: rgb(255, 242, 242);
+    font-size: 20px;
 }
 .manage-request .controls {
     align-self:center;
@@ -163,10 +197,25 @@ select{
     width: 100%;
     color: rgb(208, 78,  5);
     font-weight: bold;
-    font-family: 'Kelly Slab', cursive;
+    font-family: 'Kelly Slab';
     margin-bottom: 10px;
 
 }
 
 
 
+html, body{
+    
+
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.8), 
+        rgba(0, 0, 0, 0.8)
+      ),
+      url('../images/background.jpg');
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+    background-origin: border-box, border-box;
+    background-color: rgba(0, 0, 0, 0.185)  ;
+
+}

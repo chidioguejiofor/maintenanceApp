@@ -29,7 +29,9 @@
     <div class = "main">
         <div class ="requests box-11">
             <div>
-                   <h3>Filter By:  <select name="filter" id="filter">
+                
+                <h3>List of all Requests</h3>
+                   <h3>Filter :  <select name="filter" id="filter">
                         <option value="name">Responded</option>
                         <option value="name">Pending</option>
                         <option value="name">Sent</option>
@@ -37,7 +39,7 @@
             
                     </select>  </h3> 
                     
-                    <ul onclick="handleItemClick(event, 'engineer')">
+                    <ul class = "brief-requests" onclick="handleItemClick(event, 'engineer')">
                             <li data-id="broken-glass">Broken Glass</li>
                             <li data-id="pipe-failure">Pipe failure</li>
                             <li data-id="electrical-explosion">Electrical Explosion</li>
