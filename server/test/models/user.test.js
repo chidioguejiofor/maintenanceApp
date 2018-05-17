@@ -11,7 +11,7 @@ describe('user', () => {
 
   let user;
   beforeEach(() => {
-    user = new User(username, email, password, userType);
+    user = new User(username, password, email, userType);
   });
 
   describe('constructor', () => {
@@ -48,7 +48,7 @@ describe('user', () => {
         expect(user).to.have.property('userType').to.equal(userType);
       });
       it(`expect userType to equal ${username}`, () => {
-        expect(user).to.have.property('userType').to.equal(username);
+        expect(user).to.have.property('username').to.equal(username);
       });
     });
   });
