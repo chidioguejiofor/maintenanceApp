@@ -22,31 +22,31 @@ describe('user', () => {
       });
 
       it('returned object must have a description attribute', () => {
-        expect(user.description).to.be.defined;
+        expect(user).to.have.property('description');
       });
 
       it('returned object must have a location attribute', () => {
-        expect(user.location).to.be.defined;
+        expect(user).to.have.property('location');
       });
 
       it('returned object must have a userType attribute', () => {
-        expect(user.userType).to.be.defined;
+        expect(user).to.have.property('userType');
       });
       it('returned object must have a location attribute', () => {
-        expect(user.location).to.be.defined;
+        expect(user).to.have.property('location');
       });
     });
 
     describe('validate attribute values', () => {
       it(`expect description to equal ${description}`, () => {
-        assert.equal(user.description, description);
+        expect(user).to.have.property('description').to.equal(description);
       });
       it(`expect location to  equal ${location}`, () => {
-        assert.equal(user.location, location);
+        expect(user).to.have.property('location').to.equal(location);
       });
 
       it(`expect userType to equal ${userType}`, () => {
-        assert.equal(user.userType, userType);
+        expect(user).to.have.property('userType').to.equal(userType);
       });
     });
   });
