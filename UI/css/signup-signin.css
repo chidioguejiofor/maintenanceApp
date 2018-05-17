@@ -1,14 +1,4 @@
 
-.user{
-    background-position: center;
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0.8), 
-      rgba(0, 0, 0, 0.8)
-    ),
-    url('../images/background.jpg');
-  
-}
-
 
 body{
     display: flex;
@@ -19,8 +9,8 @@ body{
 .engineer{
     background-position: center;
     background-image: linear-gradient(
-        rgba(0, 0, 0, 0.8), 
-        rgba(0, 0, 0, 0.8)
+        rgba(0, 0, 0, 0.9), 
+        rgba(0, 0, 0, 0.9)
       ),
       url('../images/engineer-login.jpg');
      

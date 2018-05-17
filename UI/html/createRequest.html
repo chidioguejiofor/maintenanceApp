@@ -32,7 +32,7 @@
         <div class =" box-11">
                 
 
-            <div>
+            <div  onclick ="handleImageClick(event)">
                 <input id ="image-file" type="file" onchange =" handleImageChange(event)" hidden>
                 <div>
 
@@ -42,8 +42,10 @@
                        
                         <div >
                             <ul class= "create-fields">
-                                <li><img src="../images/no-image.png" alt=""></li>
-                                    <li><label for="image-file">Click to Add image</label></li>
+                                <li></li>
+                                    <li><label for="image-file"><img src="../images/no-image.png" alt="">
+                                        <div>Click to Add image</div>
+                                    </label></li>
                                 <li><input type="text" placeholder="Title"></li>
                                 <li><input type="text" placeholder="Location"></li>
                               

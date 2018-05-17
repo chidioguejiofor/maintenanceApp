@@ -1,12 +1,19 @@
 function handleItemClick(event, user){
-    const id = event.target.dataset.id;
+   
     let link; 
-    if(user === 'engineer') link =`../html/manageRequest.html?id=${id}`;
-    else {
-        link =`../html/requestStatus.html?id=${id}`;
+    if(event.target.tagName.toLowerCase() == 'a'){
+        event.preventDefault();
+        const id = event.target.dataset.id;
+        if(user === 'engineer') link =`../html/manageRequest.html?id=${id}`;
+        else {
+            link =`../html/requestStatus.html?id=${id}`;
+        }
+        
+        window.location.href = link;
     }
+   
     
-    window.location.href = link;
+
 
 }
 

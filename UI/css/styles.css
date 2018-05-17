@@ -102,6 +102,8 @@ input, select {
 }
 /* end reset browser styles */
 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 *{
     text-decoration: none;
     margin: 0;
@@ -112,16 +114,7 @@ input, select {
 
 html, body{
     height: 100%;
-    background: #FFF;
-    text-align: center;
-     
-}
-
-.welcome-page{
-    background-image: linear-gradient(
-        rgba(0, 0, 0, 0.5), 
-        rgba(0, 0, 0, 0.5)
-      ),
+    background: #FFF,
       url('../images/background.jpg');
       display: flex;
       justify-content: center;
@@ -142,7 +135,6 @@ main{
     align-items: center;
     justify-content: center;
     color: white;
-    font-family: NonStop;
 }
 
 @media  screen and (max-width: 414px){
@@ -150,7 +142,7 @@ main{
         font-size: 300px;
     }
     h3{
-        font-family: 'Oswald', sans-serif;
+
        
         margin-bottom: 13px;
         font-size: 30px;
@@ -165,14 +157,21 @@ main{
 
 h1{
     font-size: unset;
-    font-family:  'Shadows Into Light', serif;
+   
    margin-bottom: 23px;
    font-size: 50px;
   
 }
+
+
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+h3{
+    font-family: 'Lucida Sans','Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 h3{
     font-size: 30px;
-    font-family: 'Oswald', sans-serif;
     font-style: italic;
     margin-bottom: 50px;
 }
@@ -182,7 +181,6 @@ h3{
     background-color: rgb(208, 78,  5);
     color: white;
     font-size: 20px;
-    font-family: 'Shadows Into Light', serif;
     padding: 6px;
     border-radius: 5px;
     flex-basis: 10%;
@@ -222,7 +220,14 @@ h3{
 .box-10{flex: 10;}
 .box-11{flex: 11;}
 
-input, textarea{
-    font-family:  'Shadows Into Light', serif;
-}
 
+
+.user{
+    background-position: center;
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.8)
+    ),
+    url('../images/background.jpg');
+  
+}

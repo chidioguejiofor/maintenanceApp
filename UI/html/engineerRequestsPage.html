@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/requestPage.css">
 </head>
-<body>
+<body class ="engineer">
     
 
         <div class="top-nav">
@@ -30,19 +30,19 @@
         <div class ="requests box-11">
             <div>
                 
-                <h3>List of all Requests</h3>
-                   <h3>Filter :  <select name="filter" id="filter">
+                <h1>List of all Requests</h1>
+                   <p>Filter :  <select name="filter" id="filter">
                         <option value="name">Responded</option>
                         <option value="name">Pending</option>
                         <option value="name">Sent</option>
                         <option value="name">All</option>
             
-                    </select>  </h3> 
+                    </select>  </p> 
                     
                     <ul class = "brief-requests" onclick="handleItemClick(event, 'engineer')">
-                            <li data-id="broken-glass">Broken Glass</li>
-                            <li data-id="pipe-failure">Pipe failure</li>
-                            <li data-id="electrical-explosion">Electrical Explosion</li>
+                            <li data-id="broken-glass">Broken Glass <a href="">View Details</a></li>
+                            <li data-id="pipe-failure">Pipe failure <a href="">View Details</a></li>
+                            <li data-id="electrical-explosion">Electrical Explosion <a href="">View Details</a></li>
                     </ul>
             </div>
             
