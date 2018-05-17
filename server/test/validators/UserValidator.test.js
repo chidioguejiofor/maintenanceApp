@@ -6,12 +6,12 @@ import User from '../../models/User';
 
 const goodUser = new User('Chisom', 'password123', 'email@email.com', 'client');
 const badUserOne = new User('123', '', 'email.com', 'chizoba');
-const badUserTwo = new User('', '123', 'eamil@', 'chef');
 
-const validator = new UserValidator(goodUser);
-const goodUserResult = validator.validate();
+const badUserResult = new UserValidator(badUserOne).validate();
+const goodUserResult = new UserValidator(goodUser).validate();
 
-describe('Testing returned object of validateUser() ', () => {
+
+describe('Testing returned object of userValidator.validate() ', () => {
   describe('If the user is valid then', () => {
     describe('value return from validate method', () => {
       it('should be an object', () => {
@@ -42,7 +42,8 @@ describe('Testing returned object of validateUser() ', () => {
 
       it('should have an userType  property that is either engineer or client', () => {
         expect(goodUser).property('userType');
-        const validUsername = goodUser.userType;
+        const regex = /engineer|client/i;
+        const validUsername = regex.test(goodUser.userType);
         expect(validUsername).to.be.true;
       });
     });
@@ -50,10 +51,23 @@ describe('Testing returned object of validateUser() ', () => {
 
   describe('If user is invalid then', () => {
     it('valid property should be false', () => {
-      expect(badUserOne).property('valid')
+      expect(badUserResult).property('valid')
         .to.be.false;
-      expect(badUserTwo).property('valid')
-        .to.be.false;
+    });
+    it('have a valid property that is false', () => {
+      expect(badUserResult).property('valid').to.be.false;
+    });
+
+    it('have an invalid property that is an array', () => {
+      expect(badUserResult)
+        .to.have.property('invalidData')
+        .with.length.greaterThan(0);
+    });
+
+    it('jave am "invalidData" property that contains objects', () => {
+      const arr = badUserResult.invalidData;
+      const allContainObject = arr.every(item => typeof item === 'object');
+      expect(allContainObject).to.be.true;
     });
   });
 });
