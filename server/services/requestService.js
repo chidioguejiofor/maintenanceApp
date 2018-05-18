@@ -33,12 +33,12 @@ class RequestService {
   /**
    * This gets all the requests made by a client specified by the
    * clientID
-   * @param {*} clientID
+   * @param {*} clientId
    */
-  getByCredentials(clientID) {
+  getByCredentials(clientId) {
     const request =
     this.requests.filter(existingRequest =>
-      existingRequest.clientId === clientID);
+      existingRequest.clientId === clientId);
     if (request) {
       return {
         success: true,
@@ -58,9 +58,11 @@ class RequestService {
     request.id = uuid.v4();
     this.requests.push(request);
     return {
-      success: true,
-      data: request,
       statusCode: 201,
+      respObj: {
+        success: true,
+        data: request,
+      },
     };
   }
 
@@ -76,13 +78,19 @@ class RequestService {
       this.requests[requestId] = finalObj;
 
       return {
-        success: true,
-        data: finalObj,
+        statusCode: 200,
+        respObj: {
+          success: true,
+          data: finalObj,
+        },
+
       };
     }
     return {
-      success: false,
-      message: 'The id was not found',
+      respObj: {
+        success: false,
+        message: 'The id was not found',
+      },
       statusCode: 404,
     };
   }
