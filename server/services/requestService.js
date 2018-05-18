@@ -47,20 +47,24 @@ class RequestService {
    * clientID
    * @param {*} clientId
    */
-  getByCredentials(clientId) {
-    const request =
+  getByUserId(clientId) {
+    const requestArr =
     this.requests.filter(existingRequest =>
       existingRequest.clientId === clientId);
-    if (request) {
+    if (requestArr.length > 0) {
       return {
-        success: true,
-        data: request,
+        respObj: {
+          success: true,
+          data: requestArr,
+        },
         statusCode: 200,
       };
     }
     return {
-      success: false,
-      message: 'The specified request does not exist',
+      respObj: {
+        success: false,
+        message: 'The specified clientID does not exist',
+      },
       statusCode: 404,
     };
   }
