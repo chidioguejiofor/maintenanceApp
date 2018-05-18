@@ -4,8 +4,10 @@ import UserValidator from '../validators/UserValidator';
 
 export default class UserController {
   static signup(req, resp) {
-    const { email, username, password } = req.body;
-    const user = new User(username, password, email);
+    const {
+      email, username, password, userType,
+    } = req.body;
+    const user = new User(username, password, email, userType);
 
     const validateObj = new UserValidator(user).validate();
 
@@ -15,10 +17,16 @@ export default class UserController {
         success: true,
         data,
       });
+    } else if (validateObj.missingData) {
+      resp.status(400).json({
+        success: false,
+        message: 'Some required fields are missing',
+        missingData: validateObj.missingData,
+      });
     } else {
       resp.status(400).json({
         success: false,
-        message: 'Some data you inputed is invalid',
+        message: 'Some data you passed is invalid',
         invalidData: validateObj.invalidData,
       });
     }

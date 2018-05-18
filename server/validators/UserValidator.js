@@ -1,43 +1,61 @@
 import ModelValidator from './ModelValidator';
 
+
 class UserValidator extends ModelValidator {
-  constructor(user) {
-    super();
-    this.user = user;
+  constructor(model) {
+    super(model);
+    this.requirements = {
+      password: {
+        message: 'must be at least 5 characters of any type',
+        pattern: /.{5,}/g,
+      },
+      email: {
+        message: 'must have the format<username>@<hostname>.com',
+        pattern: /.{1,}@.{1,}\.com/,
+      },
+      userType: {
+        message: 'must be either "engineer" or "client"',
+        pattern: /client|engineer/i,
+      },
+      username: {
+        message: 'can contain letters or number but must begin with a letter',
+        pattern: /[a-z][a-z0-9]{3,}/g,
+      },
+    };
   }
-
-  static passwordPattern() {
-    return /.{5,}/g;
+  getPattern(attribute) {
+    return this.requirements[attribute].pattern;
   }
-
-  static emailPattern() {
-    return /.{1,}@.{1,}\.com/;
-  }
-
-  static userTypePattern() {
-    return /client|engineer/i;
-  }
-  static usernamePattern() {
-    return /[a-z][a-z0-9]{0,}/g;
-  }
-
   validate() {
-    const { user } = this;
+    const {
+      model: {
+        email, password, userType, username,
+      },
+    } = this;
+
+    const testObj = {
+      email, password, userType, username,
+    };
 
     const invalidData = [];
-    if (!UserValidator.passwordPattern().test(user.password)) {
-      invalidData.push({ password: 'The password property must be at least 5 characters ' });
-    }
-    if (!UserValidator.usernamePattern().test(user.username)) {
-      invalidData.push({ username: 'username can contain only letters or must be alphanumeric' });
+    const missingData = [];
+
+    Object.keys(testObj)
+      .forEach((property) => {
+        if (!testObj[property]) missingData.push(property);
+        else if (!this.getPattern(property).test(testObj[property])) {
+          invalidData.push({ [property]: this.requirements[property] });
+        }
+      });
+
+
+    if (missingData.length > 0) {
+      return {
+        valid: false,
+        missingData,
+      };
     }
 
-    if (!UserValidator.emailPattern().test(user.email)) {
-      invalidData.push({ email: 'email must contain an @ and must be at least 4 characters' });
-    }
-    if (!UserValidator.userTypePattern().test(user.userType)) {
-      invalidData.push({ userType: 'userType must be either client or engineer' });
-    }
     if (invalidData.length > 0) {
       return {
         valid: false,

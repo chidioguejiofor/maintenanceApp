@@ -29,6 +29,18 @@ class RequestService {
     };
   }
 
+  getAll() {
+    const { requests } = this;
+    if (requests.length >= 0) {
+      return {
+        statusCode: 200,
+        respObj: requests,
+      };
+    }
+    return {
+      statusCode: 204,
+    };
+  }
 
   /**
    * This gets all the requests made by a client specified by the

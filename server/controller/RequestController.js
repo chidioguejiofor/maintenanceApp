@@ -16,14 +16,20 @@ export default class RequestController {
   static create(req, resp) {
     const { request, validationResult } = getRequest(req.body);
 
-
+    console.log(validationResult);
     if (validationResult.valid) {
       const result = requestService.makeRequest(request);
       resp.status(result.statusCode).json(result.respObj);
+    } else if (validationResult.missingData) {
+      resp.status(400).json({
+        success: false,
+        message: 'Some required fields are missing',
+        missingData: validationResult.missingData,
+      });
     } else {
       resp.status(400).json({
         success: false,
-        message: 'Some data inputed are invalid',
+        message: 'Some data you passed is invalid',
         invalidData: validationResult.invalidData,
       });
     }
@@ -50,9 +56,7 @@ export default class RequestController {
   }
 
   static getAll(req, resp) {
-    const { username, password } = req.body;
-    const response = requestService.getByCredentials(username, password);
-
+    const response = requestService.getAll();
     resp.status(response.statusCode).json(response.respObj);
   }
 }
