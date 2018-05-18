@@ -102,7 +102,27 @@ input, select {
 }
 /* end reset browser styles */
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+*{
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+.user{
+    background-position: center;
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.8)
+    ),
+    url('../images/background.jpg');
+  
+} 
+
+
 
 *{
     text-decoration: none;
@@ -114,7 +134,16 @@ input, select {
 
 html, body{
     height: 100%;
-    background: #FFF,
+    background: #FFF;
+    text-align: center;
+     
+}
+
+.welcome-page{
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
       url('../images/background.jpg');
       display: flex;
       justify-content: center;
@@ -126,6 +155,7 @@ body{
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    background-blend-mode: darken;
 }
 
 
@@ -135,6 +165,7 @@ main{
     align-items: center;
     justify-content: center;
     color: white;
+    font-family: NonStop;
 }
 
 @media  screen and (max-width: 414px){
@@ -142,7 +173,7 @@ main{
         font-size: 300px;
     }
     h3{
-
+        font-family: 'Oswald', sans-serif;
        
         margin-bottom: 13px;
         font-size: 30px;
@@ -157,12 +188,10 @@ main{
 
 h1{
     font-size: unset;
-   
    margin-bottom: 23px;
    font-size: 50px;
   
 }
-
 
 h1,h2,h3,h4,h5,h6{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -181,6 +210,7 @@ h3{
     background-color: rgb(208, 78,  5);
     color: white;
     font-size: 20px;
+    font-family: 'Shadows Into Light', cursive, serif;
     padding: 6px;
     border-radius: 5px;
     flex-basis: 10%;
@@ -220,14 +250,6 @@ h3{
 .box-10{flex: 10;}
 .box-11{flex: 11;}
 
-
-
-.user{
-    background-position: center;
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0.8), 
-      rgba(0, 0, 0, 0.8)
-    ),
-    url('../images/background.jpg');
-  
+input, textarea{
+    font-family:  'Shadows Into Light', cursive, serif;
 }
