@@ -5,7 +5,7 @@
   "main": "server/app.js",
   "scripts": {
     "start": "babel-node server/app.js ",
-    "test": "mocha    server/test/**/*.js  --require babel-register  || true",
+    "test": "mocha    server/test/routes/**/*.js  --require babel-register  || true",
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "build": "babel ./server/ -d build --copy-files -s"
   },
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/chidioguejiofor/maintenanceApp#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chai-http": "^4.0.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
     "supertest": "^3.0.0",

@@ -16,7 +16,6 @@ export default class RequestController {
   static create(req, resp) {
     const { request, validationResult } = getRequest(req.body);
 
-    console.log(validationResult);
     if (validationResult.valid) {
       const result = requestService.makeRequest(request);
       resp.status(result.statusCode).json(result.respObj);
