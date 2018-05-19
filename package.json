@@ -6,8 +6,12 @@
   "scripts": {
     "start-dev":"nodemon --exec npm start",
     "start": "babel-node server/app.js ",
+<<<<<<< HEAD
     "test": "nyc mocha  --reporter progress --require babel-core/register \"server/test/**/*.test.js\" --exit || true",
  
+=======
+    "test": "mocha    server/test/routes/**/*.js  --require babel-register  || true",
+>>>>>>> f8a1dbe9658d66268affc8108cd7b761dffb2762
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "build": "babel ./server/ -d build --copy-files -s"
   },
