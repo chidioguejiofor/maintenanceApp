@@ -37,7 +37,6 @@ export default class RequestController {
   static modify(req, resp) {
     const { request, validationResult } = getRequest(req.body);
     const { params: { id } } = req;
-    console.log(id);
     if (validationResult.valid) {
       const response = requestService.modify(id, request);
       resp.status(response.statusCode).json(response.respObj);
@@ -51,7 +50,7 @@ export default class RequestController {
   }
 
   static getById(req, resp) {
-    const response = requestService.getByUserId(req.params.id);
+    const response = requestService.getById(req.params.id);
     resp.status(response.statusCode).json(response.respObj);
   }
 

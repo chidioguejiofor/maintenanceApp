@@ -18,3 +18,4 @@ app.listen(port, (error) => {
   if (error) console.log('An error occured while binding to port');
   console.log(`Server was set up at ${port}`);
 });
+export default app;

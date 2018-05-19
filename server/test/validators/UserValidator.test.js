@@ -5,13 +5,14 @@ import UserValidator from '../../validators/UserValidator';
 import User from '../../models/User';
 
 const goodUser = new User('Chisom', 'password123', 'email@email.com', 'client');
-const badUserOne = new User('123', '', 'email.com', 'chizoba');
+const badUserOne = new User('123', 'a', 'email.com', 'chizoba');
 
-const badUserResult = new UserValidator(badUserOne).validate();
-const badResult2 = new UserValidator(new User()).validate();
+const invalidDataResult = new UserValidator(badUserOne).validate();
+const missingDataResult = new UserValidator(new User()).validate();
 
 const goodUserResult = new UserValidator(goodUser).validate();
 
+console.log(invalidDataResult, '-invalidData______');
 
 describe('Testing returned object of userValidator.validate() ', () => {
   describe('If the user is valid then', () => {
@@ -51,47 +52,43 @@ describe('Testing returned object of userValidator.validate() ', () => {
     });
   });
 
-  describe('If user is invalid then', () => {
-    it('valid property should be false', () => {
-      expect(badUserResult).property('valid')
-        .to.be.false;
-    });
-    it('have a valid property that is false', () => {
-      expect(badUserResult).property('valid').to.be.false;
-    });
 
-    it('have an invalid property that is an array', () => {
-      expect(badUserResult)
-        .to.have.property('invalidData')
-        .with.length.greaterThan(0);
-    });
+  describe('If user is invalid then ', () => {
+    describe('the returned object should ', () => {
+      describe('have a valid property', () => {
+        it('that is false', () => {
+          expect(invalidDataResult).property('valid').to.be.false;
+        });
+      });
+      describe('if it failed because of invalid data formats then', () => {
+        describe('have a "invalidData" property', () => {
+          it('that is an array', () => {
+            expect(invalidDataResult)
+              .to.have.property('invalidData')
+              .with.length.greaterThan(0);
+          });
+          it('each element of the array should contain objects', () => {
+            const arr = invalidDataResult.invalidData;
+            const allContainObject = arr.every(item => typeof item === 'object');
+            expect(allContainObject).to.be.true;
+          });
+        });
+      });
 
-    it('jave am "invalidData" property that contains objects', () => {
-      const arr = badUserResult.invalidData;
-      const allContainObject = arr.every(item => typeof item === 'object');
-      expect(allContainObject).to.be.true;
-    });
-  });
-
-  describe('if user contains no property then the user is invalid then', () => {
-    it('valid property should be false', () => {
-      expect(badResult2).property('valid')
-        .to.be.false;
-    });
-    it('have a valid property that is false', () => {
-      expect(badResult2).property('valid').to.be.false;
-    });
-
-    it('have an invalid property that is an array', () => {
-      expect(badResult2)
-        .to.have.property('invalidData')
-        .with.length.greaterThan(0);
-    });
-
-    it('jave am "invalidData" property that contains objects', () => {
-      const arr = badResult2.invalidData;
-      const allContainObject = arr.every(item => typeof item === 'object');
-      expect(allContainObject).to.be.true;
+      describe('if it failed because some data was missing then', () => {
+        describe('have a "missingData" property', () => {
+          it('that is an array', () => {
+            expect(missingDataResult)
+              .to.have.property('missingData')
+              .with.length.greaterThan(0);
+          });
+          it('each element of the "missingData" array should contain objects', () => {
+            const arr = missingDataResult.missingData;
+            const allContainObject = arr.every(item => typeof item === 'string');
+            expect(allContainObject).to.be.true;
+          });
+        });
+      });
     });
   });
 });

@@ -4,8 +4,10 @@
   "description": "This API functionality that make it easy for a user to remotely send a maintenanec request to an admin",
   "main": "server/app.js",
   "scripts": {
+    "start-dev":"nodemon --exec npm start",
     "start": "babel-node server/app.js ",
-    "test": "mocha    server/test/routes/**/*.js  --require babel-register  || true",
+    "test": "nyc mocha  --reporter progress --require babel-core/register \"server/test/**/*.test.js\" --exit || true",
+ 
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "build": "babel ./server/ -d build --copy-files -s"
   },

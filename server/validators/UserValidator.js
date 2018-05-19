@@ -9,8 +9,8 @@ class UserValidator extends ModelValidator {
         pattern: /.{5,}/g,
       },
       email: {
-        message: 'must have the format<username>@<hostname>.com',
-        pattern: /.{1,}@.{1,}\.com/,
+        message: 'must have the format<username>@<hostname>.com and <username>must begin with an alphabet',
+        pattern: /[a-z][a-z0-9]{1,}@.{1,}\.com/i,
       },
       userType: {
         message: 'must be either "engineer" or "client"',

@@ -17,15 +17,20 @@ class RequestService {
 
     if (request) {
       return {
-        success: true,
+
         statusCode: 200,
-        data: request,
+        respObj: {
+          success: true,
+          data: request,
+        },
       };
     }
     return {
-      succes: false,
+      respObj: {
+        success: false,
+        message: 'The specified id was not found',
+      },
       statusCode: 404,
-      message: 'The specified id was not found',
     };
   }
 
@@ -34,11 +39,17 @@ class RequestService {
     if (requests.length >= 0) {
       return {
         statusCode: 200,
-        respObj: requests,
+        respObj: {
+          data: requests,
+          success: true,
+        },
       };
     }
     return {
       statusCode: 204,
+      respObj: {
+        success: false,
+      },
     };
   }
 
