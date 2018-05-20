@@ -11,11 +11,13 @@ const goodRequest =
       'Third Floor of Epic tower',
       '221133-323', 'link.jpg',
     );
-const badRequestOne = new Request('t', 'abc', '12', '', 'p');
+const badRequestOne = new Request('t', 'abc', '12', 'as', 'p');
+const badRequestTwo = new Request();
 
 const validator = new RequestValidator(goodRequest);
 const goodRequestResult = validator.validate();
-const badRequestResult = new RequestValidator(badRequestOne).validate();
+const invalidDataRequestResult = new RequestValidator(badRequestOne).validate();
+const missingDataRequestResult = new RequestValidator(badRequestTwo).validate();
 
 
 describe('Testing returned object of requestValidator.validateUser() ', () => {
@@ -55,20 +57,39 @@ describe('Testing returned object of requestValidator.validateUser() ', () => {
 
   describe('If request is invalid then validate() method', () => {
     describe('the returned object should ', () => {
-      it('have a valid property that is false', () => {
-        expect(badRequestResult).property('valid').to.be.false;
+      describe('have a valid property', () => {
+        it('that is false', () => {
+          expect(invalidDataRequestResult).property('valid').to.be.false;
+        });
+      });
+      describe('if it failed because of invalid data formats then', () => {
+        describe('have a "invalidData" property', () => {
+          it('that is an array', () => {
+            expect(invalidDataRequestResult)
+              .to.have.property('invalidData')
+              .with.length.greaterThan(0);
+          });
+          it('each element of the array should contain objects', () => {
+            const arr = invalidDataRequestResult.invalidData;
+            const allContainObject = arr.every(item => typeof item === 'object');
+            expect(allContainObject).to.be.true;
+          });
+        });
       });
 
-      it('have an invalid property that is an array', () => {
-        expect(badRequestResult)
-          .to.have.property('invalidData')
-          .with.length.greaterThan(0);
-      });
-
-      it('jave am "invalidData" property that contains objects', () => {
-        const arr = badRequestResult.invalidData;
-        const allContainObject = arr.every(item => typeof item === 'object');
-        expect(allContainObject).to.be.true;
+      describe('if it failed because some data was missing then', () => {
+        describe('have a "missingData" property', () => {
+          it('that is an array', () => {
+            expect(missingDataRequestResult)
+              .to.have.property('missingData')
+              .with.length.greaterThan(0);
+          });
+          it('each element of the "missingData" array should contain objects', () => {
+            const arr = missingDataRequestResult.missingData;
+            const allContainObject = arr.every(item => typeof item === 'string');
+            expect(allContainObject).to.be.true;
+          });
+        });
       });
     });
   });

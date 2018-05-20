@@ -1,48 +1,44 @@
 import ModelValidator from './ModelValidator';
 
+
 export default class RequestValidator extends ModelValidator {
-  static titlePattern() {
-    return /[A-Z][a-z0-9]{5,20}/i;
+  constructor(model) {
+    super(model, {
+      description: {
+        message: 'must be at least 5 alphanumeric letters or puncuations (dot and comma) and must start with a letter',
+        pattern: /[a-z]{1,}[a-z0-9,.]{5,}/i,
+      },
+      title: {
+        message: 'must be between 5 to 20 alphanumberic letters or puncuations and must start with a letter',
+        pattern: /[A-Z][a-z0-9\s]{5,20}/i,
+      },
+      image: {
+        message: 'must be at least 3 character',
+        pattern: /.{3,}/,
+      },
+      location: {
+        message: 'must be between 5 to 100 alphanumeric characters',
+        pattern: /[a-z0-9]{5,200}/i,
+      },
+      clientId: {
+        message: 'any set of characters of at least one length',
+        pattern: /.{1,}/,
+      },
+    });
   }
 
-  static descriptionPattern() {
-    return /.{5,}/i;
-  }
-
-  static locationPattern() {
-    return /.{5,200}/i;
-  }
-
-  static imagePattern() {
-    return /.{1,}/;
-  }
 
   validate() {
-    const { model } = this;
+    const {
+      model: {
+        title, description, location, image, clientId,
+      },
+    } = this;
+    const testObj = {
+      title, description, location, image, clientId,
+    };
 
-    const invalidData = [];
-    if (!RequestValidator.titlePattern().test(model.title)) {
-      invalidData.push({ title: 'The title must start with an uppercase letter and must be at least 5 characters' });
-    }
-    if (!RequestValidator.locationPattern().test(model.location)) {
-      invalidData.push({ location: 'The location must be at least 5 characters' });
-    }
-
-    if (!RequestValidator.imagePattern().test(model.image)) {
-      invalidData.push({ image: 'The image must be at least 5 characters' });
-    }
-
-    if (!RequestValidator.descriptionPattern().test(model.description)) {
-      invalidData.push({ description: 'The description must be at least 5 characters' });
-    }
-
-    if (invalidData.length > 0) {
-      return {
-        valid: false,
-        invalidData,
-      };
-    }
-    return { valid: true };
+    return super.runValidation(testObj);
   }
 }
 
