@@ -7,7 +7,6 @@ engines:
 
 ratings:
   paths:
-  - client/**
   - server/**
 
 exclude_paths: 

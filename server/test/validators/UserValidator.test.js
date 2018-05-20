@@ -8,6 +8,8 @@ const goodUser = new User('Chisom', 'password123', 'email@email.com', 'client');
 const badUserOne = new User('123', '', 'email.com', 'chizoba');
 
 const badUserResult = new UserValidator(badUserOne).validate();
+const badResult2 = new UserValidator(new User()).validate();
+
 const goodUserResult = new UserValidator(goodUser).validate();
 
 
@@ -66,6 +68,28 @@ describe('Testing returned object of userValidator.validate() ', () => {
 
     it('jave am "invalidData" property that contains objects', () => {
       const arr = badUserResult.invalidData;
+      const allContainObject = arr.every(item => typeof item === 'object');
+      expect(allContainObject).to.be.true;
+    });
+  });
+
+  describe('if user contains no property then the user is invalid then', () => {
+    it('valid property should be false', () => {
+      expect(badResult2).property('valid')
+        .to.be.false;
+    });
+    it('have a valid property that is false', () => {
+      expect(badResult2).property('valid').to.be.false;
+    });
+
+    it('have an invalid property that is an array', () => {
+      expect(badResult2)
+        .to.have.property('invalidData')
+        .with.length.greaterThan(0);
+    });
+
+    it('jave am "invalidData" property that contains objects', () => {
+      const arr = badResult2.invalidData;
       const allContainObject = arr.every(item => typeof item === 'object');
       expect(allContainObject).to.be.true;
     });
