@@ -42,7 +42,6 @@ describe('Testing methods of the requestService module', () => {
   });
 
   describe('getAllRequest() ', () => {
-<<<<<<< HEAD
     const result = requestService.getAll();
     describe('should contain a respObj', () => {
       describe('should have a data property', () => {
@@ -58,11 +57,6 @@ describe('Testing methods of the requestService module', () => {
             .to.be.true;
         });
       });
-=======
-    const allRequests = requestService.getAll();
-    it('it should always return  array', () => {
-      assert.isArray(allRequests);
->>>>>>> f8a1dbe9658d66268affc8108cd7b761dffb2762
     });
   });
 });
