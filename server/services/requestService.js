@@ -105,7 +105,7 @@ class RequestService {
       this.requests[requestId] = finalObj;
 
       return {
-        statusCode: 200,
+        statusCode: 201,
         respObj: {
           success: true,
           data: finalObj,

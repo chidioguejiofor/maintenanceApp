@@ -12,6 +12,7 @@ function getRequest(body) {
   return { request, validationResult };
 }
 
+
 export default class RequestController {
   static create(req, resp) {
     const { request, validationResult } = getRequest(req.body);
@@ -19,18 +20,8 @@ export default class RequestController {
     if (validationResult.valid) {
       const result = requestService.makeRequest(request);
       resp.status(result.statusCode).json(result.respObj);
-    } else if (validationResult.missingData) {
-      resp.status(400).json({
-        success: false,
-        message: 'Some required fields are missing',
-        missingData: validationResult.missingData,
-      });
     } else {
-      resp.status(400).json({
-        success: false,
-        message: 'Some data you passed is invalid',
-        invalidData: validationResult.invalidData,
-      });
+      resp.status(400).json(RequestValidator.handleBadData(validationResult));
     }
   }
 
@@ -41,11 +32,7 @@ export default class RequestController {
       const response = requestService.modify(id, request);
       resp.status(response.statusCode).json(response.respObj);
     } else {
-      resp.status(400).json({
-        success: false,
-        message: 'Some inputed data was invalid',
-        invalidData: validationResult.invalidData,
-      });
+      resp.status(400).json(RequestValidator.handleBadData(validationResult));
     }
   }
 
