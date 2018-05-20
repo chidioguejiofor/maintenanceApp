@@ -1,0 +1,265 @@
+.main{
+    display: flex;
+    padding: 3px;
+    height: 90%;
+  
+    flex-flow: row;
+    margin-top: 3%;
+    justify-content: center;
+   
+}
+
+
+@media( min-width: 414px){
+    .top-nav div{
+       padding: 10px;
+       
+    }
+}
+
+li a, li, div{
+    
+    
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+     
+    
+}
+.top-nav a{
+    font-size: 1.2em;
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ 
+}
+
+.top-nav div{
+    border: solid 0 white;
+    border-right-width: 2px;
+    padding-right: 10px;
+    margin-left: 20px;
+    
+   
+}
+
+.top-nav div:last-of-type{
+    border-right-width: 0;
+}
+.top-nav{
+    display: flex;
+    text-align: center;
+    padding: 10px;
+    justify-content: center;
+    background-color:rgba(208, 79, 5, 0.877);
+    box-shadow: 3px 1px 9px rgba(255, 255, 255, 0.6);
+    color: white;
+    
+}
+
+h3{
+    color:white;
+}
+.requests, .statistics{
+   
+    width: 70%;
+
+}
+
+.statistics h1{
+    text-align: center;
+    padding-left: 25%;
+}
+
+.statistics div{
+    margin-top: 5%;
+}
+
+.selected{
+   font-size: 1.3em;
+   font-weight: bold;
+}
+
+
+.statistics div li, .requests div li{
+    margin-top: 15px;
+    color: white;
+    
+    text-align: left;
+    background-color: rgba(253, 252, 252, 0.199);
+    color: rgb(255, 242, 242);
+    list-style: none;
+    padding: 14px;
+    font-size: 25px;
+    font-family: 'Shadows Into Light', serif;
+    border-radius: 10px;
+
+
+}
+.requests div .brief-requests li{
+    margin-left: 20%;
+    width: 60%;
+}
+
+h1,h2,h3,h4{
+    color: white;
+}
+
+.controls{
+    background-color: rgba(176, 94, 50, 0.048);
+}
+
+.statistics div li {
+    text-align: center;
+    background-color: inherit;
+    margin-left: 20%;
+    text-align: left;
+}
+
+
+
+.requests .request-details  li:hover{
+    background-color: inherit;
+   
+  
+}
+.requests .request-details li {
+    text-align: center;
+    background-color: inherit;
+}
+.manage-request .requests .request-details li{
+   align-self: flex-start;
+   text-align: left;
+} 
+
+.manage-request .request-details li{
+    background-color: rgba(253, 252, 252, 0.199);
+    color: rgb(255, 242, 242);
+    font-weight: bold;
+}
+.manage-request .controls li, .manage-request .controls li:hover{
+    background-color: inherit;
+    text-align: center;
+}
+.manage-request .request-details  li span{
+    
+    font-weight: lighter    ;
+
+}
+
+p{
+    color: white;
+    font-size: 27px;
+}
+input[type =text], textarea{
+    background-color: rgba(253, 252, 252, 0.199);
+    color: rgb(255, 242, 242);
+    font-size: 20px;
+}
+.manage-request .controls {
+    align-self:center;
+    justify-self: center;
+    border: solid 0 black;
+    border-left-width: 1px;
+ }
+.controls-li{
+    opacity: 0;
+    transition: opacity 400ms ease-in;
+}
+.danger{
+    background-color: rgb(240, 89, 80);
+}
+
+.danger-text{
+    color: rgb(240, 89, 80);
+}
+.danger:hover{
+    background-color: rgb(250, 29, 80);
+}
+.okay{
+    background-color: rgb( 79,152, 43);
+}
+ 
+
+.brief-requests a{
+    float: right;
+        
+    margin-right: 3px;
+    color: rgb(80, 253, 0);
+    font-size: 0.8em;
+}
+
+.brief-requests a:hover{
+    text-decoration: underline;
+}
+
+.control-group, #approved-controls{
+    transition:  opacity 400ms ease-in;
+}
+
+img{
+    width: 200px;
+    height: 200px;
+    margin-left: 1%;
+    
+}
+select{
+    height: 100%;
+    width: 10%;
+    font-size:18px;
+
+}
+
+.create-fields{
+    margin:0;
+
+}
+
+.create-fields li{
+    margin:0;
+    margin-bottom: 10px;
+}
+.create-fields li input, .create-fields li textarea, .create-fields li label{
+    margin:0;
+    width: 50%;
+    padding: 8px;
+    border-radius: 6px;
+    border: solid 1px rgba(0, 0, 0, 0.212);
+    
+}
+input{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.create-fields li label{
+    width: 100%;
+    color: rgb(208, 78,  5);
+    font-size: 16px;
+    font-weight: bold;
+    font-family:  Courier, monospace;
+    margin-bottom: 10px;
+    color:white;
+    font-weight: bold;
+
+}
+
+
+
+html, body{
+    
+
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.8), 
+        rgba(0, 0, 0, 0.8)
+      ),
+      url('../images/background.jpg');
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+    background-origin: border-box, border-box;
+    background-color: rgba(0, 0, 0, 0.185)  ;
+
+}
+
+:-moz-placeholder, ::-webkit-input-placeholder, 
+:-ms-input-placeholder, ::-webkit-input-placeholder, 
+::-moz-placeholder{
+    color:white;
+}

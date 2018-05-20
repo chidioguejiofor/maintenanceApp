@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Request Page</title>
+    <script src ="../js/requestPage.js">
+    </script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/requestPage.css">
+</head>
+<body>
+    
+
+        <div class="top-nav">
+                <div class="selected">
+                    <a href="#">Create Request</a>
+                </div>
+                <div >
+                        <a href="requestsPage.html">View All Requests</a>
+                    </div>
+                    <div>
+                            <a href="index.html">Sign Out</a>
+                    </div>
+                    
+        
+            </div>
+
+           
+    <div class = "main">
+        <div class =" box-11">
+                
+
+            <div  onclick ="handleImageClick(event)">
+                <input id ="image-file" type="file" onchange =" handleImageChange(event)" hidden>
+                <div>
+
+                        <div class = "box" > 
+                            <h1>MAKE A NEW REQUEST</h1>
+                        </div>
+                       
+                        <div >
+                            <ul class= "create-fields">
+                                <li></li>
+                                    <li><label for="image-file"><img src="../images/no-image.png" alt="">
+                                        <div>Click to Add image</div>
+                                    </label></li>
+                                <li><input type="text" placeholder="Title"></li>
+                                <li><input type="text" placeholder="Location"></li>
+                              
+                                <li><textarea name="" id="" cols="30" rows="10" placeholder="Description"></textarea></li>
+                                <li><button class ="primary-btn">Make Request</button></li>
+                               
+                            </ul>
+                            
+                        </div>
+                           
+                           
+                          
+                    </div>     
+                   
+            
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
