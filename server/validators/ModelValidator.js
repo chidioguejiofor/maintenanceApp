@@ -35,6 +35,24 @@ export default class ModelValidator {
         invalidData,
       };
     }
+
+
     return { valid: true };
+  }
+
+
+  static handleBadData(validationResult) {
+    if (validationResult.missingData) {
+      return {
+        success: false,
+        message: 'Some required fields are missing',
+        missingData: validationResult.missingData,
+      };
+    }
+    return {
+      success: false,
+      message: 'Some data you passed is invalid',
+      invalidData: validationResult.invalidData,
+    };
   }
 }

@@ -8,6 +8,21 @@ import dummyData from '../../dummys/DummyData';
 
 
 const id = dummyData.getDummyRequestId();
+const validObj = {
+  title: 'Hellooo World',
+  description: 'Yoaaaaa',
+  location: 'llocation is valid',
+  image: 'iamge is cool',
+  clientId: 'beatedasd',
+};
+const invalidRequest = {
+  title: 'e',
+  description: 'Y',
+  location: 'l',
+  image: 'i',
+  clientId: '.',
+};
+
 
 describe('/users/requests Route', () => {
   describe('GET on an unknown route', () => {
@@ -23,23 +38,140 @@ describe('/users/requests Route', () => {
   });
 
   describe('Request Routes', () => {
+    describe('PUT routes', () => {
+      const updateRequestValidRoute = `/api/v1/users/requests/${id}`;
+      const invalidUpdateRoute = '/api/v1/users/requests/invalidId';
+      describe('/api/v1/users/requests/<requestId>', () => {
+        describe('if the request is valid', () => {
+          describe('response status code', () => {
+            it('should return status 201', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .send(validObj)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .expect(201, done);
+            });
+          });
+          describe('response body', () => {
+            it('should have a success property that is true', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .send(validObj)
+                .end((error, resp) => {
+                  expect(resp.body).property('success').to.be.true;
+                  done();
+                });
+            });
+            it(`should have a data property that is an object with properties 
+                     title, description, location, image, clientId and id`, (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .send(validObj)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .end((error, resp) => {
+                  expect(resp.body).property('data').property('title');
+                  expect(resp.body).property('data').property('description');
+                  expect(resp.body).property('data').property('location');
+                  expect(resp.body).property('data').property('image');
+                  expect(resp.body).property('data').property('clientId');
+                  expect(resp.body).property('data').property('id');
+                  done();
+                });
+            });
+          });
+        });
+
+        describe('if the request some fields are missing in the request', () => {
+          describe('response status code', () => {
+            it('should return status 400', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .send({})
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .expect(400, done);
+            });
+          });
+          describe('response body', () => {
+            it('should have a success property that is false and a missingData property that is a array', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .send({})
+                .end((error, resp) => {
+                  expect(resp.body).property('success').to.be.false;
+                  expect(resp.body).property('missingData').to.be.a('array');
+                  done();
+                });
+            });
+          });
+        });
+
+        describe('if the request some fields are missing in the request', () => {
+          describe('response status code', () => {
+            it('should return status 400', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .send(invalidRequest)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .expect(400, done);
+            });
+          });
+          describe('response body', () => {
+            it('should have a success property that is false and a invalidData property that is a array', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .send(invalidRequest)
+                .end((error, resp) => {
+                  expect(resp.body).property('success').to.be.false;
+                  expect(resp.body).property('invalidData').to.be.a('array');
+                  done();
+                });
+            });
+          });
+        });
+
+        describe('if the id of the request is invalid', () => {
+          describe('response status code', () => {
+            it('should return status 404', (done) => {
+              request(app)
+                .put(invalidUpdateRoute)
+                .send(validObj)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .expect(404, done);
+            });
+          });
+
+          describe('response body', () => {
+            it('should have a success property that is false ', (done) => {
+              request(app)
+                .put(updateRequestValidRoute)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .send(invalidRequest)
+                .end((error, resp) => {
+                  expect(resp.body).property('success').to.be.false;
+                  done();
+                });
+            });
+          });
+        });
+      });
+    });
+
+
     describe('POST routes', () => {
       const CREATE_ROUTE = '/api/v1/users/requests';
       describe(CREATE_ROUTE, () => {
-        const validObj = {
-          title: 'Hellooo World',
-          description: 'Yoaaaaa',
-          location: 'llocation is valid',
-          image: 'iamge is cool',
-          clientId: 'beatedasd',
-        };
-        const invalidRequest = {
-          title: 'e',
-          description: 'Y',
-          location: 'l',
-          image: 'i',
-          clientId: '.',
-        };
         describe('if the request is valid', () => {
           describe('response status code', () => {
             it('should return status 201', (done) => {
@@ -138,6 +270,7 @@ describe('/users/requests Route', () => {
         });
       });
     });
+
     describe('GET routes', () => {
       describe('GET /api/v1/users/requests', () => {
         describe('if items exists', () => {

@@ -1,5 +1,4 @@
 import uuid from 'uuid';
-import UserValidator from '../validators/UserValidator';
 
 class UserService {
   constructor() {
@@ -13,13 +12,26 @@ class UserService {
 
     if (foundObj) {
       return {
-        id: foundObj.id,
-        username: foundObj.username,
-        userType: foundObj.userType,
-        email: foundObj.email,
+        respObj: {
+          success: true,
+          data: {
+            id: foundObj.id,
+            username: foundObj.username,
+            userType: foundObj.userType,
+            email: foundObj.email,
+          },
+
+        },
+        statusCode: 200,
       };
     }
-    return foundObj;
+    return {
+      respObj: {
+        success: false,
+        message: 'The inputed username and password combination was not found',
+      },
+      statusCode: 404,
+    };
   }
 
   /**
@@ -36,15 +48,16 @@ class UserService {
    * password and email properties
    */
   createUser(user) {
-    let foundObj;
-    const validateUser = new UserValidator(user).validate();
-    if (validateUser.valid) {
-      const id = uuid.v4();
-      const newUser = Object.assign({}, user, { id });
-      this.users[id] = newUser;
-      foundObj = newUser;
-    }
-    return foundObj;
+    const id = uuid.v4();
+    const newUser = Object.assign({}, user, { id });
+    this.users[id] = newUser;
+    return {
+      statusCode: 201,
+      respObj: {
+        success: true,
+        data: newUser,
+      },
+    };
   }
 
 
