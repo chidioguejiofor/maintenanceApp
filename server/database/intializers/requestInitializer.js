@@ -29,9 +29,16 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Requests" TO ${databaseManager.us
 const destroySql = 'DROP TABLE IF EXISTS  "Requests"';
 
 
+/**
+ * ReqeustInitializer is an {@link module:./Initializer}   that is used to
+ * intialize the "Reqeusts" table in the database. It specifies the
+ * create and destroy sql statements that is used in its superclass
+ *
+ *  @requires module:./Initializer
+ */
 class ReqeustInitializer extends Initializer {
   constructor() {
-    super(createSql, destroySql, 'Request');
+    super(createSql, destroySql, 'Requests');
   }
 }
 

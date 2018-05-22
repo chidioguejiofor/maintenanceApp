@@ -22,9 +22,16 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Engineers" TO ${databaseManager.u
 const destroySql = 'DROP TABLE IF EXISTS  "Engineers"';
 
 
+/**
+ * EngineerInitializer is an {@link module:./Initializer}   that is used to
+ * intialize the "Engineers" table in the database. It specifies the
+ * create and destroy sql statements that is used in its superclass
+ *
+ *  @requires module:./Initializer
+ */
 class EngineerInitializer extends Initializer {
   constructor() {
-    super(createSql, destroySql, 'Engineer');
+    super(createSql, destroySql, 'Engineers');
   }
 }
 

@@ -19,6 +19,14 @@ WITH (
 `;
 const destroySql = 'DROP TABLE IF EXISTS  "RequestStatus"';
 
+
+/**
+ * ReqeustStatusInitializer is an {@link module:./Initializer}   that is used to
+ * intialize the "ReqeustStatus" table in the database. It specifies the
+ * create and destroy sql statements that is used in its superclass
+ *
+ *  @requires module:./Initializer
+ */
 class ReqeustStatusInitializer extends Initializer {
   constructor() {
     super(createSql, destroySql, 'RequestStatus');

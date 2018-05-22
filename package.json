@@ -9,7 +9,8 @@
     "start-file": "babel-node  ",
     "test": "nyc mocha  --reporter progress --require babel-core/register \"server/test/**/*.test.js\" --exit || true",
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "build": "babel ./server/ -d build --copy-files -s"
+    "build": "babel ./server/ -d build --copy-files -s", 
+    "custome-migrate": "npm run start-file server/database/initScript.js"
   },
   "repository": {
     "type": "git",

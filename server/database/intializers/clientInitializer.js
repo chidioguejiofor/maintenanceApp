@@ -22,9 +22,16 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Clients" TO ${databaseManager.use
 const destroySql = 'DROP TABLE IF EXISTS  "Clients"';
 
 
+/**
+ * ClientInitializer is an {@link module:./Initializer}   that is used to
+ * intialize the "Clients" table in the database. It specifies the
+ * create and destroy sql statements that is used in its superclass
+ *
+ *  @requires module:./Initializer
+ */
 class ClientInitializer extends Initializer {
   constructor() {
-    super(createSql, destroySql, 'Client');
+    super(createSql, destroySql, 'Clients');
   }
 }
 
