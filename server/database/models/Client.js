@@ -1,3 +1,4 @@
+
 class Client {
   constructor(username, password, email) {
     this.username = username;

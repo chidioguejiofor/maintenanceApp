@@ -1,10 +1,10 @@
-import databaseManager from '../../resourceManagers/databaseManager';
+import databaseManager from '../../database/databaseManager';
 import Initializer from './Initializer';
 
 const createSql =
 `CREATE TABLE "Requests"
 (
-    id integer,
+    id integer PRIMARY_KEY AUTO_INCREMENT,
     title character varying(100),
     description character varying(2000),
     location character varying(300),

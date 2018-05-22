@@ -22,7 +22,7 @@ const testConfig = {
 let client;
 const query = (sql, callback, errorHandler, values) => {
   client.query(sql, values)
-    .then(callback)
+    .then(result => callback(result))
     .catch(errorHandler);
 };
 
