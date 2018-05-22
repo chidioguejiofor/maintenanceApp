@@ -1,10 +1,10 @@
 class Request {
-  constructor(title, description, location, clientId, image) {
+  constructor(title, description, location, clientUsername, image) {
     this.title = title;
     this.description = description;
     this.location = location;
     this.image = image;
-    this.clientId = clientId;
+    this.clientUsername = clientUsername;
   }
 }
 export default Request;
