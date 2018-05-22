@@ -9,7 +9,7 @@
     "start-file": "babel-node  ",
     "test": "nyc mocha  --reporter progress --require babel-core/register \"server/test/**/*.test.js\" --exit || true",
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "build": "babel ./server/ -d build --copy-files -s", 
+    "build": "babel ./server/ -d build --copy-files -s",
     "custome-migrate": "npm run start-file server/database/initScript.js"
   },
   "repository": {
@@ -27,9 +27,10 @@
     "chai-http": "^4.0.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
+    "minimist": "^1.2.0",
+    "pg": "^7.4.3",
     "supertest": "^3.0.0",
-    "uuid": "^3.2.1", 
-    "pg": "^7.4.3"
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -47,7 +48,6 @@
     "mocha": "^5.1.1",
     "nodemon": "^1.17.4",
     "nyc": "^11.7.1",
-    
     "travis": "^0.1.1"
   }
 }
