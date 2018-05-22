@@ -4,12 +4,13 @@
   "description": "This API functionality that make it easy for a user to remotely send a maintenanec request to an admin",
   "main": "server/app.js",
   "scripts": {
-    "start-dev":"nodemon --exec npm start",
+    "start-dev": "nodemon --exec npm start",
     "start": "babel-node server/app.js ",
+    "start-file": "babel-node  ",
     "test": "nyc mocha  --reporter progress --require babel-core/register \"server/test/**/*.test.js\" --exit || true",
- 
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "build": "babel ./server/ -d build --copy-files -s"
+    "build": "babel ./server/ -d build --copy-files -s", 
+    "custome-migrate": "npm run start-file server/database/initScript.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,8 @@
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
     "supertest": "^3.0.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1", 
+    "pg": "^7.4.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -41,8 +43,11 @@
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.8.2",
+    "gem": "^2.4.3",
     "mocha": "^5.1.1",
     "nodemon": "^1.17.4",
-    "nyc": "^11.7.1"
+    "nyc": "^11.7.1",
+    
+    "travis": "^0.1.1"
   }
 }
