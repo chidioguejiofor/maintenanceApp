@@ -6,4 +6,3 @@ Call for help
 [![GitHub issues](https://img.shields.io/github/issues/chidioguejiofor/maintenanceApp.svg)](https://github.com/chidioguejiofor/maintenanceApp/issues) 
 [![](https://img.shields.io/badge/Author-Oguejiofor%20Chidiebere-orange.svg)](https://img.shields.io/badge/Author-Oguejiofor%20Chidiebere-orange.svg)[![Maintainability](https://api.codeclimate.com/v1/badges/31f450e6956a71d3e832/maintainability)](https://codeclimate.com/github/chidioguejiofor/maintenanceApp/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/31f450e6956a71d3e832/test_coverage)](https://codeclimate.com/github/chidioguejiofor/maintenanceApp/test_coverage) 
 
-
