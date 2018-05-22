@@ -1,37 +1,43 @@
-import uuid from 'uuid';
+import { EngineerMapper, ClientMapper } from '../database/TableMappers';
 
 class UserService {
   constructor() {
     this.users = {};
   }
 
-  getByCredentials(username, password) {
-    const foundObj = Object.values(this.users)
-      .find(user =>
-        user.username === username && user.password === password);
-
-    if (foundObj) {
-      return {
-        respObj: {
-          success: true,
-          data: {
-            id: foundObj.id,
-            username: foundObj.username,
-            userType: foundObj.userType,
-            email: foundObj.email,
+  static getByCredentials(username, password, callback) {
+    let response;
+    ClientMapper.loginQuery(username, password, (result) => {
+      if (result.length > 0) {
+        response = {
+          statusCode: 201,
+          respObj: {
+            success: true,
+            data: result,
           },
+        };
+      } else {
+        response = {
+          statusCode: 500,
+          respObj: {
+            success: false,
+            message: 'The specified user was not found',
+          },
+        };
+      }
 
+      callback(response);
+    }, (err) => {
+      console.error(err);
+      response = {
+        statusCode: 400,
+        respObj: {
+          success: false,
+          message: 'Unknown error occured',
         },
-        statusCode: 200,
       };
-    }
-    return {
-      respObj: {
-        success: false,
-        message: 'The inputed username and password combination was not found',
-      },
-      statusCode: 404,
-    };
+      callback(response);
+    });
   }
 
   /**
@@ -43,21 +49,52 @@ class UserService {
   }
 
   /**
-   * Adds a new user into the system
-   * @param {*} user an instance of model User that contains a userType, username,
+   * Adds a new user into the database
+   * @param {Client} user an instance of model User that contains a userType, username,
    * password and email properties
    */
-  createUser(user) {
-    const id = uuid.v4();
-    const newUser = Object.assign({}, user, { id });
-    this.users[id] = newUser;
-    return {
-      statusCode: 201,
-      respObj: {
-        success: true,
-        data: newUser,
-      },
-    };
+  createUser(user, callback) {
+    let mapper;
+    if (user.userType === 'engineer') {
+      mapper = new EngineerMapper(user);
+    } else {
+      mapper = new ClientMapper(user);
+    }
+    let response;
+    this.name = '';
+    mapper.create((result) => {
+      console.log(result);
+      if (result.rowCount > 0) {
+        response = {
+          statusCode: 201,
+          respObj: {
+            success: true,
+            data: user,
+          },
+        };
+      } else {
+        response = {
+          statusCode: 500,
+          respObj: {
+            success: false,
+            message: `The new ${user.userType} was not created for unknown reasons`,
+          },
+        };
+      }
+
+      callback(response);
+    }, (err) => {
+      console.error(err);
+      response = {
+        statusCode: 400,
+        respObj: {
+          success: false,
+          message: 'Unknown error occured',
+        },
+      };
+      callback(response);
+      DatabaseManager.closeConnection();
+    });
   }
 
 

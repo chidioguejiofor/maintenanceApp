@@ -34,10 +34,8 @@ class TableMapper {
    }}
    */
   create(callback, errorHandler) {
-    DatabaseManager.connect();
-    DatabaseManager.executeQuery(this.createSql, () => {
-      callback();
-      DatabaseManager.closeConnection();
+    DatabaseManager.executeQuery(this.createSql, (result) => {
+      callback(result);
     }, errorHandler, this.createValues);
   }
 
@@ -50,10 +48,8 @@ class TableMapper {
    * @param {Function} errorHandler called when an error occured
    */
   update(key, callback, errorHandler) {
-    DatabaseManager.connect();
     DatabaseManager.executeQuery(this.update[key].sql, () => {
       callback();
-      DatabaseManager.closeConnection();
     }, errorHandler, this.updateValues);
   }
 }
@@ -76,19 +72,21 @@ export class ClientMapper extends TableMapper {
      * this Client. The
      */
   constructor(newClient, existingClient) {
-    super({
+    const obj = {
       create: {
         sql:
-            `INSERT INTO "Clients"(username, password, email)
-                VALUES($1, $2, $3) `,
+              `INSERT INTO "Engineers"(username, password, email)
+                  VALUES($1, $2, $3) `,
         values: [newClient.username, newClient.password, newClient.email],
 
       },
-      update: {
+    };
+    if (existingClient) {
+      obj.update = {
         'username-password': {
-          sql: `UPDATE "Clients" 
-            SET username = $1, password = $2
-            WHERE password = $4 AND username = $5`,
+          sql: `UPDATE "Engineers" 
+              SET username = $1, password = $2
+              WHERE password = $4 AND username = $5`,
           values: [
             newClient.username, newClient.password,
             existingClient.password, existingClient.username,
@@ -96,21 +94,27 @@ export class ClientMapper extends TableMapper {
         },
 
         password: {
-          sql: `UPDATE "Clients" SET password = ($1)
-                WHERE password = ($4) AND username = ($5)`,
+          sql: `UPDATE "Engineers" SET password = ($1)
+                  WHERE password = ($4) AND username = ($5)`,
           values: [newClient.password, existingClient.password, existingClient.username],
 
         },
         email: {
-          sql: `UPDATE "Clients" SET email = ($1)
-                  WHERE password = ($4) AND username = ($5)`,
+          sql: `UPDATE "Engineers" SET email = ($1)
+                    WHERE password = ($4) AND username = ($5)`,
           values: [newClient.email, existingClient.password, existingClient.username],
 
         },
-      },
-    });
-    this.newModel = newClient;
-    this.existingModel = existingClient;
+      };
+    }
+    super(obj);
+  }
+
+  static loginQuery(username, password, callback, errorHandler) {
+    const sql = `SELECT username, email FROM "Clients" WHERE 
+              username = ($1) AND password = ($2)`;
+
+    DatabaseManager.executeStream(sql, callback, errorHandler, [username, password]);
   }
 }
 
@@ -127,7 +131,7 @@ export class EngineerMapper extends TableMapper {
      * @param {object} [existingEngineer] optionally an engineer to be added to the db
      */
   constructor(newEngineer, existingEngineer) {
-    super({
+    const obj = {
       create: {
         sql:
               `INSERT INTO "Engineers"(username, password, email)
@@ -135,7 +139,9 @@ export class EngineerMapper extends TableMapper {
         values: [newEngineer.username, newEngineer.password, newEngineer.email],
 
       },
-      update: {
+    };
+    if (existingEngineer) {
+      obj.update = {
         'username-password': {
           sql: `UPDATE "Engineers" 
               SET username = $1, password = $2
@@ -158,10 +164,9 @@ export class EngineerMapper extends TableMapper {
           values: [newEngineer.email, existingEngineer.password, existingEngineer.username],
 
         },
-      },
-    });
-    this.newModel = newEngineer;
-    this.existingModel = existingEngineer;
+      };
+    }
+    super(obj);
   }
 }
 

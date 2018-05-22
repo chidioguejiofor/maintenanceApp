@@ -1,4 +1,4 @@
-import databaseManager from '../../resourceManagers/databaseManager';
+import DatabaseManager from '../../database/DatabaseManager';
 import Initializer from './Initializer';
 
 const createSql =
@@ -16,7 +16,7 @@ WITH (
 ALTER TABLE "Clients"
     OWNER to postgres;
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Clients" TO ${databaseManager.user()};
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Clients" TO ${DatabaseManager.user()};
 `;
 
 const destroySql = 'DROP TABLE IF EXISTS  "Clients"';

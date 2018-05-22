@@ -1,4 +1,4 @@
-import databaseManager from '../../resourceManagers/databaseManager';
+import databaseManager from '../DatabaseManager';
 import Initializer from './Initializer';
 
 const createSql =

@@ -4,7 +4,7 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../app';
-import User from '../../models/User';
+
 
 describe('User Routes', () => {
   describe('POST routes', () => {

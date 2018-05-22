@@ -2,7 +2,6 @@
 /*  eslint no-undef: off */
 import { expect, assert } from 'chai';
 import UserValidator from '../../validators/UserValidator';
-import User from '../../models/User';
 
 const goodUser = new User('Chisom', 'password123', 'email@email.com', 'client');
 const badUserOne = new User('123', 'a', 'email.com', 'chizoba');

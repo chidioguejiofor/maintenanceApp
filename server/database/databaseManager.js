@@ -1,6 +1,6 @@
 /* esint-diasable no-console: off */
 
-import { Client } from 'pg';
+import { Pool } from 'pg';
 
 const user = process.env.DATABASE_USER || 'maintenance_app_client';
 const productionConfig = {
@@ -19,22 +19,44 @@ const testConfig = {
   host: 'localhost',
 };
 
-let client;
-const query = (sql, callback, errorHandler, values) => {
-  client.query(sql, values)
-    .then(result => callback(result))
-    .catch(errorHandler);
-};
-
-
+let pool = new Pool(productionConfig);
 /**
  *A databaseManager contains logic for executing sql statements in the database
  * It contains code that connects the
  */
 class DatabaseManager {
+  /**
+   * This is used to executes sql statements in the databresult @param {*} sql
+   * @param {*} callback
+   * @param {*} errorHandler
+   * @param {*} [values]  */
+
+
   static executeQuery(sql, callback, errorHandler, values) {
-    query(sql, callback, errorHandler, values);
+    pool.connect((err, client, done) => {
+      if (err) errorHandler(err);
+      else {
+        client.query(sql, values, (error, result) => {
+          if (err) {
+            errorHandler(error);
+          } else {
+            callback(result);
+          }
+          done();
+        });
+      }
+    });
   }
+
+  static executeStream(sql, callback, errorHandler, values) {
+    pool.query(sql, values, (err, res) => {
+      if (err) errorHandler(err);
+      else {
+        callback(res);
+      }
+    });
+  }
+
   static user() {
     return user;
   }
@@ -43,19 +65,30 @@ class DatabaseManager {
     client.connect();
   }
 
-  static closeConnection() {
-    client.end();
-  }
-
 
   static initTestConfig() {
-    client = new Client(testConfig);
+    pool = new Pool(testConfig);
   }
 
   static initProductionConfig() {
-    client = new Client(productionConfig);
+    pool = new Pool(productionConfig);
   }
 }
 
 export default DatabaseManager;
+
+
+class ConnectionManager {
+  static query(text, params, callback) {
+    return pool.query(text, params, (err, res) => {
+      callback(err, res);
+    });
+  }
+
+  static getClient(callback) {
+    pool.connect((err, client, done) => {
+      callback(err, client, done);
+    });
+  }
+}
 

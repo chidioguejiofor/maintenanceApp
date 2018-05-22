@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import databaseManager from '../../resourceManagers/databaseManager';
+import databaseManager from '../../database/DatabaseManager';
 
 /**
  * An intializer encapsulates logic for creating and droping a table in the
@@ -30,7 +30,7 @@ class Initializer {
     databaseManager.executeQuery(this.createSql, () => {
       console.log(`Successfully created "${this.modelName}" table`);
       if (closeConnection) {
-        databaseManager.closeConnection();
+
       }
     }, (err) => {
       console.log(`An error occured while creating table "${this.modelName}" table`);
