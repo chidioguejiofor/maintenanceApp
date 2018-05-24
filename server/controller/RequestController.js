@@ -35,6 +35,19 @@ export default class RequestController {
     }
   }
 
+
+  static getAllClientRequests(req, resp) {
+    if (!req.authData.client) {
+      resp.status(403).json({
+        success: false,
+        message: 'Only clients can access this route',
+      });
+      return;
+    }
+    requestService.getByUsername(req.authData.client.username, (result) => {
+      resp.status(result.statusCode).json(result.respObj);
+    });
+  }
   static modify(req, resp) {
     const { request, validationResult } = getRequest(req.body);
     const { params: { id } } = req;
@@ -54,12 +67,6 @@ export default class RequestController {
     });
   }
 
-  static getByUsername(req, resp) {
-    const { body: { username } } = req;
-    requestService.getByUsername(username, (result) => {
-      resp.status(result.statusCode).json(result.respObj);
-    });
-  }
 
   static getById(req, resp) {
     const { body: { username }, params: { id } } = req;

@@ -83,6 +83,7 @@ class UserService {
           },
         };
       } else {
+        console.log(err);
         response = {
           statusCode: 400,
           respObj: {

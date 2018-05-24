@@ -6,8 +6,8 @@ const requestRouter = Router();
 requestRouter.use(authenticator.verifyToken);
 
 requestRouter.post('/users/requests', RequestController.create);
-requestRouter.get('/requests', RequestController.getAll);
-requestRouter.get('users/requests/:id', RequestController.getById);
+requestRouter.get('/users/requests', RequestController.getAllClientRequests);
+requestRouter.get('/users/requests/:id', RequestController.getById);
 
 
 export default requestRouter;

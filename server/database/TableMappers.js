@@ -212,7 +212,7 @@ export class ReqeustMapper extends TableMapper {
    */
   static getByUsername(username, callback, errorHandler) {
     const sql =
-    `SELECT id, title, description, location, image, status, message 
+    `SELECT id, title, description, location, image, status, message  FROM "Requests"
         WHERE clientUsername = $1`;
     DatabaseManager.executeStream(sql, callback, errorHandler, [username]);
   }
