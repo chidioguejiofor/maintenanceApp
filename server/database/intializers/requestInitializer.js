@@ -1,5 +1,4 @@
 import Initializer from './Initializer';
-import DatabaseManager from '../DatabaseManager';
 
 const createSql =
 `CREATE TABLE "Requests"
@@ -21,7 +20,6 @@ const createSql =
 );
 
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Requests" TO ${DatabaseManager.user()};
 
 `;
 

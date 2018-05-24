@@ -1,4 +1,4 @@
-import DatabaseManager from './DatabaseManager';
+import DatabaseManager from './databaseManager';
 
 /**
  * A {@code TableMapper } is used to link an sql table to a javascript object

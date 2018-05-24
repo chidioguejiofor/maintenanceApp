@@ -1,4 +1,3 @@
-import databaseManager from '../DatabaseManager';
 import Initializer from './Initializer';
 
 const createSql =
@@ -12,7 +11,6 @@ const createSql =
 );
 
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Engineers" TO ${databaseManager.user()};
 `;
 
 const destroySql = 'DROP TABLE IF EXISTS  "Engineers"';
