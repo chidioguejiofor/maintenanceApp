@@ -20,12 +20,7 @@ class Initializer {
     this.modelName = modelName;
   }
 
-  /**
-   * This method creates a new table by executing the sql command. It takes a
-   * boolean that specifies whether or not the connection should be closed
-   * once the operation is successful
-   * @param {Boolean} closeConnection
-   */
+
   create() {
     databaseManager.executeQuery(this.createSql, () => {
       console.log(`Successfully created "${this.modelName}" table`);

@@ -41,7 +41,7 @@ class DatabaseManager {
       else {
         client.query(sql, values, (error, result) => {
           done();
-          if (err) {
+          if (error) {
             errorHandler(error);
           } else {
             callback(result);

@@ -1,5 +1,30 @@
-import uuid from 'uuid';
 
+import { ReqeustMapper } from '../database/TableMappers';
+
+
+function handleGetRequests(rows, callback) {
+  console.log(callback, 'callback');
+  if (rows.length > 0) {
+    callback({
+      statusCode: 200,
+      respObj: {
+        data: rows,
+      },
+    });
+  } else {
+    callback({
+      statusCode: 204,
+    });
+  }
+}
+
+function errorHandler(error, callback) {
+  console.log(error);
+  callback({
+    statusCode: 500,
+    message: 'An unknown error occured in the server',
+  });
+}
 class RequestService {
   constructor() {
     this.requests = [];
@@ -10,87 +35,57 @@ class RequestService {
    * with success === true
    * @param {uuid} requestId
    */
-  getById(requestId) {
-    const request =
-        this.requests
-          .find(existingRequest => existingRequest.id === requestId);
-
-    if (request) {
-      return {
-
-        statusCode: 200,
-        respObj: {
-          success: true,
-          data: request,
-        },
-      };
-    }
-    return {
-      respObj: {
-        success: false,
-        message: 'The specified id was not found',
-      },
-      statusCode: 404,
-    };
+  static getByUsername(clientUsername, callback) {
+    ReqeustMapper.getByUsername(clientUsername, (result) => {
+      handleGetRequests(result.rows, callback);
+    }, errorHandler(errorHandler));
   }
 
-  getAll() {
-    const { requests } = this;
-    if (requests.length >= 0) {
-      return {
-        statusCode: 200,
-        respObj: {
-          data: requests,
-          success: true,
-        },
-      };
-    }
-    return {
-      statusCode: 204,
-      respObj: {
-        success: false,
-      },
-    };
+  static getAll(callback) {
+    ReqeustMapper.getAll((result) => {
+      console.log(result, 'result');
+      handleGetRequests(result.rows, callback);
+    }, (error) => {
+      errorHandler(error, callback);
+    });
   }
 
   /**
-   * This gets all the requests made by a client specified by the
-   * clientID
-   * @param {*} clientId
+   * Gets a specific request made by a client specified by the using the clientUsername
+   * and requestId
+   * @param {string} clientUsername the clientUsername in the reques
+   * @param {string} requestId the id of the request
    */
-  getByUserId(clientId) {
-    const requestArr =
-    this.requests.filter(existingRequest =>
-      existingRequest.clientId === clientId);
-    if (requestArr.length > 0) {
-      return {
-        respObj: {
-          success: true,
-          data: requestArr,
-        },
-        statusCode: 200,
-      };
-    }
-    return {
-      respObj: {
-        success: false,
-        message: 'The specified clientID does not exist',
-      },
-      statusCode: 404,
-    };
+  static getById(clientUsername, requestId, callback) {
+    ReqeustMapper.getById(clientUsername, requestId, (result) => {
+      handleGetRequests(result.rows, callback);
+    }, errorHandler(errorHandler));
   }
 
 
-  makeRequest(request) {
-    request.id = uuid.v4();
-    this.requests.push(request);
-    return {
-      statusCode: 201,
-      respObj: {
-        success: true,
-        data: request,
-      },
-    };
+  static makeRequest(request, callback) {
+    const mapperObj = new ReqeustMapper(request);
+    mapperObj.create((result) => {
+      console.log(result, 'result');
+      if (result.rowCount === 1) {
+        callback({
+          statusCode: 201,
+          respObj: {
+            success: true,
+            data: result.rows[0],
+          },
+        });
+      }
+    }, (error) => {
+      console.log(error);
+      callback({
+        statusCode: 400,
+        respObj: {
+          success: false,
+          message: 'Unknown error',
+        },
+      });
+    });
   }
 
   modify(requestId, newRequest) {
@@ -123,4 +118,4 @@ class RequestService {
   }
 }
 
-export default new RequestService();
+export default RequestService;

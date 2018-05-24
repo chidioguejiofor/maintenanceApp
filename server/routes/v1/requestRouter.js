@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import RequestController from '../../controller/RequestController';
+import authenticator from '../../helpers/authenticator';
 
 const requestRouter = Router();
+requestRouter.use(authenticator.verifyToken);
 
-requestRouter.post('/', RequestController.create);
-requestRouter.get('/', RequestController.getAll);
-requestRouter.get('/:id', RequestController.getById);
-requestRouter.put('/:id', RequestController.modify);
+requestRouter.post('/users/requests', RequestController.create);
+requestRouter.get('/requests', RequestController.getAll);
+requestRouter.get('users/requests/:id', RequestController.getById);
+
 
 export default requestRouter;

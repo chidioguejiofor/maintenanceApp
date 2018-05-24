@@ -4,9 +4,11 @@ import RequestValidator from '../validators/RequestValidator';
 
 function getRequest(body) {
   const {
-    title, description, clientId, image, location,
+    title, description, image, location,
   } = body;
-  const request = new Request(title, description, location, clientId, image);
+  const request = {
+    title, description, image, location,
+  };
   const validationResult = new RequestValidator(request).validate();
   return { request, validationResult };
 }
@@ -14,11 +16,20 @@ function getRequest(body) {
 
 export default class RequestController {
   static create(req, resp) {
-    const { request, validationResult } = getRequest(req.body);
+    if (!req.authData.client) {
+      resp.status(403).json({
+        success: false,
+        message: 'Only users(clients) can make a request',
+      });
+      return;
+    }
+    const { request, validationResult } = getRequest(req.body, req.authData.client.username);
 
     if (validationResult.valid) {
-      const result = requestService.makeRequest(request);
-      resp.status(result.statusCode).json(result.respObj);
+      request.clientUsername = req.authData.client.username;
+      requestService.makeRequest(request, (result) => {
+        resp.status(result.statusCode).json(result.respObj);
+      });
     } else {
       resp.status(400).json(RequestValidator.handleBadData(validationResult));
     }
@@ -35,14 +46,26 @@ export default class RequestController {
     }
   }
 
-  static getById(req, resp) {
-    const response = requestService.getById(req.params.id);
-    resp.status(response.statusCode).json(response.respObj);
-  }
 
   static getAll(req, resp) {
-    const response = requestService.getAll();
-    resp.status(response.statusCode).json(response.respObj);
+    requestService.getAll((result) => {
+      console.log(result, 'result');
+      resp.status(result.statusCode).json(result.respObj);
+    });
+  }
+
+  static getByUsername(req, resp) {
+    const { body: { username } } = req;
+    requestService.getByUsername(username, (result) => {
+      resp.status(result.statusCode).json(result.respObj);
+    });
+  }
+
+  static getById(req, resp) {
+    const { body: { username }, params: { id } } = req;
+    requestService.getById(username, id, (result) => {
+      resp.status(result.statusCode).json(result.respObj);
+    });
   }
 }
 

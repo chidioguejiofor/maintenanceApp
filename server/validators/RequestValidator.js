@@ -20,10 +20,6 @@ export default class RequestValidator extends ModelValidator {
         message: 'must be between 5 to 100 alphanumeric characters',
         pattern: /[a-z0-9]{5,200}/i,
       },
-      clientId: {
-        message: 'any set of characters of at least one length',
-        pattern: /.{1,}/,
-      },
     });
   }
 
@@ -31,11 +27,11 @@ export default class RequestValidator extends ModelValidator {
   validate() {
     const {
       model: {
-        title, description, location, image, clientId,
+        title, description, location, image,
       },
     } = this;
     const testObj = {
-      title, description, location, image, clientId,
+      title, description, location, image,
     };
 
     return super.runValidation(testObj);

@@ -176,18 +176,20 @@ export class EngineerMapper extends TableMapper {
  */
 export class ReqeustMapper extends TableMapper {
   constructor(newRequest, id) {
-    super({
+    const requestOptions = {
       create: {
         sql:
-                `INSERT INTO "Requests"( title, description, location, image, clientUsername)
-                    VALUES($1, $2, $3,$3, $4, $5, $6 ) `,
+                `INSERT INTO "Requests"( title, description, location, image, clientusername)
+                    VALUES($1, $2, $3, $4, $5 ) RETURNING *`,
         values: [
           newRequest.title, newRequest.description,
           newRequest.location, newRequest.image,
           newRequest.clientUsername],
 
       },
-      update: {
+    };
+    if (id) {
+      requestOptions.update = {
         request: {
           sql: `UPDATE "Requests"( title, description, location, image, clientUsername)
                     VALUES($1, $2, $3,$3, $4, $5, $6 )
@@ -197,8 +199,35 @@ export class ReqeustMapper extends TableMapper {
             newRequest.location, newRequest.image,
             newRequest.clientUsername, id],
         },
-      },
-    });
+      };
+    }
+    super(requestOptions);
+  }
+
+  /**
+   *
+   * @param {*} username
+   * @param {*} callback
+   * @param {*} errorHandler
+   */
+  static getByUsername(username, callback, errorHandler) {
+    const sql =
+    `SELECT id, title, description, location, image, status, message 
+        WHERE clientUsername = $1`;
+    DatabaseManager.executeStream(sql, callback, errorHandler, [username]);
+  }
+
+  static getById(username, id, callback, errorHandler) {
+    const sql =
+    `SELECT id, title, description, location, image, status, message 
+        WHERE clientUsername = $1 AND id = $2 `;
+    DatabaseManager.executeStream(sql, callback, errorHandler, [username, id]);
+  }
+
+  static getAll(callback, errorHandler) {
+    const sql =
+    'SELECT id, title, description, location, image, status, message, clientUsername FROM "Requests"';
+    DatabaseManager.executeStream(sql, callback, errorHandler);
   }
 }
 
