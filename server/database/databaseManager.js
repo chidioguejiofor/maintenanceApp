@@ -2,16 +2,15 @@
 
 import { Pool } from 'pg';
 
-const user = process.env.DATABASE_USER || 'maintenance_app_client';
+const dbURL = process.env.DATABASE_URL;
+let user = 'maintenance_app_client';
+
 const productionConfig = {
-  user,
-  database: process.env.DATABASE_URL || 'maintenance_app_db',
-  password: process.env.DATABASE_PASSWORD || null,
-  port: process.env.DATABASE_PORT || null,
-  host: 'localhost',
+  connectionString: process.env.DATABASE_URL,
   max: 1,
 };
 
+console.log('Erntered');
 const testConfig = {
   user,
   database: process.env.DATABASE_URL || 'maintenance_app_db',
@@ -21,7 +20,7 @@ const testConfig = {
   max: 1,
 };
 
-let pool = new Pool(productionConfig);
+let pool;
 
 /**
  *A databaseManager contains logic for executing sql statements in the database
@@ -68,10 +67,14 @@ class DatabaseManager {
 
   static initTestConfig() {
     pool = new Pool(testConfig);
+    user = 'maintenance_app_client';
   }
 
   static initProductionConfig() {
+    user = dbURL.split('//')[1].split(':')[0];/* esint-disable line prefer-destructuring: off */
+    console.log(user, 'The user got here');
     pool = new Pool(productionConfig);
+    console.log(pool, 'pool contents');
   }
 }
 
