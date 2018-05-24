@@ -69,8 +69,15 @@ export default class RequestController {
 
 
   static getById(req, resp) {
-    const { body: { username }, params: { id } } = req;
-    requestService.getById(username, id, (result) => {
+    const { params: { id } } = req;
+    if (!req.authData.client) {
+      resp.status(403).json({
+        success: false,
+        message: 'Only clients can access this route',
+      });
+      return;
+    }
+    requestService.getById(req.authData.client.username, id, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }

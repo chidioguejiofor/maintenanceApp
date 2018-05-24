@@ -219,8 +219,8 @@ export class ReqeustMapper extends TableMapper {
 
   static getById(username, id, callback, errorHandler) {
     const sql =
-    `SELECT id, title, description, location, image, status, message 
-        WHERE clientUsername = $1 AND id = $2 `;
+    `SELECT id, title, description, location, image, status, message  FROM "Requests"
+        WHERE clientusername = $1 AND id = $2 `;
     DatabaseManager.executeStream(sql, callback, errorHandler, [username, id]);
   }
 
