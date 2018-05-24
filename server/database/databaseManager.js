@@ -10,7 +10,6 @@ const productionConfig = {
   max: 1,
 };
 
-console.log('Erntered');
 const testConfig = {
   user,
   database: process.env.DATABASE_URL || 'maintenance_app_db',
@@ -68,6 +67,7 @@ class DatabaseManager {
   static initTestConfig() {
     pool = new Pool(testConfig);
     user = 'maintenance_app_client';
+    console.log('Inialized test config', pool);
   }
 
   static initProductionConfig() {

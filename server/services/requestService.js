@@ -8,6 +8,7 @@ function handleGetRequests(rows, callback) {
     callback({
       statusCode: 200,
       respObj: {
+        success: true,
         data: rows,
       },
     });
@@ -22,23 +23,17 @@ function errorHandler(error, callback) {
   console.log(error);
   callback({
     statusCode: 500,
-    message: 'An unknown error occured in the server',
+    message: 'Unknown error occured. Please check your parameters and try again',
   });
 }
 class RequestService {
-  constructor() {
-    this.requests = [];
-  }
-
-  /**
-   * This checks if the specified id exists in the system and returns an object
-   * with success === true
-   * @param {uuid} requestId
-   */
   static getByUsername(clientUsername, callback) {
     ReqeustMapper.getByUsername(clientUsername, (result) => {
       handleGetRequests(result.rows, callback);
-    }, errorHandler(errorHandler));
+    }, (error) => {
+      console.log(error);
+      errorHandler(error, callback);
+    });
   }
 
   static getAll(callback) {
@@ -46,7 +41,14 @@ class RequestService {
       console.log(result, 'result');
       handleGetRequests(result.rows, callback);
     }, (error) => {
-      errorHandler(error, callback);
+      console.log(error);
+      callback({
+        statusCode: 400,
+        respObj: {
+          success: false,
+          message: 'Unknown error',
+        },
+      });
     });
   }
 
