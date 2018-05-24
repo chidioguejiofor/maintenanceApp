@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import databaseManager from '../../database/DatabaseManager';
+import DatabaseManager from '../../database/databaseManager';
 
 /**
  * An intializer encapsulates logic for creating and droping a table in the
@@ -22,7 +22,7 @@ class Initializer {
 
 
   create() {
-    databaseManager.executeQuery(this.createSql, () => {
+    DatabaseManager.executeQuery(this.createSql, () => {
       console.log(`Successfully created "${this.modelName}" table`);
     }, (err) => {
       console.log(`An error occured while creating table "${this.modelName}" table`);
@@ -37,9 +37,9 @@ class Initializer {
    * @param {Boolean} closeConnection
    */
   drop(closeConnection) {
-    databaseManager.executeQuery(this.destroySql, () => {
+    DatabaseManager.executeQuery(this.destroySql, () => {
       console.log(`Successfully deleted "${this.modelName}" table`);
-      if (closeConnection) databaseManager.closeConnection();
+      if (closeConnection) DatabaseManager.closeConnection();
     }, (err) => {
       console.log(`An error occured while droping table" ${this.modelName}" table`);
       console.log(err.message);
