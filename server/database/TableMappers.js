@@ -34,7 +34,7 @@ class TableMapper {
    }}
    */
   create(callback, errorHandler) {
-    DatabaseManager.executeQuery(this.createSql, (result) => {
+    DatabaseManager.executeStream(this.createSql, (result) => {
       callback(result);
     }, errorHandler, this.createValues);
   }
@@ -75,7 +75,7 @@ export class ClientMapper extends TableMapper {
     const obj = {
       create: {
         sql:
-              `INSERT INTO "Engineers"(username, password, email)
+              `INSERT INTO "Clients"(username, password, email)
                   VALUES($1, $2, $3) `,
         values: [newClient.username, newClient.password, newClient.email],
 
@@ -111,8 +111,8 @@ export class ClientMapper extends TableMapper {
   }
 
   static loginQuery(username, password, callback, errorHandler) {
-    const sql = `SELECT username, email FROM "Clients" WHERE 
-              username = ($1) AND password = ($2)`;
+    const sql = `SELECT username, email FROM "Clients" 
+                  WHERE username = $1 AND password = $2`;
 
     DatabaseManager.executeStream(sql, callback, errorHandler, [username, password]);
   }

@@ -1,6 +1,5 @@
 import requestService from '../services/requestService';
 import RequestValidator from '../validators/RequestValidator';
-import Request from '../models/Request';
 
 
 function getRequest(body) {

@@ -1,28 +1,26 @@
-import databaseManager from '../../database/databaseManager';
 import Initializer from './Initializer';
+import DatabaseManager from '../DatabaseManager';
 
 const createSql =
 `CREATE TABLE "Requests"
 (
-    id integer PRIMARY_KEY AUTO_INCREMENT,
+    id SERIAL,
     title character varying(100),
     description character varying(2000),
     location character varying(300),
     image character varying(400),
+    status character varying(100),
+    message character varying(1000),
     "clientUsername" character varying(100),
     PRIMARY KEY (id),
     CONSTRAINT "clientUsernameConstraint" FOREIGN KEY ("clientUsername")
         REFERENCES "Clients" (username) MATCH FULL
         ON UPDATE CASCADE
         ON DELETE CASCADE
-        NOT VALID
-)
-WITH (
-    OIDS = FALSE
 );
 
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Requests" TO ${databaseManager.user()};
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Requests" TO ${DatabaseManager.user()};
 
 `;
 

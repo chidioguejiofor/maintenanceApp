@@ -9,6 +9,7 @@ const productionConfig = {
   password: process.env.DATABASE_PASSWORD || null,
   port: process.env.DATABASE_PORT || null,
   host: 'localhost',
+  max: 1,
 };
 
 const testConfig = {
@@ -17,9 +18,11 @@ const testConfig = {
   password: process.env.DATABASE_PASSWORD || null,
   port: process.env.DATABASE_PORT || null,
   host: 'localhost',
+  max: 1,
 };
 
 let pool = new Pool(productionConfig);
+
 /**
  *A databaseManager contains logic for executing sql statements in the database
  * It contains code that connects the
@@ -37,16 +40,17 @@ class DatabaseManager {
       if (err) errorHandler(err);
       else {
         client.query(sql, values, (error, result) => {
+          done();
           if (err) {
             errorHandler(error);
           } else {
             callback(result);
           }
-          done();
         });
       }
     });
   }
+
 
   static executeStream(sql, callback, errorHandler, values) {
     pool.query(sql, values, (err, res) => {
@@ -61,10 +65,6 @@ class DatabaseManager {
     return user;
   }
 
-  static connect() {
-    client.connect();
-  }
-
 
   static initTestConfig() {
     pool = new Pool(testConfig);
@@ -76,19 +76,4 @@ class DatabaseManager {
 }
 
 export default DatabaseManager;
-
-
-class ConnectionManager {
-  static query(text, params, callback) {
-    return pool.query(text, params, (err, res) => {
-      callback(err, res);
-    });
-  }
-
-  static getClient(callback) {
-    pool.connect((err, client, done) => {
-      callback(err, client, done);
-    });
-  }
-}
 

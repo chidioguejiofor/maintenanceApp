@@ -8,13 +8,9 @@ const createSql =
     password character varying(255),
     email character varying(255),
     PRIMARY KEY (username)
-)
-WITH (
-    OIDS = FALSE
 );
 
-ALTER TABLE "Clients"
-    OWNER to postgres;
+
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE "Clients" TO ${DatabaseManager.user()};
 `;

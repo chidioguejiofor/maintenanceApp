@@ -1,14 +1,12 @@
 import clientInitializer from './intializers/clientInitializer';
 import engineerInitializer from './intializers/engineerInitializer';
 import requestInitializer from './intializers/requestInitializer';
-import requestStatusInitializer from './intializers/requestStatusInitializer';
 import DatabaseManager from './DatabaseManager';
 
 
 DatabaseManager.initProductionConfig();
 
 
-requestStatusInitializer.drop();
 requestInitializer.drop();
 clientInitializer.drop();
 engineerInitializer.drop();
@@ -16,5 +14,11 @@ engineerInitializer.drop();
 clientInitializer.create();
 engineerInitializer.create();
 requestInitializer.create();
-requestStatusInitializer.create(true);
 
+DatabaseManager.executeStream(`INSERT INTO "Engineers"(username, password, email, accessType)
+        VALUES('superEngineer', 'super123456', 'super@email.com', 'super');`, () => {
+  console.log('Successfully seeded the engineer table');
+}, (err) => {
+  console.log(err);
+  console.log('Error while seeding the engineer table');
+});

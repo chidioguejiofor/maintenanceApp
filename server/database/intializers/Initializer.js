@@ -26,12 +26,9 @@ class Initializer {
    * once the operation is successful
    * @param {Boolean} closeConnection
    */
-  create(closeConnection) {
+  create() {
     databaseManager.executeQuery(this.createSql, () => {
       console.log(`Successfully created "${this.modelName}" table`);
-      if (closeConnection) {
-
-      }
     }, (err) => {
       console.log(`An error occured while creating table "${this.modelName}" table`);
       console.log(err.message);
