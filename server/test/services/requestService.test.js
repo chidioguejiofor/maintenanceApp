@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import requestService from '../../services/requestService';
 import Request from '../../models/Request';
 import userService from '../../services/userService';
-import User from '../../models/User';
+
 
 const newUser = userService.createUser(new User('username', 'password', 'emil@emal.com', 'client'));
 const goodRequest = new Request('Broken Pipe', 'Bath thub pipe got broken', '3rd Floor Andela', newUser.id);

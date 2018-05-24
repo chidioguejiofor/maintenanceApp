@@ -1,6 +1,6 @@
 /* esint-diasable no-console: off */
 
-import { Client } from 'pg';
+import { Pool } from 'pg';
 
 const user = process.env.DATABASE_USER || 'maintenance_app_client';
 const productionConfig = {
@@ -9,6 +9,7 @@ const productionConfig = {
   password: process.env.DATABASE_PASSWORD || null,
   port: process.env.DATABASE_PORT || null,
   host: 'localhost',
+  max: 1,
 };
 
 const testConfig = {
@@ -17,43 +18,60 @@ const testConfig = {
   password: process.env.DATABASE_PASSWORD || null,
   port: process.env.DATABASE_PORT || null,
   host: 'localhost',
+  max: 1,
 };
 
-let client;
-const query = (sql, callback, errorHandler, values) => {
-  client.query(sql, values)
-    .then(callback)
-    .catch(errorHandler);
-};
-
+let pool = new Pool(productionConfig);
 
 /**
  *A databaseManager contains logic for executing sql statements in the database
  * It contains code that connects the
  */
 class DatabaseManager {
+  /**
+   * This is used to executes sql statements in the databresult @param {*} sql
+   * @param {*} callback
+   * @param {*} errorHandler
+   * @param {*} [values]  */
+
+
   static executeQuery(sql, callback, errorHandler, values) {
-    query(sql, callback, errorHandler, values);
+    pool.connect((err, client, done) => {
+      if (err) errorHandler(err);
+      else {
+        client.query(sql, values, (error, result) => {
+          done();
+          if (err) {
+            errorHandler(error);
+          } else {
+            callback(result);
+          }
+        });
+      }
+    });
   }
+
+
+  static executeStream(sql, callback, errorHandler, values) {
+    pool.query(sql, values, (err, res) => {
+      if (err) errorHandler(err);
+      else {
+        callback(res);
+      }
+    });
+  }
+
   static user() {
     return user;
   }
 
-  static connect() {
-    client.connect();
-  }
-
-  static closeConnection() {
-    client.end();
-  }
-
 
   static initTestConfig() {
-    client = new Client(testConfig);
+    pool = new Pool(testConfig);
   }
 
   static initProductionConfig() {
-    client = new Client(productionConfig);
+    pool = new Pool(productionConfig);
   }
 }
 

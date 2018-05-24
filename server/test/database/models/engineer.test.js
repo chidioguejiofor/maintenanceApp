@@ -1,23 +1,21 @@
 /*  eslint no-unused-expressions: off */
 /*  eslint no-undef: off */
 import { expect } from 'chai';
-import User from '../../models/User';
+import Engineer from '../../../database/models/Engineer';
 
-describe('user', () => {
+describe('client', () => {
   const email = 'test@email.com';
   const password = 'passs';
   const username = 'username';
-  const userType = 'super';
-
   let user;
   beforeEach(() => {
-    user = new User(username, password, email, userType);
+    user = new Engineer(username, password, email);
   });
 
   describe('constructor', () => {
     describe('attributes created in by constructor', () => {
       it('user must be a User', () => {
-        expect(user instanceof User).to.be.true;
+        expect(user instanceof Engineer).to.be.true;
       });
 
       it('returned object must have a email attribute', () => {
@@ -28,9 +26,7 @@ describe('user', () => {
         expect(user).to.have.property('password');
       });
 
-      it('returned object must have a userType attribute', () => {
-        expect(user).to.have.property('userType');
-      });
+
       it('returned object must have a username attribute', () => {
         expect(user).to.have.property('username');
       });
@@ -44,10 +40,8 @@ describe('user', () => {
         expect(user).to.have.property('password').to.equal(password);
       });
 
-      it(`expect userType to equal ${userType}`, () => {
-        expect(user).to.have.property('userType').to.equal(userType);
-      });
-      it(`expect userType to equal ${username}`, () => {
+
+      it(`expect username to equal ${username}`, () => {
         expect(user).to.have.property('username').to.equal(username);
       });
     });

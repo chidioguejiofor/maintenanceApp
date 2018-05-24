@@ -2,7 +2,7 @@
 /*  eslint no-undef: off */
 
 import { expect } from 'chai';
-import Request from '../../models/Request';
+import Request from '../../../database/models/Request';
 
 describe('request', () => {
   const description = 'The bath thub pipe got broken';

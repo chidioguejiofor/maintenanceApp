@@ -1,83 +1,119 @@
-import uuid from 'uuid';
+import { EngineerMapper, ClientMapper } from '../database/TableMappers';
 
 class UserService {
-  constructor() {
-    this.users = {};
-  }
-
-  getByCredentials(username, password) {
-    const foundObj = Object.values(this.users)
-      .find(user =>
-        user.username === username && user.password === password);
-
-    if (foundObj) {
-      return {
-        respObj: {
-          success: true,
-          data: {
-            id: foundObj.id,
-            username: foundObj.username,
-            userType: foundObj.userType,
-            email: foundObj.email,
-          },
-
-        },
-        statusCode: 200,
-      };
+  static getByCredentials(username, password, userType, callback) {
+    let response;
+    let mapper = ClientMapper;
+    if (userType === 'engineer') {
+      mapper = EngineerMapper;
     }
-    return {
-      respObj: {
-        success: false,
-        message: 'The inputed username and password combination was not found',
-      },
-      statusCode: 404,
-    };
+    mapper.loginQuery(username, password, (result) => {
+      if (result.rows.length > 0) {
+        response = {
+          statusCode: 201,
+          respObj: {
+            success: true,
+            data: result.rows[0],
+          },
+        };
+      } else {
+        response = {
+          statusCode: 404,
+          respObj: {
+            success: false,
+            message: 'The specified username and password does not exists',
+          },
+        };
+      }
+
+      callback(response);
+    }, (err) => {
+      response = {
+        statusCode: 500,
+        respObj: {
+          success: false,
+          message: 'The specified user was not found',
+        },
+      };
+      callback(response, err);
+    });
   }
 
-  /**
-   *
-   * @param {*} id
-   */
-  getById(id) {
-    return this.users[id];
-  }
 
   /**
-   * Adds a new user into the system
-   * @param {*} user an instance of model User that contains a userType, username,
+   * Adds a new user into the database
+   * @param {Client} user an instance of model User that contains a userType, username,
    * password and email properties
    */
-  createUser(user) {
-    const id = uuid.v4();
-    const newUser = Object.assign({}, user, { id });
-    this.users[id] = newUser;
-    return {
-      statusCode: 201,
-      respObj: {
-        success: true,
-        data: newUser,
-      },
-    };
-  }
-
-
-  /**
-   * This method resets the password of a user.
-   * It returns undefined if the specified email does not exist
-   * @param {string} email
-   * @param {string} newPassword
-   */
-  resetPassword(email, newPassword) {
-    const findResult = this.users.find(user => user.email === email);
-    let changedObj;
-    if (findResult) {
-      this.users[findResult.id].password = newPassword;
-      changedObj = this.users[findResult.id];
+  static createUser(user, callback) {
+    let mapper;
+    if (user.userType === 'engineer') {
+      mapper = new EngineerMapper(user);
+    } else {
+      mapper = new ClientMapper(user);
     }
+    let response;
+    mapper.create((result) => {
+      if (result.rowCount > 0) {
+        response = {
+          statusCode: 201,
+          respObj: {
+            success: true,
+            data: user,
+          },
+        };
+      } else {
+        response = {
+          statusCode: 500,
+          respObj: {
+            success: false,
+            message: `The new ${user.userType} was not created for unknown reasons`,
+          },
+        };
+      }
 
-    return changedObj;
+      callback(response);
+    }, (err) => {
+      if (+err.code === 23505) {
+        response = {
+          statusCode: 409,
+          respObj: {
+            success: false,
+            message: 'The specified username already exists',
+          },
+        };
+      } else {
+        response = {
+          statusCode: 400,
+          respObj: {
+            success: false,
+            message: 'Unknown error occured',
+          },
+        };
+      }
+
+      callback(response);
+    });
   }
+
+
+  // /**
+  //  * This method resets the password of a user.
+  //  * It returns undefined if the specified email does not exist
+  //  * @param {string} email
+  //  * @param {string} newPassword
+  //  */
+  // static resetPassword(email, newPassword) {
+  //   const findResult = this.users.find(user => user.email === email);
+  //   let changedObj;
+  //   if (findResult) {
+  //     this.users[findResult.id].password = newPassword;
+  //     changedObj = this.users[findResult.id];
+  //   }
+
+  //   return changedObj;
+  // }
 }
 
 
-export default new UserService();
+export default UserService;
