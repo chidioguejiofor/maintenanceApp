@@ -35,6 +35,19 @@ export default class RequestController {
     }
   }
 
+
+  static getAllClientRequests(req, resp) {
+    if (!req.authData.client) {
+      resp.status(403).json({
+        success: false,
+        message: 'Only users(clients) can make a request',
+      });
+      return;
+    }
+    requestService.getByUsername(req.authData.client.username, (result) => {
+      resp.status(result.statusCode).json(result.respObj);
+    });
+  }
   static modify(req, resp) {
     const { request, validationResult } = getRequest(req.body);
     const { params: { id } } = req;
