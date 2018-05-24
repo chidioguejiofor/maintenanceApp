@@ -1,6 +1,7 @@
 import userService from '../services/userService';
 import UserValidator from '../validators/UserValidator';
 import LoginValidator from '../validators/LoginValidator';
+import authenticator from '../helpers/authenticator';
 
 function getUser(body) {
   const {
@@ -19,7 +20,17 @@ export default class UserController {
     const { validationResult, user } = getUser(req.body);
     if (validationResult.valid) {
       userService.createUser(user, (result) => {
-        resp.status(result.statusCode).json(result.respObj);
+        if (result.respObj.data) {
+          const payload = {
+            client: result.respObj.data,
+          };
+          authenticator.createToken(payload, '3days', (err, token) => {
+            result.respObj.data.token = token;// eslint-disable-line no-param-reassign
+            resp.status(result.statusCode).json(result.respObj);
+          });
+        } else {
+          resp.status(result.statusCode).json(result.respObj);
+        }
       });
     } else {
       resp.status(400).json(UserValidator.handleBadData(validationResult));
@@ -34,8 +45,18 @@ export default class UserController {
 
 
     if (validationResult.valid) {
-      userService.createUser(user, (result) => {
-        resp.status(result.statusCode).json(result.respObj);
+      userService.getByCredentials(username, password, userType, (result) => {
+        if (result.respObj.data) {
+          const payload = {
+            [userType]: result.respObj.data,
+          };
+          authenticator.createToken(payload, '3days', (err, token) => {
+            result.respObj.data.token = token;// eslint-disable-line no-param-reassign
+            resp.status(result.statusCode).json(result.respObj);
+          });
+        } else {
+          resp.status(result.statusCode).json(result.respObj);
+        }
       });
     } else {
       resp.status(400).json(UserValidator.handleBadData(validationResult));
