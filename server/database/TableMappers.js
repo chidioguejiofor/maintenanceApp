@@ -174,6 +174,15 @@ export class EngineerMapper extends TableMapper {
 
     DatabaseManager.executeStream(sql, callback, errorHandler, [username, password]);
   }
+
+  static updateStatus(requestId, newStatus, callback, errorHandler) {
+    const sql =
+    `UPDATE ONLY Table "Requests" 
+        SET status = $1
+      WHERE id = $2`;
+
+    DatabaseManager.executeStream(sql, callback, errorHandler, [newStatus, requestId]);
+  }
 }
 
 /**
