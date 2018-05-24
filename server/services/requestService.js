@@ -61,7 +61,9 @@ class RequestService {
   static getById(clientUsername, requestId, callback) {
     ReqeustMapper.getById(clientUsername, requestId, (result) => {
       handleGetRequests(result.rows, callback);
-    }, errorHandler(errorHandler));
+    }, (error) => {
+      errorHandler(error, callback);
+    });
   }
 
 
