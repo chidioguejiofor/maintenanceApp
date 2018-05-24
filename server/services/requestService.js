@@ -41,14 +41,7 @@ class RequestService {
       console.log(result, 'result');
       handleGetRequests(result.rows, callback);
     }, (error) => {
-      console.log(error);
-      callback({
-        statusCode: 400,
-        respObj: {
-          success: false,
-          message: 'Unknown error',
-        },
-      });
+      errorHandler(error, callback);
     });
   }
 

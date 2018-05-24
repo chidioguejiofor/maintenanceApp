@@ -61,8 +61,14 @@ export default class RequestController {
 
 
   static getAll(req, resp) {
+    if (!req.authData.engineer) {
+      resp.status(403).json({
+        success: false,
+        message: 'Only clients can access this route',
+      });
+      return;
+    }
     requestService.getAll((result) => {
-      console.log(result, 'result');
       resp.status(result.statusCode).json(result.respObj);
     });
   }

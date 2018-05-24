@@ -168,6 +168,12 @@ export class EngineerMapper extends TableMapper {
     }
     super(obj);
   }
+  static loginQuery(username, password, callback, errorHandler) {
+    const sql = `SELECT username, email FROM "Engineers" 
+                  WHERE username = $1 AND password = $2`;
+
+    DatabaseManager.executeStream(sql, callback, errorHandler, [username, password]);
+  }
 }
 
 /**
@@ -226,7 +232,7 @@ export class ReqeustMapper extends TableMapper {
 
   static getAll(callback, errorHandler) {
     const sql =
-    'SELECT id, title, description, location, image, status, message, clientUsername FROM "Requests"';
+    'SELECT *  FROM "Requests"';
     DatabaseManager.executeStream(sql, callback, errorHandler);
   }
 }
