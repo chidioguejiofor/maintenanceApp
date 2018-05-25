@@ -1,21 +1,32 @@
 /*  eslint no-unused-expressions: off */
 /*  eslint no-undef: off */
 
-import request from 'supertest';
+import supertest from 'supertest';
 import { expect } from 'chai';
 import app from '../../app';
 
+const request = supertest(app);
 
 describe('User Routes', () => {
   describe('POST routes', () => {
     const SIGNUP_ROUTE = '/api/v1/auth/signup';
     describe(SIGNUP_ROUTE, () => {
-      const validObj = new User('username', 'password0', 'email@email.com', 'client');
-      const invalidObj = new User('rr', 'a', 'com', 'lient');
+      const validObj = {
+        username: 'username',
+        password: 'password0',
+        email: 'email@email.com',
+        userType: 'client',
+      };
+      const invalidObj = {
+        username: 'rr',
+        password: 'a',
+        email: 'com',
+        userType: 'lient',
+      };
       describe('if request is valid', () => {
         describe('response status code', () => {
           it('should return status 201', (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .send(validObj)
               .set('Accept', 'application/json')
@@ -25,7 +36,7 @@ describe('User Routes', () => {
         });
         describe('response body', () => {
           it('should have a success property that is true', (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -38,7 +49,7 @@ describe('User Routes', () => {
 
           it(`should have a data property that is an object with properties 
           username, email, userType`, (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .send(validObj)
               .set('Accept', 'application/json')
@@ -56,7 +67,7 @@ describe('User Routes', () => {
       describe('if some fields are missing in the requests', () => {
         describe('response status code', () => {
           it('should return status 400', (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .send({})
               .set('Accept', 'application/json')
@@ -67,7 +78,7 @@ describe('User Routes', () => {
 
         describe('response body', () => {
           it('should have a success property that is false and a missingData property that is a array', (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -84,7 +95,7 @@ describe('User Routes', () => {
       describe('if some fields in the request is/are invalid ', () => {
         describe('response status code', () => {
           it('should return status 400', (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .send(invalidObj)
               .set('Accept', 'application/json')
@@ -95,7 +106,7 @@ describe('User Routes', () => {
 
         describe('response body', () => {
           it('should have a success property that is false and a invalidData property that is a array', (done) => {
-            request(app)
+            request
               .post(SIGNUP_ROUTE)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -112,12 +123,22 @@ describe('User Routes', () => {
 
     const LOGIN_ROUTE = '/api/v1/auth/login';
     describe(LOGIN_ROUTE, () => {
-      const validObj = new User('username', 'password0', 'email@email.com', 'client');
-      const invalidObj = new User('rr', 'aa', 'com', 'lient');
+      const validObj = {
+        username: 'username',
+        password: 'password0',
+        email: 'email@email.com',
+        userType: 'client',
+      };
+      const invalidObj = {
+        username: 'rr',
+        password: 'aa',
+        email: 'com',
+        userType: 'lient',
+      };
       describe('if request is valid', () => {
         describe('response status code', () => {
           it('should return status 200', (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .send(validObj)
               .set('Accept', 'application/json')
@@ -127,7 +148,7 @@ describe('User Routes', () => {
         });
         describe('response body', () => {
           it('should have a success property that is true', (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -140,7 +161,7 @@ describe('User Routes', () => {
 
           it(`should have a data property that is an object with properties 
           username, email, userType`, (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .send(validObj)
               .set('Accept', 'application/json')
@@ -158,7 +179,7 @@ describe('User Routes', () => {
       describe('if some fields are missing in the requests', () => {
         describe('response status code', () => {
           it('should return status 400', (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .send({})
               .set('Accept', 'application/json')
@@ -169,7 +190,7 @@ describe('User Routes', () => {
 
         describe('response body', () => {
           it('should have a success property that is false and a missingData property that is a array', (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -186,7 +207,7 @@ describe('User Routes', () => {
       describe('if some fields in the request is/are invalid ', () => {
         describe('response status code', () => {
           it('should return status 400', (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .send(invalidObj)
               .set('Accept', 'application/json')
@@ -197,7 +218,7 @@ describe('User Routes', () => {
 
         describe('response body', () => {
           it('should have a success property that is false and a invalidData property that is a array', (done) => {
-            request(app)
+            request
               .post(LOGIN_ROUTE)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
