@@ -235,6 +235,15 @@ export class ReqeustMapper extends TableMapper {
     'SELECT *  FROM "Requests"';
     DatabaseManager.executeStream(sql, callback, errorHandler);
   }
+
+  static updateStatus(requestId, newStatus, callback, errorHandler) {
+    const sql =
+    `UPDATE  "Requests" 
+        SET status = $1
+      WHERE id = $2 RETURNING * `;
+
+    DatabaseManager.executeStream(sql, callback, errorHandler, [newStatus, requestId]);
+  }
 }
 
 /**

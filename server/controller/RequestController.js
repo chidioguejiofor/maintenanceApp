@@ -14,6 +14,11 @@ function getRequest(body) {
 }
 
 
+function getStatus(status) {
+  const regex = /approve|disapprove|resolve/i;
+  if (regex.test(status)) return `${status}d`;
+  return false;
+}
 export default class RequestController {
   static create(req, resp) {
     if (!req.authData.client) {
@@ -86,6 +91,28 @@ export default class RequestController {
     requestService.getById(req.authData.client.username, id, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
+  }
+  static updateStatus(req, resp) {
+    const { params: { status, id } } = req;
+    if (!req.authData.engineer) {
+      resp.status(403).json({
+        success: false,
+        message: 'Only clients can access this route',
+      });
+      return;
+    }
+    const statusValue = getStatus(status);
+
+    if (statusValue) {
+      requestService.updateStatus(statusValue, id, (result) => {
+        resp.status(result.statusCode).json(result.respObj);
+      });
+    } else {
+      resp.status(400).json({
+        success: false,
+        message: 'The route you specified is invalid',
+      });
+    }
   }
 }
 

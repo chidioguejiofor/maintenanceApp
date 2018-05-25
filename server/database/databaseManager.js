@@ -38,11 +38,11 @@ class DatabaseManager {
       if (err) errorHandler(err);
       else {
         client.query(sql, values, (error, result) => {
-          done();
           if (error) {
             errorHandler(error);
           } else {
             callback(result);
+            done();
           }
         });
       }
@@ -71,8 +71,6 @@ class DatabaseManager {
   }
 
   static initProductionConfig() {
-    user = dbURL.split('//')[1].split(':')[0];/* esint-disable line prefer-destructuring: off */
-    console.log(user, 'The user got here');
     pool = new Pool(productionConfig);
     console.log(pool, 'pool contents');
   }

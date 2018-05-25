@@ -9,4 +9,5 @@ requestRouter.post('/users/requests', RequestController.create);
 requestRouter.get('/users/requests', RequestController.getAllClientRequests);
 requestRouter.get('/users/requests/:id', RequestController.getById);
 requestRouter.get('/requests/', RequestController.getAll);
+requestRouter.put('/requests/:id/:status', RequestController.updateStatus);
 export default requestRouter;
