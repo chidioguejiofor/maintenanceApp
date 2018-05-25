@@ -21,10 +21,21 @@ function handleGetRequests(rows, callback) {
 
 function errorHandler(error, callback) {
   console.log(error);
-  callback({
-    statusCode: 500,
-    message: 'Unknown error occured. Please check your parameters and try again',
-  });
+  if (+error.number === 23503) {
+    callback({
+      statusCode: 404,
+      respObj: {
+        success: false,
+        message: 'The clientUsername you specified does not exists',
+      },
+
+    });
+  } else {
+    callback({
+      statusCode: 500,
+      message: 'Unknown error occured. Please check your parameters and try again',
+    });
+  }
 }
 class RequestService {
   static getByUsername(clientUsername, callback) {
@@ -85,33 +96,30 @@ class RequestService {
     });
   }
 
-  modify(requestId, newRequest) {
-    const requestIndex =
-         this.requests
-           .findIndex(existing =>
-             existing.id === requestId);
+  static updateStatus(status, requestId, callback) {
+    ReqeustMapper.updateStatus(requestId, status, (result) => {
+      const { rows } = result;
 
-    if (requestIndex >= 0) {
-      const finalObj = Object.assign({}, newRequest);
-      finalObj.id = requestId;
-      this.requests[requestId] = finalObj;
-
-      return {
-        statusCode: 201,
-        respObj: {
-          success: true,
-          data: finalObj,
-        },
-
-      };
-    }
-    return {
-      respObj: {
-        success: false,
-        message: 'The id was not found',
-      },
-      statusCode: 404,
-    };
+      if (rows.length > 0) {
+        callback({
+          statusCode: 201,
+          respObj: {
+            success: true,
+            data: rows,
+          },
+        });
+      } else {
+        callback({
+          statusCode: 404,
+          respObj: {
+            success: false,
+            message: 'The request Id you specified does not exist',
+          },
+        });
+      }
+    }, (error) => {
+      errorHandler(error, callback);
+    });
   }
 }
 
