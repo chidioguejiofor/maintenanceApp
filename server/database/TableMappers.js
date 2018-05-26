@@ -76,7 +76,7 @@ export class ClientMapper extends TableMapper {
       create: {
         sql:
               `INSERT INTO "Clients"(username, password, email)
-                  VALUES($1, $2, $3) `,
+                  VALUES($1, $2, $3) RETURNING username, email`,
         values: [newClient.username, newClient.password, newClient.email],
 
       },
@@ -135,7 +135,7 @@ export class EngineerMapper extends TableMapper {
       create: {
         sql:
               `INSERT INTO "Engineers"(username, password, email)
-                  VALUES($1, $2, $3) `,
+                  VALUES($1, $2, $3) RETURNING username, email`,
         values: [newEngineer.username, newEngineer.password, newEngineer.email],
 
       },

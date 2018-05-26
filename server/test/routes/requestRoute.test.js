@@ -4,9 +4,16 @@
 import supertest from 'supertest';
 import { expect } from 'chai';
 import app from '../../app';
-import seeder from '../../database/seeders/seeder';
+import Seeder from '../../database/seeders/Seeder';
+import userService from '../../services/userService';
 
 const request = supertest(app);
+
+const client = {
+  username: 'client',
+  password: 'password',
+  email: 'email',
+};
 const validObj = {
   title: 'Hellooo World',
   description: 'Yoaaaaa',
@@ -20,8 +27,25 @@ const invalidRequest = {
   image: 'i',
 };
 
+Seeder.addClient(client);
+let clientToken = '';
+let engineerToken = '';
 
+before(() => {
+  userService.getByCredentials(client.username, client.password, 'client', (result) => {
+    if (result.respObj) {
+      clientToken = result.respObj.data.token;
+    }
+  });
+  userService.getByCredentials('superEngineer', 'super123456', 'engineer', (result) => {
+    if (result.respObj) {
+      engineerToken = result.respObj.data.token;
+    }
+  });
+});
 describe('/users/requests Route', () => {
+  
+
   describe('GET on an unknown route', () => {
     it('/abc', (done) => {
       request.get('/ds')
@@ -47,6 +71,7 @@ describe('/users/requests Route', () => {
                 .send(validObj)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .expect(201, done);
             });
           });
@@ -55,6 +80,7 @@ describe('/users/requests Route', () => {
               request.put(updateRequestValidRoute)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .send(validObj)
                 .end((error, resp) => {
                   expect(resp.body).property('success').to.be.true;
@@ -68,6 +94,7 @@ describe('/users/requests Route', () => {
                 .send(validObj)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .end((error, resp) => {
                   expect(resp.body).property('data').property('title');
                   expect(resp.body).property('data').property('description');
@@ -89,6 +116,7 @@ describe('/users/requests Route', () => {
                 .send({})
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .expect(400, done);
             });
           });
@@ -99,6 +127,7 @@ describe('/users/requests Route', () => {
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .send({})
+                .set('x-access-token', clientToken)
                 .end((error, resp) => {
                   expect(resp.body).property('success').to.be.false;
                   expect(resp.body).property('missingData').to.be.a('array');
@@ -116,6 +145,7 @@ describe('/users/requests Route', () => {
                 .send(invalidRequest)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .expect(400, done);
             });
           });
@@ -125,6 +155,7 @@ describe('/users/requests Route', () => {
                 .put(updateRequestValidRoute)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .send(invalidRequest)
                 .end((error, resp) => {
                   expect(resp.body).property('success').to.be.false;
@@ -142,6 +173,7 @@ describe('/users/requests Route', () => {
                 .put(invalidUpdateRoute)
                 .send(validObj)
                 .set('Accept', 'application/json')
+                .set('x-access-token', clientToken)
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .expect(404, done);
             });
@@ -152,6 +184,7 @@ describe('/users/requests Route', () => {
               request
                 .put(updateRequestValidRoute)
                 .set('Accept', 'application/json')
+                .set('x-access-token', clientToken)
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .send(invalidRequest)
                 .end((error, resp) => {
@@ -174,6 +207,7 @@ describe('/users/requests Route', () => {
               request
                 .post(CREATE_ROUTE)
                 .send(validObj)
+                .set('x-access-token', clientToken)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .expect(201, done);
@@ -184,6 +218,7 @@ describe('/users/requests Route', () => {
               request
                 .post(CREATE_ROUTE)
                 .set('Accept', 'application/json')
+                .set('x-access-token', clientToken)
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .send(validObj)
                 .end((error, resp) => {
@@ -196,6 +231,7 @@ describe('/users/requests Route', () => {
               request
                 .post(CREATE_ROUTE)
                 .send(validObj)
+                .set('x-access-token', clientToken)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .end((error, resp) => {
@@ -217,6 +253,7 @@ describe('/users/requests Route', () => {
               request
                 .post(CREATE_ROUTE)
                 .send({})
+                .set('x-access-token', clientToken)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .expect(400, done);
@@ -228,6 +265,7 @@ describe('/users/requests Route', () => {
                 .post(CREATE_ROUTE)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
+                .set('x-access-token', clientToken)
                 .send({})
                 .end((error, resp) => {
                   expect(resp.body).property('success').to.be.false;
@@ -244,6 +282,7 @@ describe('/users/requests Route', () => {
               request
                 .post(CREATE_ROUTE)
                 .send(invalidRequest)
+                .set('x-access-token', clientToken)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .expect(400, done);
@@ -254,6 +293,7 @@ describe('/users/requests Route', () => {
               request
                 .post(CREATE_ROUTE)
                 .set('Accept', 'application/json')
+                .set('x-access-token', clientToken)
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .send(invalidRequest)
                 .end((error, resp) => {
@@ -272,11 +312,13 @@ describe('/users/requests Route', () => {
         describe('if items exists', () => {
           it('should return a 200 http code ', (done) => {
             request.get('/api/v1/users/requests')
+              .set('x-access-token', clientToken)
               .expect('Content-Type', /json/)
               .expect(200, done);
           });
           it('should  a body that has an array property named "data"', (done) => {
             request.get('/api/v1/users/requests')
+              .set('x-access-token', clientToken)
               .expect('Content-Type', /json/)
               .end((error, resp) => {
                 expect(resp.body).property('success').to.be.true;
@@ -291,6 +333,7 @@ describe('/users/requests Route', () => {
         describe('the response should have a status code that', (done) => {
           it('should be  200', () => {
             request.get(`/api/v1/users/requests/${id}`)
+              .set('x-access-token', clientToken)
               .expect('Content-Type', /json/)
               .expect(200, done);
           });
@@ -300,6 +343,7 @@ describe('/users/requests Route', () => {
           describe('should have a success property ', () => {
             it('that is true', (done) => {
               request.get(`/api/v1/users/requests/${id}`)
+                .set('x-access-token', clientToken)
                 .expect('Content-Type', /json/)
                 .end((err, resp) => {
                   expect(resp.body).property('success').to.be.true;
@@ -311,6 +355,7 @@ describe('/users/requests Route', () => {
           describe('should have a data property ', () => {
             it('that has property id', () => {
               request.get(`/api/v1/users/requests/${id}`)
+                .set('x-access-token', clientToken)
                 .end((err, resp) => {
                   expect(resp.body).property('data').to.haveOwnProperty('id');
                 });
@@ -318,6 +363,7 @@ describe('/users/requests Route', () => {
 
             it('that has property image', () => {
               request.get(`/api/v1/users/requests/${id}`)
+                .set('x-access-token', clientToken)
                 .end((err, resp) => {
                   expect(resp.body).property('data').to.haveOwnProperty('image');
                 });
@@ -325,6 +371,7 @@ describe('/users/requests Route', () => {
 
             it('that has property description', () => {
               request.get(`/api/v1/users/requests/${id}`)
+                .set('x-access-token', clientToken)
                 .end((err, resp) => {
                   expect(resp.body).property('data').to.haveOwnProperty('description');
                 });
@@ -339,6 +386,7 @@ describe('/users/requests Route', () => {
 
             it('that has property title', () => {
               request.get(`/api/v1/users/requests/${id}`)
+                .set('x-access-token', clientToken)
                 .end((err, resp) => {
                   expect(resp.body).property('data').to.haveOwnProperty('title');
                 });

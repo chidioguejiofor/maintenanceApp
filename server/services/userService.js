@@ -1,5 +1,7 @@
 import { EngineerMapper, ClientMapper } from '../database/TableMappers';
 
+import PasswordHasher from '../helpers/PasswordHasher';
+
 class UserService {
   static getByCredentials(username, password, userType, callback) {
     let response;
@@ -7,7 +9,7 @@ class UserService {
     if (userType === 'engineer') {
       mapper = EngineerMapper;
     }
-    mapper.loginQuery(username, password, (result) => {
+    mapper.loginQuery(username, PasswordHasher.hash(password), (result) => {
       if (result.rows.length > 0) {
         response = {
           statusCode: 201,
@@ -46,12 +48,15 @@ class UserService {
    * password and email properties
    */
   static createUser(user, callback) {
+    const userObj = user;
+    userObj.password = PasswordHasher.hash(userObj.password);
     let mapper;
     if (user.userType === 'engineer') {
-      mapper = new EngineerMapper(user);
+      mapper = new EngineerMapper(userObj);
     } else {
-      mapper = new ClientMapper(user);
+      mapper = new ClientMapper(userObj);
     }
+
     let response;
     mapper.create((result) => {
       if (result.rowCount > 0) {
@@ -59,7 +64,7 @@ class UserService {
           statusCode: 201,
           respObj: {
             success: true,
-            data: user,
+            data: result.rows,
           },
         };
       } else {
@@ -96,24 +101,6 @@ class UserService {
       callback(response);
     });
   }
-
-
-  // /**
-  //  * This method resets the password of a user.
-  //  * It returns undefined if the specified email does not exist
-  //  * @param {string} email
-  //  * @param {string} newPassword
-  //  */
-  // static resetPassword(email, newPassword) {
-  //   const findResult = this.users.find(user => user.email === email);
-  //   let changedObj;
-  //   if (findResult) {
-  //     this.users[findResult.id].password = newPassword;
-  //     changedObj = this.users[findResult.id];
-  //   }
-
-  //   return changedObj;
-  // }
 }
 
 

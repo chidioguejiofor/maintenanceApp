@@ -1,6 +1,7 @@
-import sha512 from 'sha512';
+import hasha from 'hasha';
 
 const salt = process.env.SALT;
+
 
 /**
  * This helper function salts an unhashed password and returns the result
@@ -24,7 +25,7 @@ export default class PasswordHasher {
      * @returns a string containing the hashed password
      */
   static hash(password) {
-    return sha512(salt + saltPassword(password) + salt);
+    return hasha(salt + saltPassword(password) + salt);
   }
 
   /**
@@ -35,6 +36,6 @@ export default class PasswordHasher {
    * @returns a boolean that is true if the comparison passed
    */
   static compare(hashed, unhashed) {
-    return sha512(saltPassword(unhashed)) === hashed;
+    return hasha(saltPassword(unhashed)) === hashed;
   }
 }

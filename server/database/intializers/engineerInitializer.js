@@ -4,7 +4,7 @@ const createSql =
 `CREATE TABLE "Engineers"
 (
     username character varying(100),
-    password character varying(255),
+    password character varying(10000),
     email character varying(255),
     accessType character varying(100),
     PRIMARY KEY (username)
