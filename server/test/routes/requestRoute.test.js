@@ -4,6 +4,7 @@
 import supertest from 'supertest';
 import { expect } from 'chai';
 import app from '../../app';
+import seeder from '../../database/seeders/seeder';
 
 const request = supertest(app);
 const validObj = {
@@ -11,14 +12,12 @@ const validObj = {
   description: 'Yoaaaaa',
   location: 'llocation is valid',
   image: 'iamge is cool',
-  clientId: 'beatedasd',
 };
 const invalidRequest = {
   title: 'e',
   description: 'Y',
   location: 'l',
   image: 'i',
-  clientId: '.',
 };
 
 
