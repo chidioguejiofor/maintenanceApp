@@ -31,15 +31,26 @@ initScript();
 
 
 let clientToken = 'emptyToken';
+let engineerToken = '';
 before((done) => {
-  console.log('Entered');
   request.post('/api/v1/auth/signup')
     .send(client)
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/x-www-form-urlencoded')
     .end((err, res) => {
       clientToken = res.body.data.token;
-      console.log(clientToken, 'clientToken');
+    });
+  request.post('/api/v1/auth/login')
+    .send({
+      username: 'superEngineer',
+      password: 'super123456',
+      userType: 'engineer',
+
+    })
+    .set('Accept', 'application/json')
+    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .end((err, res) => {
+      engineerToken = res.body.data.token;
       done();
     });
 });
@@ -136,6 +147,30 @@ describe('Request Routes', () => {
             });
           });
 
+
+          describe('if the token is invalid', () => {
+            it('should expect status 403', (done) => {
+              request.get(CREATE_ROUTE)
+                .set('x-access-token', engineerToken)
+                .expect(403, done);
+            });
+            it('body should have a success property that is false', (done) => {
+              request.get(requestRoute)
+                .set('x-access-token', engineerToken)
+                .end((err, resp) => {
+                  expect(resp.body).property('success').to.be.false;
+                  done();
+                });
+            });
+            it('body should have a message property', (done) => {
+              request.get(requestRoute)
+                .set('x-access-token', engineerToken)
+                .end((err, resp) => {
+                  expect(resp.body).property('message');
+                  done();
+                });
+            });
+          });
           describe('if the request some fields are missing in the request', () => {
             describe('response status code', () => {
               it('should return status 400', (done) => {
@@ -166,8 +201,332 @@ describe('Request Routes', () => {
           });
         });
       });
+      describe('PUT routes', () => {
+        let approveRoute = '';
+        let resolveRoute = '';
+        let disapproveRoute = '';
+        before((done) => {
+          request.get('/api/v1/users/requests/')
+            .set('x-access-token', clientToken)
+            .end((err, resp) => {
+              const { data } = resp.body;
+              approveRoute = `/api/v1/requests/${data[0].id}/approve`;
+              resolveRoute = `/api/v1/requests/${data[0].id}/resolve`;
+              disapproveRoute = `/api/v1/requests/${data[0].id}/disapprove`;
+              done();
+            });
+        });
+
+        describe('PUT /api/v1/requests/disapprove', () => {
+          describe('if the id exists ', () => {
+            describe('status code', () => {
+              it('status should be 201', (done) => {
+                request.put(disapproveRoute)
+                  .set('x-access-token', engineerToken)
+                  .expect(201, done);
+              });
+            });
+
+            describe('response body', () => {
+              it('should have a success property that is true', (done) => {
+                request.put(disapproveRoute)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('success').to.be.true;
+                    done();
+                  });
+              });
+
+              it('should have a data property that is an object', (done) => {
+                request.put(disapproveRoute)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('data').to.be.an('object');
+                    done();
+                  });
+              });
+
+              describe('request body data property', () => {
+                it('should have an id', (done) => {
+                  request.put(disapproveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('id');
+                      done();
+                    });
+                });
+
+                it('should have an message', (done) => {
+                  request.put(disapproveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('message');
+                      done();
+                    });
+                });
+
+                it('should have a status property that is equal to "disapproved"', (done) => {
+                  request.put(disapproveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('status')
+                        .to.equal('disapproved');
+                      done();
+                    });
+                });
+              });
+            });
+          });
+        });
+
+        describe('PUT /api/v1/requests/resolve', () => {
+          describe('if the id exists ', () => {
+            describe('status code', () => {
+              it('status should be 201', (done) => {
+                request.put(resolveRoute)
+                  .set('x-access-token', engineerToken)
+                  .expect(201, done);
+              });
+            });
+
+            describe('response body', () => {
+              it('should have a success property that is true', (done) => {
+                request.put(resolveRoute)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('success').to.be.true;
+                    done();
+                  });
+              });
+
+              it('should have a data property that is an object', (done) => {
+                request.put(resolveRoute)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('data').to.be.an('object');
+                    done();
+                  });
+              });
+
+              describe('request body data property', () => {
+                it('should have an id', (done) => {
+                  request.put(resolveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('id');
+                      done();
+                    });
+                });
+
+                it('should have an message', (done) => {
+                  request.put(resolveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('message');
+                      done();
+                    });
+                });
+
+                it('should have a status property that is equal to "resolved"', (done) => {
+                  request.put(resolveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('status')
+                        .to.equal('resolved');
+                      done();
+                    });
+                });
+              });
+            });
+          });
+        });
+
+        describe(`PUT ${approveRoute}`, () => {
+          describe('if the id exists ', () => {
+            describe('status code', () => {
+              it('status should be 201', (done) => {
+                request.put(approveRoute)
+                  .set('x-access-token', engineerToken)
+                  .expect(201, done);
+              });
+            });
+
+            describe('response body', () => {
+              it('should have a success property that is true', (done) => {
+                request.put(approveRoute)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('success').to.be.true;
+                    done();
+                  });
+              });
+
+              it('should have a data property that is an object', (done) => {
+                request.put(approveRoute)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('data').to.be.an('object');
+                    done();
+                  });
+              });
+
+              describe('request body data property', () => {
+                it('should have an id', (done) => {
+                  request.put(approveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('id');
+                      done();
+                    });
+                });
+
+                it('should have an message', (done) => {
+                  request.put(approveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('message');
+                      done();
+                    });
+                });
+
+                it('should have a status property that is equal to "approved"', (done) => {
+                  request.put(approveRoute)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data')
+                        .property('status')
+                        .to.equal('approved');
+                      done();
+                    });
+                });
+              });
+            });
+          });
+        });
+      });
+
 
       describe('GET routes', () => {
+        describe('GET /api/v1/requests', () => {
+          const route = '/api/v1/requests';
+          describe('if requests have been made', () => {
+            describe('status code', () => {
+              it('should return status of 200', (done) => {
+                request.get(route)
+                  .set('x-access-token', engineerToken)
+                  .expect(200, done);
+              });
+            });
+
+            describe('request body data property', () => {
+              it('should be an array', (done) => {
+                request.get(route)
+                  .set('x-access-token', engineerToken)
+                  .end((err, resp) => {
+                    expect(resp.body).property('data').to.be.an('array');
+                    done();
+                  });
+              });
+
+              describe('the array contained in the data property', () => {
+                it('all the elements of the array should be an array', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => typeof item === 'object');
+                      expect(allObj).to.be.true;
+                      done();
+                    });
+                });
+
+                it('the elements of the array must have an id ', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => typeof item === 'object');
+                      expect(allObj).to.be.true;
+                      done();
+                    });
+                });
+
+                it('the elements of the array must have a description ', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => item.description);
+                      expect(allObj).to.be.true;
+                      done();
+                    });
+                });
+
+                it('the element of the array must have an status property ', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => item.status);
+                      expect(allObj).to.be.true;
+                      done();
+                    });
+                });
+                it('the element of the array must have a location property ', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => item.location);
+                      expect(allObj).to.be.true;
+                      done();
+                    });
+                });
+
+                it('the element of the array must have a date property ', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => item.date);
+
+                      done(); expect(allObj).to.be.true;
+                    });
+                });
+
+                it('the element of the array must have a image property ', (done) => {
+                  request.get(route)
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const array = resp.body.data;
+                      const allObj = array.every(item => item.image);
+                      expect(allObj).to.be.true;
+                      done();
+                    });
+                });
+              });
+            });
+          });
+        });
+
+
         describe('GET /api/v1/users/requests', () => {
           describe('if items exists', () => {
             it('should return a 200 http code ', (done) => {
@@ -284,32 +643,58 @@ describe('Request Routes', () => {
 
         describe('if the id is invalid', () => {
           const badRequestRoute = '/api/v1/users/requests/10000';
-          describe('the response ', () => {
-            describe('status should be 404', () => {
-              it('expects 404 status', (done) => {
-                request.get(badRequestRoute)
-                  .set('x-access-token', clientToken)
-                  .expect(404, done);
-              });
-            });
-            describe('response body ', () => {
-              it('should have a success property that is false', (done) => {
-                request.get(badRequestRoute)
-                  .set('x-access-token', clientToken)
-                  .expect(404)
-                  .end((err, resp) => {
-                    expect(resp.body).property('success').to.be.false;
-                    done();
-                  });
-              });
 
-              it('should have a message property', (done) => {
-                request.get(badRequestRoute)
-                  .set('x-access-token', clientToken)
-                  .end((err, resp) => {
-                    expect(resp.body).to.have.property('message');
-                    done();
-                  });
+          describe('if the token is invalid', () => {
+            it('should expect status 403', (done) => {
+              request.get(requestRoute)
+                .set('x-access-token', engineerToken)
+                .expect(403, done);
+            });
+            it('body should have a success property that is false', (done) => {
+              request.get(requestRoute)
+                .set('x-access-token', engineerToken)
+                .end((err, resp) => {
+                  expect(resp.body).property('success').to.be.false;
+                  done();
+                });
+            });
+            it('body should have a message property', (done) => {
+              request.get(requestRoute)
+                .set('x-access-token', engineerToken)
+                .end((err, resp) => {
+                  expect(resp.body).property('message');
+                  done();
+                });
+            });
+          });
+          describe('if the id is invalid', () => {
+            describe('the response ', () => {
+              describe('status should be 404', () => {
+                it('expects 404 status', (done) => {
+                  request.get(badRequestRoute)
+                    .set('x-access-token', clientToken)
+                    .expect(404, done);
+                });
+              });
+              describe('response body ', () => {
+                it('should have a success property that is false', (done) => {
+                  request.get(badRequestRoute)
+                    .set('x-access-token', clientToken)
+                    .expect(404)
+                    .end((err, resp) => {
+                      expect(resp.body).property('success').to.be.false;
+                      done();
+                    });
+                });
+
+                it('should have a message property', (done) => {
+                  request.get(badRequestRoute)
+                    .set('x-access-token', clientToken)
+                    .end((err, resp) => {
+                      expect(resp.body).to.have.property('message');
+                      done();
+                    });
+                });
               });
             });
           });
