@@ -21,10 +21,7 @@ export default class UserController {
     if (validationResult.valid) {
       userService.createUser(user, (result) => {
         if (result.respObj.data) {
-          const payload = {
-            client: result.respObj.data,
-          };
-          authenticator.createToken(payload, '3days', (err, token) => {
+          UserController.createToken(result.respObj.data, 'client', (err, token) => {
             result.respObj.data.token = token;// eslint-disable-line no-param-reassign
             resp.status(result.statusCode).json(result.respObj);
           });
@@ -38,6 +35,12 @@ export default class UserController {
   }
 
 
+  static createToken(data, userType, callback) {
+    const payload = {
+      [userType]: data,
+    };
+    authenticator.createToken(payload, '3days', callback);
+  }
   static login(req, resp) {
     const { username, password, userType } = req.body;
     const user = { username, password, userType };
@@ -46,12 +49,10 @@ export default class UserController {
 
     if (validationResult.valid) {
       userService.getByCredentials(username, password, userType, (result) => {
-        if (result.respObj.data) {
-          const payload = {
-            [userType]: result.respObj.data,
-          };
-          authenticator.createToken(payload, '3days', (err, token) => {
-            result.respObj.data.token = token;// eslint-disable-line no-param-reassign
+        const { respObj } = result;
+        if (respObj.data) {
+          UserController.createToken(respObj.data, userType, (err, token) => {
+            respObj.data.token = token;
             resp.status(result.statusCode).json(result.respObj);
           });
         } else {

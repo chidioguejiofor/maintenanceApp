@@ -14,7 +14,7 @@ export default class RequestValidator extends ModelValidator {
       },
       image: {
         message: 'must be at least 3 character',
-        pattern: /\\S{3,}/,
+        pattern: /.{3,}/,
       },
       location: {
         message: 'must be between 5 to 100 alphanumeric characters',

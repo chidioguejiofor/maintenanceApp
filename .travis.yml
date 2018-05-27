@@ -7,9 +7,21 @@ script: npm run coverage
 
 before_script:
   - npm install codeclimate-test-reporter istanbul nyc -g
+  - psql -c 'create database maintenance_app_db;' -U postgres
 
 after_script: 
    - codeclimate-test-reporter < ./coverage/lcov.info
+
+services: 
+  - postgres
+
+test:
+  adapter: postgres
+  database: maintenance_app_db
+  username: maintenance_app_client
+  password: null
+  port: null
+  encoding: utf8
 
 addons:
   code_climate:
