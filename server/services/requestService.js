@@ -2,14 +2,26 @@
 import { ReqeustMapper } from '../database/TableMappers';
 
 
-function handleGetRequests(rows, callback) {
-  console.log(callback, 'callback');
+function handleGetRequests(rows, callback, oneRow) {
+  let data;
+  if (oneRow) [data] = rows;
+  else {
+    data = rows;
+  }
   if (rows.length > 0) {
     callback({
       statusCode: 200,
       respObj: {
         success: true,
-        data: rows,
+        data,
+      },
+    });
+  } else if (oneRow) {
+    callback({
+      statusCode: 404,
+      respObj: {
+        success: false,
+        message: 'The data you requested for was not found',
       },
     });
   } else {
@@ -49,7 +61,6 @@ class RequestService {
 
   static getAll(callback) {
     ReqeustMapper.getAll((result) => {
-      console.log(result, 'result');
       handleGetRequests(result.rows, callback);
     }, (error) => {
       errorHandler(error, callback);
@@ -64,7 +75,7 @@ class RequestService {
    */
   static getById(clientUsername, requestId, callback) {
     ReqeustMapper.getById(clientUsername, requestId, (result) => {
-      handleGetRequests(result.rows, callback);
+      handleGetRequests(result.rows, callback, true);
     }, (error) => {
       errorHandler(error, callback);
     });
@@ -74,7 +85,6 @@ class RequestService {
   static makeRequest(request, callback) {
     const mapperObj = new ReqeustMapper(request);
     mapperObj.create((result) => {
-      console.log(result, 'result');
       if (result.rowCount === 1) {
         callback({
           statusCode: 201,
@@ -105,7 +115,7 @@ class RequestService {
           statusCode: 201,
           respObj: {
             success: true,
-            data: rows,
+            data: rows[0],
           },
         });
       } else {

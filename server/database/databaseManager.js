@@ -2,7 +2,6 @@
 
 import { Pool } from 'pg';
 
-const dbURL = process.env.DATABASE_URL;
 let user = 'maintenance_app_client';
 
 const productionConfig = {
@@ -67,12 +66,19 @@ class DatabaseManager {
   static initTestConfig() {
     pool = new Pool(testConfig);
     user = 'maintenance_app_client';
-    console.log('Inialized test config', pool);
   }
 
   static initProductionConfig() {
     pool = new Pool(productionConfig);
-    console.log(pool, 'pool contents');
+  }
+
+  /**
+   * This sets the maximum number of clients allowed in the pool using the method
+   * argument.
+   * @param {number} maxClient a number representing the maximum number of clients
+   */
+  static setPoolMaxSize(maxClient) {
+    pool.max = maxClient;
   }
 }
 

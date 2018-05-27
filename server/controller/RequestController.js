@@ -19,17 +19,21 @@ function getStatus(status) {
   if (regex.test(status)) return `${status}d`;
   return false;
 }
+
+function verifyUser(req, resp, userType) {
+  if (!req.authData[userType]) {
+    resp.status(403).json({
+      success: false,
+      message: `Only ${userType}(s) can make a request`,
+    });
+    return false;
+  }
+  return true;
+}
 export default class RequestController {
   static create(req, resp) {
-    if (!req.authData.client) {
-      resp.status(403).json({
-        success: false,
-        message: 'Only users(clients) can make a request',
-      });
-      return;
-    }
     const { request, validationResult } = getRequest(req.body, req.authData.client.username);
-
+    if (!verifyUser(req, resp, 'client')) return;
     if (validationResult.valid) {
       request.clientUsername = req.authData.client.username;
       requestService.makeRequest(request, (result) => {
@@ -42,37 +46,14 @@ export default class RequestController {
 
 
   static getAllClientRequests(req, resp) {
-    if (!req.authData.client) {
-      resp.status(403).json({
-        success: false,
-        message: 'Only clients can access this route',
-      });
-      return;
-    }
+    if (!verifyUser(req, resp, 'client')) return;
     requestService.getByUsername(req.authData.client.username, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
-  static modify(req, resp) {
-    const { request, validationResult } = getRequest(req.body);
-    const { params: { id } } = req;
-    if (validationResult.valid) {
-      const response = requestService.modify(id, request);
-      resp.status(response.statusCode).json(response.respObj);
-    } else {
-      resp.status(400).json(RequestValidator.handleBadData(validationResult));
-    }
-  }
-
 
   static getAll(req, resp) {
-    if (!req.authData.engineer) {
-      resp.status(403).json({
-        success: false,
-        message: 'Only clients can access this route',
-      });
-      return;
-    }
+    if (!verifyUser(req, resp, 'engineer')) return;
     requestService.getAll((result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
@@ -80,27 +61,15 @@ export default class RequestController {
 
 
   static getById(req, resp) {
+    if (!verifyUser(req, resp, 'client')) return;
     const { params: { id } } = req;
-    if (!req.authData.client) {
-      resp.status(403).json({
-        success: false,
-        message: 'Only clients can access this route',
-      });
-      return;
-    }
     requestService.getById(req.authData.client.username, id, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
   static updateStatus(req, resp) {
     const { params: { status, id } } = req;
-    if (!req.authData.engineer) {
-      resp.status(403).json({
-        success: false,
-        message: 'Only clients can access this route',
-      });
-      return;
-    }
+    if (!verifyUser(req, resp, 'engineer')) return;
     const statusValue = getStatus(status);
 
     if (statusValue) {
