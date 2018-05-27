@@ -115,7 +115,7 @@ class RequestService {
           statusCode: 201,
           respObj: {
             success: true,
-            data: rows,
+            data: rows[0],
           },
         });
       } else {

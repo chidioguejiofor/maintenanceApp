@@ -51,17 +51,6 @@ export default class RequestController {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
-  static modify(req, resp) {
-    const { request, validationResult } = getRequest(req.body);
-    const { params: { id } } = req;
-    if (validationResult.valid) {
-      const response = requestService.modify(id, request);
-      resp.status(response.statusCode).json(response.respObj);
-    } else {
-      resp.status(400).json(RequestValidator.handleBadData(validationResult));
-    }
-  }
-
 
   static getAll(req, resp) {
     if (!verifyUser(req, resp, 'engineer')) return;
