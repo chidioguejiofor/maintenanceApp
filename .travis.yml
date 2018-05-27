@@ -21,7 +21,6 @@ test:
   username: maintenance_app_client
   password: null
   port: null
-  encoding: utf8
 
 addons:
   code_climate:
