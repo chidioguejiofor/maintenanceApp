@@ -71,6 +71,15 @@ class DatabaseManager {
   static initProductionConfig() {
     pool = new Pool(productionConfig);
   }
+
+  /**
+   * This sets the maximum number of clients allowed in the pool using the method
+   * argument.
+   * @param {number} maxClient a number representing the maximum number of clients
+   */
+  static setPoolMaxSize(maxClient) {
+    pool.max = maxClient;
+  }
 }
 
 export default DatabaseManager;

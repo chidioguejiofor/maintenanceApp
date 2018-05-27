@@ -48,7 +48,7 @@ class TableMapper {
    * @param {Function} errorHandler called when an error occured
    */
   update(key, callback, errorHandler) {
-    DatabaseManager.executeQuery(this.update[key].sql, () => {
+    DatabaseManager.executeStream(this.update[key].sql, () => {
       callback();
     }, errorHandler, this.updateValues);
   }

@@ -64,7 +64,7 @@ class UserService {
           statusCode: 201,
           respObj: {
             success: true,
-            data: result.rows,
+            data: result.rows[0],
           },
         };
       } else {
