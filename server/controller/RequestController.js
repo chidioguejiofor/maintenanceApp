@@ -31,6 +31,19 @@ function verifyUser(req, resp, userType) {
   return true;
 }
 export default class RequestController {
+  static modify(req, resp) {
+    const { request, validationResult } = getRequest(req.body);
+    const { params: { id } } = req;
+    if (!verifyUser(req, resp, 'client')) return;
+    if (validationResult.valid) {
+      const user = req.authData.client;
+      requestService.modify(user.username, request, id, (result) => {
+        resp.status(result.statusCode).json(result.respObj);
+      });
+    } else {
+      resp.status(400).json(RequestValidator.handleBadData(validationResult));
+    }
+  }
   static create(req, resp) {
     const { request, validationResult } = getRequest(req.body, req.authData.client.username);
     if (!verifyUser(req, resp, 'client')) return;

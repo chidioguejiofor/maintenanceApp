@@ -13,8 +13,8 @@ export default class RequestValidator extends ModelValidator {
         pattern: /[A-Z][a-z0-9\s]{5,20}/i,
       },
       image: {
-        message: 'must be at least 3 character',
-        pattern: /.{3,}/,
+        message: 'iamge must be a URI with the pattern <scheme>:\\\\<authority>',
+        pattern: /.{1,}:\/\/.{1,}/,
       },
       location: {
         message: 'must be between 5 to 100 alphanumeric characters',
