@@ -105,6 +105,44 @@ class RequestService {
     });
   }
 
+  static modify(username, request, id, callback) {
+    const mapperObj = new ReqeustMapper(request, id);
+
+    ReqeustMapper.getById(username, id, (result) => {
+      if (result.rowCount > 0) {
+        const previousRequest = result.rows[0];
+
+        if (previousRequest.status === 'created') {
+          mapperObj.update(username, (res) => {
+            callback({
+              statusCode: 201,
+              respObj: {
+                success: true,
+                data: res.rows[0],
+              },
+            });
+          }, error => errorHandler(error, callback));
+        } else {
+          callback({
+            statusCode: 409,
+            respObj: {
+              success: false,
+              message: `The engineer has responded to this request. The current status of this request is ${previousRequest.status} `,
+              data: result.rows[0],
+            },
+          });
+        }
+      } else {
+        callback({
+          statusCode: 404,
+          respObj: {
+            success: false,
+            message: 'The id was not found',
+          },
+        });
+      }
+    }, error => errorHandler(error, callback));
+  }
   static updateStatus(status, requestId, callback) {
     ReqeustMapper.updateStatus(requestId, status, (result) => {
       const { rows } = result;

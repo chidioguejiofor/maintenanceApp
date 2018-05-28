@@ -17,5 +17,8 @@ The app makes the experience of both the user and the engineer pleasureable
 
 - An engineer can do the following:
     - login to the app
-    - make a request
-    - view all the previous requests he has made
+    - approve a request
+    - resolve a request
+    - disapprove a request if it was poorly created
+    - view all the requests made by different clients
+    

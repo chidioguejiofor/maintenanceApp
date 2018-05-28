@@ -35,16 +35,16 @@ export default class ReqeustMapper extends TableMapper {
         called when an error occurs. It takes the error object as its argument
      }} errorHandler
      */
-  update(callback, errorHandler) {
+  update(clientUsername, callback, errorHandler) {
     const { newRequest, id } = this;
     const sql = `
-      UPDATE "Requests"( title, description, location, image, clientUsername)
-      VALUES($1, $2, $3,$3, $4, $5, $6 )
-      WHERE id = ($7) RETURNING ${requestColumns};`;
+      UPDATE "Requests"
+        SET  title =$1, description=$2, location = $3, image =  $4, clientUsername =$5
+      WHERE id = $6 RETURNING ${requestColumns};`;
     const values = [
       newRequest.title, newRequest.description,
       newRequest.location, newRequest.image,
-      newRequest.clientUsername, id,
+      clientUsername, id,
     ];
     ReqeustMapper.executeUpdateHelper(sql, values, callback, errorHandler);
   }

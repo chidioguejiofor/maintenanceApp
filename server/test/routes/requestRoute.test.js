@@ -26,6 +26,7 @@ const invalidRequest = {
   location: 'l',
   image: 'i',
 };
+const CREATE_ROUTE = '/api/v1/users/requests';
 
 initScript();
 
@@ -70,7 +71,6 @@ describe('Request Routes', () => {
 
     describe('Existing Request Routes', () => {
       describe('POST routes', () => {
-        const CREATE_ROUTE = '/api/v1/users/requests';
         describe(CREATE_ROUTE, () => {
           describe('if the request is valid', () => {
             describe('response status code', () => {
@@ -219,6 +219,130 @@ describe('Request Routes', () => {
             });
         });
 
+        describe('/users/requests/<requestId>', () => {
+          let updateRoute = '';
+          let approveNew = '';
+
+          before((done) => {
+            request
+              .post(CREATE_ROUTE)
+              .send(validObj)
+              .set('x-access-token', clientToken)
+              .set('Content-Type', 'application/x-www-form-urlencoded')
+              .end((err, resp) => {
+                const { data: { id: newId } } = resp.body;
+                updateRoute = `/api/v1/users/requests/${newId}`;
+                approveNew = `/api/v1/requests/${newId}/approve`;
+                done();
+              });
+          });
+          describe('if the request has not yet been approved', () => {
+            describe('request body data property', () => {
+              it('should have a data property that is an object', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .end((err, resp) => {
+                    console.log(resp.body, 'invalidBody');
+                    expect(resp.body).property('data').to.be.an('object');
+                    done();
+                  });
+              });
+              it('should have id', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .end((err, resp) => {
+                    expect(resp.body).property('data')
+                      .property('id');
+                    done();
+                  });
+              });
+
+              it('should have message', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .end((err, resp) => {
+                    expect(resp.body).property('data')
+                      .property('message');
+                    done();
+                  });
+              });
+
+              it('should have status property that equals "created"', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .end((err, resp) => {
+                    expect(resp.body).property('data')
+                      .property('status')
+                      .equals('created');
+                    done();
+                  });
+              });
+            });
+          });
+
+          describe('if the request has  been approved', () => {
+            before((done) => {
+              request.put(approveNew)
+                .set('x-access-token', engineerToken)
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .end((err, resp) => {
+                  console.log(resp.body, 'beforeBody');
+                  done();
+                });
+            });
+
+            describe('status code', () => {
+              it('should be 409 "Conflict"', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .expect(409, done);
+              });
+            });
+
+            describe('request body', () => {
+              it('should have a successs property that is false', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .end((err, resp) => {
+                    expect(resp.body).property('success').to.be.false;
+                    done();
+                  });
+              });
+
+              it('should have a message property', (done) => {
+                request.put(updateRoute)
+                  .send(validObj)
+                  .set('x-access-token', clientToken)
+                  .set('Accept', 'application/json')
+                  .set('Content-Type', 'application/x-www-form-urlencoded')
+                  .end((err, resp) => {
+                    expect(resp.body).property('message');
+                    done();
+                  });
+              });
+            });
+          });
+        });
+
         describe('/api/v1/requests/<status>', () => {
           describe('/api/v1/requests/<invalidStatus>', () => {
             it('should return a status of 404', (done) => {
@@ -264,10 +388,10 @@ describe('Request Routes', () => {
                     done();
                   });
               });
-              it('should expect status 401', (done) => {
+              it('should expect status 403', (done) => {
                 request.get(resolveRoute)
                   .set('x-access-token', clientToken)
-                  .expect(401, done);
+                  .expect(403, done);
               });
             });
             describe('PUT /api/v1/requests/disapprove', () => {
