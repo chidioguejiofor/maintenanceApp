@@ -77,7 +77,7 @@ export default class RequestController {
         resp.status(result.statusCode).json(result.respObj);
       });
     } else {
-      resp.status(400).json({
+      resp.status(404).json({
         success: false,
         message: 'The route you specified is invalid',
       });
