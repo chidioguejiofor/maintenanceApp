@@ -1,4 +1,5 @@
-import { EngineerMapper, ClientMapper } from '../database/TableMappers';
+import EngineerMapper from '../database/mappers/EngineerMapper';
+import ClientMapper from '../database/mappers/ClientMapper';
 
 import PasswordHasher from '../helpers/PasswordHasher';
 
