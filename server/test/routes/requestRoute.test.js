@@ -155,7 +155,7 @@ describe('Request Routes', () => {
                 .expect(403, done);
             });
             it('body should have a success property that is false', (done) => {
-              request.get(requestRoute)
+              request.get(CREATE_ROUTE)
                 .set('x-access-token', engineerToken)
                 .end((err, resp) => {
                   expect(resp.body).property('success').to.be.false;
@@ -163,7 +163,7 @@ describe('Request Routes', () => {
                 });
             });
             it('body should have a message property', (done) => {
-              request.get(requestRoute)
+              request.get(CREATE_ROUTE)
                 .set('x-access-token', engineerToken)
                 .end((err, resp) => {
                   expect(resp.body).property('message');

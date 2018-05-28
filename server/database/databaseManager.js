@@ -51,8 +51,10 @@ class DatabaseManager {
 
   static executeStream(sql, callback, errorHandler, values) {
     pool.query(sql, values, (err, res) => {
-      if (err) errorHandler(err);
-      else {
+      if (err) {
+        console.log(`Error while executing ${sql}`);
+        errorHandler(err);
+      } else {
         callback(res);
       }
     });
