@@ -1,6 +1,5 @@
 
-import { ReqeustMapper } from '../database/TableMappers';
-
+import ReqeustMapper from '../database/mappers/RequestMapper';
 
 function handleGetRequests(rows, callback, oneRow) {
   let data;
