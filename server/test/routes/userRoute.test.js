@@ -130,9 +130,10 @@ describe('User Routes', () => {
 
     const LOGIN_ROUTE = '/api/v1/auth/login';
     describe(LOGIN_ROUTE, () => {
-      before(() => {
+      before((done) => {
         initScript();
         Seeder.addClient(validClient);
+        done();
       });
       describe('if request is valid', () => {
         describe('response status code', () => {

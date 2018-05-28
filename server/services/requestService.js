@@ -171,15 +171,15 @@ class RequestService {
 
   static getStatistics(callback) {
     ReqeustMapper.getStats((result) => {
-      if (result.rowCount > 0) {
-        callback({
-          statusCode: 200,
-          respObj: {
-            success: true,
-            data: result.rows[0],
-          },
-        });
-      }
+      callback({
+        statusCode: 200,
+        respObj: {
+          success: true,
+          data: result.rows[0],
+        },
+      });
+    }, (error) => {
+      errorHandler(error, callback);
     });
   }
 }
