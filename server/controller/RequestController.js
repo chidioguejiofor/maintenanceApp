@@ -3,11 +3,11 @@ import RequestValidator from '../validators/RequestValidator';
 
 
 function getRequest(body) {
-  const {
-    title, description, image, location,
-  } = body;
   const request = {
-    title, description, image, location,
+    title: body.title,
+    description: body.description,
+    image: body.image,
+    location: body.location,
   };
   const validationResult = new RequestValidator(request).validate();
   return { request, validationResult };
