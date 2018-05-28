@@ -626,6 +626,174 @@ describe('Request Routes', () => {
 
 
       describe('GET routes', () => {
+        describe('GET /api/v1/requests/stats', () => {
+          const statsRoute = '/api/v1/requests/stats';
+          describe('if the request is valid', () => {
+            describe('request status code', () => {
+              it('should be 200', (done) => {
+                request.get(statsRoute)
+                  .set('Accept', 'application/json')
+                  .set('x-access-token', clientToken)
+                  .expect(200, done);
+              });
+            });
+
+            describe('request body should', () => {
+              it('have a success propery equal to true', (done) => {
+                request.get(statsRoute)
+                  .set('Accept', 'application/json')
+                  .set('x-access-token', clientToken)
+                  .expect(200, done)
+                  .end((err, resp) => {
+                    expect(resp.body).property('success').to.be.true;
+                  });
+              });
+
+              it('have a data property that is an object', (done) => {
+                request.get(statsRoute)
+                  .set('Accept', 'application/json')
+                  .set('x-access-token', clientToken)
+                  .expect(200, done)
+                  .end((err, resp) => {
+                    expect(resp.body).property('data')
+                      .to.be.an('object');
+                  });
+              });
+
+              describe('data property', () => {
+                it('should a "totalRequests" property', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(200, done)
+                    .end((err, resp) => {
+                      expect(resp.body).property('data')
+                        .property('totalRequests');
+                    });
+                });
+                it('should a "requestsReceived" property', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(200, done)
+                    .end((err, resp) => {
+                      expect(resp.body).property('data')
+                        .property('requestsReceived');
+                    });
+                });
+                it('should a "requestsResponded" property', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(200, done)
+                    .end((err, resp) => {
+                      expect(resp.body).property('data')
+                        .property('requestsResponded');
+                    });
+                });
+                it('should a "pendingRequests" property', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(200, done)
+                    .end((err, resp) => {
+                      expect(resp.body).property('data')
+                        .property('pendingRequests');
+                    });
+                });
+                it('should a "disapprovedRequests" property', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(200, done)
+                    .end((err, resp) => {
+                      expect(resp.body).property('data')
+                        .property('disapprovedRequests');
+                    });
+                });
+                it('should a "disapprovedRequests" property', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(200, done)
+                    .end((err, resp) => {
+                      expect(resp.body).property('data')
+                        .property('disapprovedRequests');
+                    });
+                });
+              });
+            });
+          });
+
+          describe('if the request is invalid', () => {
+            describe('if the token is totally invalid', () => {
+              describe('request status code', () => {
+                it('should return 403', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(401, done);
+                });
+              });
+
+              describe('request body', () => {
+                it('should have a success property equals false', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data').to.be.true;
+                      done();
+                    });
+                });
+
+                it('should have a message property ', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .end((err, resp) => {
+                      expect(resp.body).property('message');
+                      done();
+                    });
+                });
+              });
+            });
+            describe('if the token is a clientToke', () => {
+              describe('request status code', () => {
+                it('should return 403', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .expect(401, done);
+                });
+              });
+
+              describe('request body', () => {
+                it('should have a success property equals false', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .end((err, resp) => {
+                      expect(resp.body)
+                        .property('data').to.be.true;
+                      done();
+                    });
+                });
+
+                it('should have a message property ', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', clientToken)
+                    .end((err, resp) => {
+                      expect(resp.body).property('message');
+                      done();
+                    });
+                });
+              });
+            });
+          });
+        });
         describe('GET /api/v1/requests', () => {
           const route = '/api/v1/requests';
           describe('if requests have been made', () => {

@@ -11,5 +11,6 @@ requestRouter.put('/users/requests/:id', RequestController.modify);
 
 requestRouter.get('/users/requests/:id', RequestController.getById);
 requestRouter.get('/requests/', RequestController.getAll);
+requestRouter.get('/requests/stats', RequestController.getStats);
 requestRouter.put('/requests/:id/:status', RequestController.updateStatus);
 export default requestRouter;

@@ -44,6 +44,13 @@ export default class RequestController {
       resp.status(400).json(RequestValidator.handleBadData(validationResult));
     }
   }
+
+  static getStats(req, resp) {
+    if (!verifyUser(req, resp, 'engineer')) return;
+    requestService.getStatistics((result) => {
+      resp.status(result.statusCode).json(result.respObj);
+    });
+  }
   static create(req, resp) {
     const { request, validationResult } = getRequest(req.body, req.authData.client.username);
     if (!verifyUser(req, resp, 'client')) return;

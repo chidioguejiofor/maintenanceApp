@@ -168,6 +168,20 @@ class RequestService {
       errorHandler(error, callback);
     });
   }
+
+  static getStatistics(callback) {
+    ReqeustMapper.getStats((result) => {
+      if (result.rowCount > 0) {
+        callback({
+          statusCode: 200,
+          respObj: {
+            success: true,
+            data: result.rows[0],
+          },
+        });
+      }
+    });
+  }
 }
 
 export default RequestService;
