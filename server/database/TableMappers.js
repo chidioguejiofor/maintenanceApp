@@ -1,5 +1,16 @@
 import DatabaseManager from './databaseManager';
 
+
+/**
+ * This helper functions is used to execute updates on the different TableMappers
+ * @param {string} sql
+ * @param {string} values
+ * @param {function} callback
+ * @param {function} errorHandler
+ */
+function executeUpdateHelper(sql, values, callback, errorHandler) {
+  DatabaseManager.executeStream(sql, callback, errorHandler, values);
+}
 /**
  * A {@code TableMapper } is used to link an sql table to a javascript object
  * This is supposed to make it easier to insert new table rows in the database.
@@ -18,7 +29,6 @@ class TableMapper {
   constructor(sqlObj) {
     this.createSql = sqlObj.create.sql;
     this.createValues = sqlObj.create.values;
-    this.update = sqlObj.update;
   }
 
   /**
@@ -37,20 +47,6 @@ class TableMapper {
     DatabaseManager.executeStream(this.createSql, (result) => {
       callback(result);
     }, errorHandler, this.createValues);
-  }
-
-  /**
-   *This updates a specified row in the table. The row to update is determined
-   by the values passed in the constructor when this object was being created
-   * @param {string} key represents the attribute(s)/ column(s) to be updated
-   * @param {Function} callback called with the result of the query when the operation
-   * was successful
-   * @param {Function} errorHandler called when an error occured
-   */
-  update(key, callback, errorHandler) {
-    DatabaseManager.executeStream(this.update[key].sql, () => {
-      callback();
-    }, errorHandler, this.updateValues);
   }
 }
 /**
@@ -81,35 +77,55 @@ export class ClientMapper extends TableMapper {
 
       },
     };
-    if (existingClient) {
-      obj.update = {
-        'username-password': {
-          sql: `UPDATE "Engineers" 
-              SET username = $1, password = $2
-              WHERE password = $4 AND username = $5`,
-          values: [
-            newClient.username, newClient.password,
-            existingClient.password, existingClient.username,
-          ],
-        },
-
-        password: {
-          sql: `UPDATE "Engineers" SET password = ($1)
-                  WHERE password = ($4) AND username = ($5)`,
-          values: [newClient.password, existingClient.password, existingClient.username],
-
-        },
-        email: {
-          sql: `UPDATE "Engineers" SET email = ($1)
-                    WHERE password = ($4) AND username = ($5)`,
-          values: [newClient.email, existingClient.password, existingClient.username],
-
-        },
-      };
-    }
     super(obj);
+    this.existingClient = existingClient;
+    this.newClient = newClient;
   }
 
+
+  /**
+   *This method uses this ClientMapper's new client to run an sql statement that
+   updates the existingClient's password
+   * @param {function} callback
+   * @param {function} errorHandler
+   */
+  updatePassword(callback, errorHandler) {
+    const { newClient, existingClient } = this;
+    const sql = `UPDATE "Clients" SET password = ($1)
+      WHERE password = ($2) AND username = ($3)`;
+    const values = [newClient.password, existingClient.password, existingClient.username];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
+  /**
+   *Uses this ClientMapper's newClient object to run an sql statement that
+   updates the existingClient's username and password
+   * @param {function} callback
+   * @param {function} errorHandler
+   */
+  updateUsernameAndPassword(callback, errorHandler) {
+    const { newClient, existingClient } = this;
+    const sql = `UPDATE "Clients" 
+    SET username = $1, password = $2
+    WHERE password = $4 AND username = $5`;
+    const values = [
+      existingClient.username, existingClient.password,
+      newClient.username, newClient.password];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
+
+  /**
+   *Uses this ClientMapper's newClient object to run an sql statement that
+   updates the existingClient's email address
+   * @param {function} callback
+   * @param {function} errorHandler
+   */
+  updateEmail(callback, errorHandler) {
+    const { newClient, existingClient } = this;
+    const sql = `UPDATE "Engineers" SET email = ($1)
+    WHERE password = ($4) AND username = ($5)`;
+    const values = [newClient.email, existingClient.password, existingClient.username];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
   static loginQuery(username, password, callback, errorHandler) {
     const sql = `SELECT username, email FROM "Clients" 
                   WHERE username = $1 AND password = $2`;
@@ -140,34 +156,56 @@ export class EngineerMapper extends TableMapper {
 
       },
     };
-    if (existingEngineer) {
-      obj.update = {
-        'username-password': {
-          sql: `UPDATE "Engineers" 
-              SET username = $1, password = $2
-              WHERE password = $4 AND username = $5`,
-          values: [
-            newEngineer.username, newEngineer.password,
-            existingEngineer.password, existingEngineer.username,
-          ],
-        },
-
-        password: {
-          sql: `UPDATE "Engineers" SET password = ($1)
-                  WHERE password = ($4) AND username = ($5)`,
-          values: [newEngineer.password, existingEngineer.password, existingEngineer.username],
-
-        },
-        email: {
-          sql: `UPDATE "Engineers" SET email = ($1)
-                    WHERE password = ($4) AND username = ($5)`,
-          values: [newEngineer.email, existingEngineer.password, existingEngineer.username],
-
-        },
-      };
-    }
     super(obj);
+    this.newEngineer = newEngineer;
+    this.existingEngineer = existingEngineer;
   }
+
+  /**
+   *This method uses this ClientMapper's new client to run an sql statement that
+   updates the existingClient's password
+   * @param {function} callback
+   * @param {function} errorHandler
+   */
+  updatePassword(callback, errorHandler) {
+    const { newEngineer, existingEngineer } = this;
+    const sql =
+    `UPDATE "Engineers" SET password = ($1)
+      WHERE password = ($2) AND username = ($3)`;
+    const values = [newEngineer.password, existingEngineer.password, existingEngineer.username];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
+  /**
+   *Uses this EngineerMapper's newClient object to run an sql statement that
+   updates the existingClient's username and password
+   * @param {function} callback
+   * @param {function} errorHandler
+   */
+  updateUsernameAndPassword(callback, errorHandler) {
+    const { newEngineer, existingEngineer } = this;
+    const sql = `UPDATE "Engineers" 
+    SET username = $1, password = $2
+    WHERE password = $4 AND username = $5`;
+    const values = [
+      existingEngineer.username, existingEngineer.password,
+      newEngineer.username, newEngineer.password];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
+
+  /**
+   *Uses this EngineerMapper's newClient object to run an sql statement that
+   updates the existingClient's email address
+   * @param {function} callback
+   * @param {function} errorHandler
+   */
+  updateEmail(callback, errorHandler) {
+    const { newEngineer, existingEngineer } = this;
+    const sql = `UPDATE "Engineers" SET email = ($1)
+    WHERE password = ($4) AND username = ($5)`;
+    const values = [newEngineer.email, existingEngineer.password, existingEngineer.username];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
+
   static loginQuery(username, password, callback, errorHandler) {
     const sql = `SELECT username, email FROM "Engineers" 
                   WHERE username = $1 AND password = $2`;
@@ -176,6 +214,8 @@ export class EngineerMapper extends TableMapper {
   }
 }
 
+
+const requestColumns = 'date , id, title, description, location, image, status, message';
 /**
  * An ReqeustMapper makes inserting and updating rows in the "Reqeuests" table
  * easier and more convenient
@@ -186,7 +226,7 @@ export class ReqeustMapper extends TableMapper {
       create: {
         sql:
                 `INSERT INTO "Requests"( title, description, location, image, clientusername)
-                    VALUES($1, $2, $3, $4, $5 ) RETURNING *`,
+                    VALUES($1, $2, $3, $4, $5 ) RETURNING id, title, description, location, image, status, message;`,
         values: [
           newRequest.title, newRequest.description,
           newRequest.location, newRequest.image,
@@ -194,85 +234,107 @@ export class ReqeustMapper extends TableMapper {
 
       },
     };
-    if (id) {
-      requestOptions.update = {
-        request: {
-          sql: `UPDATE "Requests"( title, description, location, image, clientUsername)
-                    VALUES($1, $2, $3,$3, $4, $5, $6 )
-                    WHERE id = ($7)`,
-          values: [
-            newRequest.title, newRequest.description,
-            newRequest.location, newRequest.image,
-            newRequest.clientUsername, id],
-        },
-      };
-    }
     super(requestOptions);
+    this.newRequest = newRequest;
+    this.id = id;
   }
 
   /**
-   *
-   * @param {*} username
-   * @param {*} callback
-   * @param {*} errorHandler
+   * Uses the id and newRequest stored in this ReqeustMapper to create and execute
+   * an sql statement that  update a request with the specified id
+    @param {function callback(result) {
+      called with the result of the query. Note that this result is an object that contains
+      rows, rowcount etc
+   }} callback
+   * @param {function errorHandler(sqlError) {
+      called when an error occurs. It takes the error object as its argument
+   }} errorHandler
+   */
+  update(callback, errorHandler) {
+    const { newRequest, id } = this;
+    const sql = `
+    UPDATE "Requests"( title, description, location, image, clientUsername)
+    VALUES($1, $2, $3,$3, $4, $5, $6 )
+    WHERE id = ($7) RETURNING ${requestColumns};`;
+    const values = [
+      newRequest.title, newRequest.description,
+      newRequest.location, newRequest.image,
+      newRequest.clientUsername, id,
+    ];
+    executeUpdateHelper(sql, values, callback, errorHandler);
+  }
+  /**
+   * Gets the request of a specified client using the client username
+   * @param {string} username
+   * @param {function callback(result) {
+      called with the result of the query. Note that this result is an object that contains
+      rows, rowcount etc
+   }} callback
+   * @param {function errorHandler(sqlError) {
+      called when an error occurs. It takes the error object as its argument
+   }} errorHandler
    */
   static getByUsername(username, callback, errorHandler) {
     const sql =
-    `SELECT id, title, description, location, image, status, message  FROM "Requests"
+    `SELECT ${requestColumns}  FROM "Requests"
         WHERE clientUsername = $1`;
     DatabaseManager.executeStream(sql, callback, errorHandler, [username]);
   }
 
+  /**
+   * Gets a request that has a specified id and username
+   * @param {*} username the username of the client
+   * @param {*} id the id of the request
+     @param {function callback(result) {
+      called with the result of the query. Note that this result is an object that contains
+      rows, rowcount etc
+   }} callback
+   * @param {function errorHandler(sqlError) {
+      called when an error occurs. It takes the error object as its argument
+   }} errorHandler
+   */
   static getById(username, id, callback, errorHandler) {
     const sql =
-    `SELECT id, title, description, location, image, status, message  FROM "Requests"
+    `SELECT ${requestColumns}  FROM "Requests"
         WHERE clientusername = $1 AND id = $2 `;
     DatabaseManager.executeStream(sql, callback, errorHandler, [username, id]);
   }
 
+  /**
+   *Gets all the request in the database
+  @param {function callback(result) {
+      called with the result of the query. Note that this result is an object that contains
+      rows, rowcount etc
+   }} callback
+   * @param {function errorHandler(sqlError) {
+      called when an error occurs. It takes the error object as its argument
+   }} errorHandler
+   */
   static getAll(callback, errorHandler) {
     const sql =
-    'SELECT *  FROM "Requests"';
+    `SELECT ${requestColumns}  FROM "Requests"`;
     DatabaseManager.executeStream(sql, callback, errorHandler);
   }
 
+  /**
+   * Updates the status of a request with the specified requestId
+   * @param {*} requestId   the id of the request
+   * @param {*} newStatus the new status of the request
+      @param {function callback(result) {
+      called with the result of the query. Note that this result is an object that contains
+      rows, rowcount etc
+   }} callback
+   * @param {function errorHandler(sqlError) {
+      called when an error occurs. It takes the error object as its argument
+   }} errorHandler
+   */
   static updateStatus(requestId, newStatus, callback, errorHandler) {
     const sql =
-    `UPDATE  "Requests" 
-        SET status = $1
-      WHERE id = $2 RETURNING * `;
+    `UPDATE  "Requests" SET status = $1
+      WHERE id = $2  
+      RETURNING  ${requestColumns}`;
 
     DatabaseManager.executeStream(sql, callback, errorHandler, [newStatus, requestId]);
   }
 }
 
-/**
- * An ReqeustStatusMapper makes inserting and updating rows in the "RequestStatus" table
- * easier and more convenient
- */
-export class ReqeustStatusMapper extends TableMapper {
-  constructor(newRequest, id) {
-    super({
-      create: {
-        sql: `INSERT INTO "Requests"( title, description, location, image, clientUsername)
-                        VALUES($1, $2, $3,$3, $4, $5, $6 ) `,
-        values: [
-          newRequest.title, newRequest.description,
-          newRequest.location, newRequest.image,
-          newRequest.clientUsername],
-
-      },
-      update: {
-        request: {
-          sql: `UPDATE "Requests"( title, description, location, image, clientUsername)
-                        VALUES($1, $2, $3,$3, $4, $5, $6 )
-                        WHERE id = ($7)`,
-          values: [
-            newRequest.title, newRequest.description,
-            newRequest.location, newRequest.image,
-            newRequest.clientUsername, id],
-        },
-      },
-    });
-  }
-}
