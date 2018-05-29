@@ -11,7 +11,6 @@ export default class ModelValidator {
     return this.requirements[key].pattern;
   }
 
-
   runValidation(testObj) {
     const invalidData = [];
     const missingData = [];

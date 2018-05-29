@@ -1,36 +1,23 @@
-import ModelValidator from './ModelValidator';
+import UserValidator from './UserValidator';
 
 
-class LoginValidator extends ModelValidator {
+class LoginValidator extends UserValidator {
   constructor(model) {
-    super(model, {
-      password: {
-        message: 'must be at least 5 characters of any type',
-        pattern: /.{5,}/g,
-      },
-      userType: {
-        message: 'must be either "engineer" or "client"',
-        pattern: /client|engineer/i,
-      },
-      username: {
-        message: 'can contain letters or number but must begin with a letter',
-        pattern: /[a-z][a-z0-9]{3,}/g,
-      },
-    });
+    super(model, 'password', 'userType', 'username');
   }
 
-  validate() {
-    const {
-      model: {
-        password, userType, username,
-      },
-    } = this;
+  // validate() {
+  //   const {
+  //     model: {
+  //       password, userType, username,
+  //     },
+  //   } = this;
 
-    const testObj = {
-      password, userType, username,
-    };
-    return super.runValidation(testObj);
-  }
+  //   const testObj = {
+  //     password, userType, username,
+  //   };
+  //   return super.runValidation(testObj);
+  // }
 }
 
 export default LoginValidator;

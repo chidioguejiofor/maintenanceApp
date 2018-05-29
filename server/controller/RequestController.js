@@ -1,6 +1,6 @@
 import requestService from '../services/requestService';
 import RequestValidator from '../validators/RequestValidator';
-
+import Controller from './Controller';
 
 function getRequest(body) {
   const request = {
@@ -20,21 +20,12 @@ function getStatus(status) {
   return false;
 }
 
-function verifyUser(req, resp, userType) {
-  if (!req.authData[userType]) {
-    resp.status(403).json({
-      success: false,
-      message: `Only ${userType}(s) can make a request`,
-    });
-    return false;
-  }
-  return true;
-}
-export default class RequestController {
+
+export default class RequestController extends Controller {
   static modify(req, resp) {
     const { request, validationResult } = getRequest(req.body);
     const { params: { id } } = req;
-    if (!verifyUser(req, resp, 'client')) return;
+    if (!RequestController.verifyUser(req, resp, 'client')) return;
     if (validationResult.valid) {
       const user = req.authData.client;
       requestService.modify(user.username, request, id, (result) => {
@@ -46,14 +37,14 @@ export default class RequestController {
   }
 
   static getStats(req, resp) {
-    if (!verifyUser(req, resp, 'engineer')) return;
+    if (!RequestController.verifyUser(req, resp, 'engineer')) return;
     requestService.getStatistics((result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
   static create(req, resp) {
     const { request, validationResult } = getRequest(req.body, req.authData.client.username);
-    if (!verifyUser(req, resp, 'client')) return;
+    if (!RequestController.verifyUser(req, resp, 'client')) return;
     if (validationResult.valid) {
       request.clientUsername = req.authData.client.username;
       requestService.makeRequest(request, (result) => {
@@ -66,14 +57,14 @@ export default class RequestController {
 
 
   static getAllClientRequests(req, resp) {
-    if (!verifyUser(req, resp, 'client')) return;
+    if (!RequestController.verifyUser(req, resp, 'client')) return;
     requestService.getByUsername(req.authData.client.username, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
 
   static getAll(req, resp) {
-    if (!verifyUser(req, resp, 'engineer')) return;
+    if (!RequestController.verifyUser(req, resp, 'engineer')) return;
     requestService.getAll((result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
@@ -81,7 +72,7 @@ export default class RequestController {
 
 
   static getById(req, resp) {
-    if (!verifyUser(req, resp, 'client')) return;
+    if (!RequestController.verifyUser(req, resp, 'client')) return;
     const { params: { id } } = req;
     requestService.getById(req.authData.client.username, id, (result) => {
       resp.status(result.statusCode).json(result.respObj);
@@ -89,7 +80,7 @@ export default class RequestController {
   }
   static updateStatus(req, resp) {
     const { params: { status, id } } = req;
-    if (!verifyUser(req, resp, 'engineer')) return;
+    if (!RequestController.verifyUser(req, resp, 'engineer')) return;
     const statusValue = getStatus(status);
 
     if (statusValue) {

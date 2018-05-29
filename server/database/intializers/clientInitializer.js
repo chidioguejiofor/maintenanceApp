@@ -1,11 +1,12 @@
 import Initializer from './Initializer';
 
 const createSql =
-`CREATE TABLE "Clients"
+`CREATE TABLE IF NOT EXISTS "Clients"
 (
     username character varying(100),
     password character varying(10000),
     email character varying(255),
+    CONSTRAINT clientuniqueMail UNIQUE (email),
     PRIMARY KEY (username)
 );
 

@@ -26,8 +26,13 @@ export default class Seeder {
 
   static seedEngineer() {
     const passwordHash = PasswordHasher.hash('super123456');
-    DatabaseManager.executeStream(`INSERT INTO "Engineers"(username, password, email, accessType)
-    VALUES('superEngineer', $1, 'super@email.com', 'super');`, () => {
+    DatabaseManager.executeStream(`
+      INSERT INTO "Engineers"(username, password, email, accessType)
+        SELECT 'superEngineer', $1, 'super@email.com', 'super'
+          WHERE 0 =
+            (
+              SELECT COUNT(*) FROM "Engineers"
+            );`, () => {
       console.log('Successfully seeded the engineer table');
     }, (err) => {
       console.log(err);
