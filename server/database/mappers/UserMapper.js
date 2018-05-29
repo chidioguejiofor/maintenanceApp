@@ -33,56 +33,28 @@ export default class UserMapper extends TableMapper {
     this.tableName = tableName;
   }
 
-
-  /**
-     *This method uses this UserMapper's new user to run an sql statement that
-     updates the existingUser's password
-     * @param {function} callback
-     * @param {function} errorHandler
-     */
-  updatePassword(callback, errorHandler) {
-    const { newUser, existingUser } = this;
-    const sql = `UPDATE "${this.tableName}" SET password = ($1)
-        WHERE password = ($2) AND username = ($3)`;
-    const values = [newUser.password, existingUser.password, existingUser.username];
-    UserMapper.executeUpdateHelper(sql, values, callback, errorHandler);
-  }
-  /**
-     *Uses this UserMapper's newUser object to run an sql statement that
-     updates the existingUser's username and password
-     * @param {function} callback
-     * @param {function} errorHandler
-     */
-  updateUsernameAndPassword(callback, errorHandler) {
-    const { newUser, existingUser } = this;
-    const sql = `UPDATE "${this.tableName}" 
-      SET username = $1, password = $2
-      WHERE password = $4 AND username = $5`;
-    const values = [
-      existingUser.username, existingUser.password,
-      newUser.username, newUser.password];
-    UserMapper.executeUpdateHelper(sql, values, callback, errorHandler);
-  }
-
-  /**
-     *Uses this UserMapper's newUser object to run an sql statement that
-     updates the existingUser's email address
-     * @param {function} callback
-     * @param {function} errorHandler
-     */
-  updateEmail(callback, errorHandler) {
-    const { newUser, existingUser } = this;
-    const sql = `UPDATE "${this.tableName}" SET email = ($1)
-      WHERE password = ($4) AND username = ($5)`;
-    const values = [newUser.email, existingUser.password, existingUser.username];
-    UserMapper.executeUpdateHelper(sql, values, callback, errorHandler);
-  }
-
   static loginQuery(username, password, tableName, callback, errorHandler) {
     const sql = `SELECT username, email FROM "${tableName}" 
                     WHERE username = $1 AND password = $2`;
 
     UserMapper.executeUpdateHelper(sql, [username, password], callback, errorHandler);
+  }
+
+
+  static findMail(email, tableName, callback, errorHandler) {
+    const sql = `SELECT username, email FROM "${tableName}" 
+            WHERE email = $1; `;
+
+    UserMapper.executeUpdateHelper(sql, [email], callback, errorHandler);
+  }
+
+  static updateCredentials(user, tableName, callback, errorHandler) {
+    const sql =
+    `UPDATE "${tableName}" 
+        SET username = $1, password = $2
+        WHERE email = $3 RETURNING username, email;`;
+    const values = [user.username, user.password, user.email];
+    UserMapper.executeUpdateHelper(sql, values, callback, errorHandler);
   }
 }
 

@@ -10,7 +10,7 @@
     "test": "nyc mocha  --reporter progress --reporter progress --require babel-core/register \"server/test/**/**.test.js\" --exit || true",
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "build": "babel ./server/ -d build --copy-files -s",
-    "custome-migrate": "npm run start-file server/database/initScript.js",
+    "drop-tables": "npm run start-file server/database/dropScript.js",
     "temp": "babel-node minimist.js -production true",
     "start-test": " babel-node  server/database/initTestConfig.js && npm run start",
     "start-prod": " babel-node  server/database/initProduction.js "

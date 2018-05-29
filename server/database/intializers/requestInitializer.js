@@ -1,7 +1,7 @@
 import Initializer from './Initializer';
 
 const createSql =
-`CREATE TABLE "Requests"
+`CREATE TABLE IF NOT EXISTS "Requests"
 (
     id SERIAL,
     title character varying(100),

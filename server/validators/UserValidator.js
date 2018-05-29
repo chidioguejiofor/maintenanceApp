@@ -2,8 +2,8 @@ import ModelValidator from './ModelValidator';
 
 
 class UserValidator extends ModelValidator {
-  constructor(model) {
-    super(model, {
+  constructor(model, ...requiredProperties) {
+    const userProperties = {
       password: {
         message: 'must be at least 5 characters of any type',
         pattern: /.{5,}/g,
@@ -20,20 +20,24 @@ class UserValidator extends ModelValidator {
         message: 'can contain letters or number but must begin with a letter',
         pattern: /[a-z][a-z0-9]{3,}/g,
       },
-    });
+    };
+    const requirements = {};
+    requiredProperties
+      .forEach((property) => {
+        requirements[property] = userProperties[property];
+      });
+    super(model, requirements);
+    this.requiredProperties = requiredProperties;
   }
 
   validate() {
-    const {
-      model: {
-        email, password, userType, username,
-      },
-    } = this;
+    const testProps = {};
+    this.requiredProperties
+      .forEach((elem) => {
+        testProps[elem] = this.model[elem];
+      });
 
-    const testObj = {
-      email, password, userType, username,
-    };
-    return super.runValidation(testObj);
+    return super.runValidation(testProps);
   }
 }
 
