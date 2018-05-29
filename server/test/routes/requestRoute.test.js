@@ -245,7 +245,6 @@ describe('Request Routes', () => {
                   .set('Accept', 'application/json')
                   .set('Content-Type', 'application/x-www-form-urlencoded')
                   .end((err, resp) => {
-                    console.log(resp.body, 'invalidBody');
                     expect(resp.body).property('data').to.be.an('object');
                     done();
                   });
@@ -298,8 +297,7 @@ describe('Request Routes', () => {
                 .set('x-access-token', engineerToken)
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/x-www-form-urlencoded')
-                .end((err, resp) => {
-                  console.log(resp.body, 'beforeBody');
+                .end(() => {
                   done();
                 });
             });
@@ -373,7 +371,7 @@ describe('Request Routes', () => {
           describe('if the token is invalid', () => {
             describe('if it is a clientToken', () => {
               it('body should have a success property that is false', (done) => {
-                request.get(resolveRoute)
+                request.put(resolveRoute)
                   .set('x-access-token', clientToken)
                   .end((err, resp) => {
                     expect(resp.body).property('success').to.be.false;
@@ -381,7 +379,7 @@ describe('Request Routes', () => {
                   });
               });
               it('body should have a message property', (done) => {
-                request.get(resolveRoute)
+                request.put(resolveRoute)
                   .set('x-access-token', clientToken)
                   .end((err, resp) => {
                     expect(resp.body).property('message');
@@ -389,7 +387,7 @@ describe('Request Routes', () => {
                   });
               });
               it('should expect status 403', (done) => {
-                request.get(resolveRoute)
+                request.put(resolveRoute)
                   .set('x-access-token', clientToken)
                   .expect(403, done);
               });
@@ -633,7 +631,7 @@ describe('Request Routes', () => {
               it('should be 200', (done) => {
                 request.get(statsRoute)
                   .set('Accept', 'application/json')
-                  .set('x-access-token', clientToken)
+                  .set('x-access-token', engineerToken)
                   .expect(200, done);
               });
             });
@@ -642,21 +640,23 @@ describe('Request Routes', () => {
               it('have a success propery equal to true', (done) => {
                 request.get(statsRoute)
                   .set('Accept', 'application/json')
-                  .set('x-access-token', clientToken)
-                  .expect(200, done)
+                  .set('x-access-token', engineerToken)
+                  .expect(200)
                   .end((err, resp) => {
                     expect(resp.body).property('success').to.be.true;
+                    done();
                   });
               });
 
               it('have a data property that is an object', (done) => {
                 request.get(statsRoute)
                   .set('Accept', 'application/json')
-                  .set('x-access-token', clientToken)
-                  .expect(200, done)
+                  .set('x-access-token', engineerToken)
+                  .expect(200)
                   .end((err, resp) => {
                     expect(resp.body).property('data')
                       .to.be.an('object');
+                    done();
                   });
               });
 
@@ -664,61 +664,78 @@ describe('Request Routes', () => {
                 it('should a "totalRequests" property', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
-                    .expect(200, done)
+                    .set('x-access-token', engineerToken)
+                    .expect(200)
                     .end((err, resp) => {
                       expect(resp.body).property('data')
                         .property('totalRequests');
+                      done();
                     });
                 });
-                it('should a "requestsReceived" property', (done) => {
+                it('should a "totalRequests" property', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
-                    .expect(200, done)
+                    .set('x-access-token', engineerToken)
+                    .expect(200)
                     .end((err, resp) => {
                       expect(resp.body).property('data')
-                        .property('requestsReceived');
+                        .property('totalRequests');
+                      done();
                     });
                 });
-                it('should a "requestsResponded" property', (done) => {
+                it('should a "responded" property', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
-                    .expect(200, done)
+                    .set('x-access-token', engineerToken)
                     .end((err, resp) => {
                       expect(resp.body).property('data')
-                        .property('requestsResponded');
+                        .property('responded');
+                      done();
                     });
                 });
-                it('should a "pendingRequests" property', (done) => {
+                it('should a "notResponded" property', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
-                    .expect(200, done)
+                    .set('x-access-token', engineerToken)
                     .end((err, resp) => {
                       expect(resp.body).property('data')
-                        .property('pendingRequests');
+                        .property('notResponded');
+                      done();
                     });
                 });
-                it('should a "disapprovedRequests" property', (done) => {
+                it('should a "disapproved" property', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
-                    .expect(200, done)
+                    .set('x-access-token', engineerToken)
                     .end((err, resp) => {
                       expect(resp.body).property('data')
-                        .property('disapprovedRequests');
+                        .property('disapproved');
+                      done();
                     });
                 });
-                it('should a "disapprovedRequests" property', (done) => {
+                it('should a "disapproved" property', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
-                    .expect(200, done)
+                    .set('x-access-token', engineerToken)
                     .end((err, resp) => {
-                      expect(resp.body).property('data')
-                        .property('disapprovedRequests');
+                      expect(resp.body)
+                        .property('data')
+                        .property('disapproved');
+                      done();
+                    });
+                });
+
+                it('expect the responded to be equal to the sum of approved, disapproved and resolved', (done) => {
+                  request.get(statsRoute)
+                    .set('Accept', 'application/json')
+                    .set('x-access-token', engineerToken)
+                    .end((err, resp) => {
+                      const {
+                        responded, approved, disapproved, resolved,
+                      } = resp.body.data;
+                      expect(+responded)
+                        .to.equal(+approved + +disapproved + +resolved);
+                      done();
                     });
                 });
               });
@@ -731,7 +748,7 @@ describe('Request Routes', () => {
                 it('should return 403', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
+                    .set('x-access-token', 'engineerToken')
                     .expect(401, done);
                 });
               });
@@ -740,10 +757,10 @@ describe('Request Routes', () => {
                 it('should have a success property equals false', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
+                    .set('x-access-token', 'engineerToken')
                     .end((err, resp) => {
                       expect(resp.body)
-                        .property('data').to.be.true;
+                        .property('success').to.be.false;
                       done();
                     });
                 });
@@ -751,7 +768,7 @@ describe('Request Routes', () => {
                 it('should have a message property ', (done) => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
-                    .set('x-access-token', clientToken)
+                    .set('x-access-token', 'engineerToken')
                     .end((err, resp) => {
                       expect(resp.body).property('message');
                       done();
@@ -765,7 +782,7 @@ describe('Request Routes', () => {
                   request.get(statsRoute)
                     .set('Accept', 'application/json')
                     .set('x-access-token', clientToken)
-                    .expect(401, done);
+                    .expect(403, done);
                 });
               });
 
@@ -776,7 +793,7 @@ describe('Request Routes', () => {
                     .set('x-access-token', clientToken)
                     .end((err, resp) => {
                       expect(resp.body)
-                        .property('data').to.be.true;
+                        .property('success').to.be.false;
                       done();
                     });
                 });

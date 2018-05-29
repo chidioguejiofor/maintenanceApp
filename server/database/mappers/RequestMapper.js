@@ -120,5 +120,29 @@ export default class ReqeustMapper extends TableMapper {
         RETURNING  ${requestColumns}`;
     ReqeustMapper.executeUpdateHelper(sql, [newStatus, requestId], callback, errorHandler);
   }
+
+  /**
+   * Queries the database for statistics of the requests in the system and calls the
+   * callback with its requests
+    @param {function callback(result) {
+        called with the result of the query. Note that this result is an object that contains
+        rows, rowcount etc
+     }} callback
+     * @param {function errorHandler(sqlError) {
+        called when an error occurs. It takes the error object as its argument
+     }} errorHandler
+   */
+  static getStats(callback, errorHandler) {
+    const sql =
+      ` SELECT COUNT(*) AS "totalRequests", 
+               COUNT(status)  FILTER (where status= 'approved') as approved,
+               COUNT(status) FILTER (where status= 'disapproved') as disapproved,
+               COUNT(status) FILTER (where status= 'resolved') as resolved,
+               COUNT(status) FILTER (where status= 'resolved' OR status= 'disapproved' OR status= 'approved') as responded,
+               COUNT(status) FILTER (where status= 'created') as "notResponded"
+        FROM "Requests";
+      `;
+    ReqeustMapper.executeUpdateHelper(sql, [], callback, errorHandler);
+  }
 }
 
