@@ -168,9 +168,6 @@ input[type =text], textarea{
     background-color: rgb(240, 89, 80);
 }
 
-.danger-text{
-    color: rgb(240, 89, 80);
-}
 .danger:hover{
     background-color: rgb(250, 29, 80);
 }

@@ -29,7 +29,7 @@ body{
     padding: 3px 0;
 }
 
-.signup-group, .reset-group, .signin-group  {
+.signup-group, .reset-group, .signin-group {
     
     flex-direction: column;
     justify-content: center;
@@ -95,4 +95,8 @@ input{
     padding: 10px;
     border-radius: 10px;
     font-family:  Georgia, 'Times New Roman', Times, serif;
+}
+
+input[data-name]{
+    display: fixed;
 }

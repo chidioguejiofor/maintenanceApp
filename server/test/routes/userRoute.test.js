@@ -372,7 +372,6 @@ describe('User Routes', () => {
             .set('Accept', 'application/json')
             .set('Content-Type', 'application/x-www-form-urlencoded')
             .end((err, resp) => {
-              console.log(resetToken, 'resteToken');
               resetToken = resp.body.data.token;
 
               done();
@@ -402,7 +401,6 @@ describe('User Routes', () => {
                 .set('Content-Type', 'application/x-www-form-urlencoded')
                 .send(newClient)
                 .end((err, resp) => {
-                  console.log(resp.body, 'badBody');
                   expect(resp.body).property('success')
                     .to.be.true;
                   done();

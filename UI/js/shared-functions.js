@@ -1,10 +1,31 @@
+let apiHost = 'http://localhost:3232';
+if(location.href.includes('localhost')){
+  apiHost = 'http://localhost:3232';
+} else {
+  apiHost = 'https://chidiebere-maintenance-api.herokuapp.com';
+}
 function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    let regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+  if (!url) url = window.location.href;
+  const replaceName = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${replaceName}(=([^&#]*)|&|#|$)`);
 
-    let results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
+function consumeAPI(endPoint, requestOptions, callback, errorHandler) {
+  const url = `${apiHost}/api/v1${endPoint}`;
+  fetch(url, requestOptions)
+    .then((res) => {
+      res.json()
+        .then((data) => {
+          const finalObj = data;
+          finalObj.statusCode = res.status;
+          callback(finalObj, true);
+        });
+    })
+    .catch(error => errorHandler(error, false));
 }
