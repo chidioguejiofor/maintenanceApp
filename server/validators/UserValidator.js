@@ -6,7 +6,7 @@ class UserValidator extends ModelValidator {
     const userProperties = {
       password: {
         message: 'must be at least 5 characters of any type',
-        pattern: /.{5,}/g,
+        pattern: /.{5,}/i,
       },
       email: {
         message: 'must have the format<username>@<hostname>.com and <username>must begin with an alphabet',
@@ -18,7 +18,7 @@ class UserValidator extends ModelValidator {
       },
       username: {
         message: 'can contain letters or number but must begin with a letter',
-        pattern: /[a-z][a-z0-9]{3,}/g,
+        pattern: /[a-z][a-z0-9]{3,}/i,
       },
     };
     const requirements = {};

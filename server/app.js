@@ -7,7 +7,11 @@ import dbInit from './database/initScript';
 dbInit();
 const app = express();
 const port = process.env.PORT || 3232;
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
+app.use(bodyParser.json());
+
 app.use('/api/v1/', apiRouter);
 app.all('/*', (req, resp) => {
   resp.status(404).json({
@@ -15,6 +19,7 @@ app.all('/*', (req, resp) => {
     message: 'Invalid Route',
   });
 });
+
 
 app.listen(port, (error) => {
   if (error) console.log('An error occured while binding to port');

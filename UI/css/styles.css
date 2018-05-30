@@ -253,3 +253,11 @@ h3{
 input, textarea{
     font-family:  'Shadows Into Light', cursive, serif;
 }
+
+.danger-text{
+    color: rgb(240, 89, 80);
+    display: inline;
+    max-width: 90%;
+    text-align: center;
+}
+

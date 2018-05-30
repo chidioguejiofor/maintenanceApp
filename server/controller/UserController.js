@@ -33,6 +33,7 @@ export default class UserController extends Controller {
 
   static login(req, resp) {
     const { username, password, userType } = req.body;
+
     const user = { username, password, userType };
     const validationResult = new LoginValidator(user).validate();
     if (validationResult.valid) {
@@ -109,7 +110,6 @@ export default class UserController extends Controller {
     const userType = authData.client ? 'client' : 'engineer';
     const updateUser = { username, password };
     updateUser.email = authData[userType];
-    console.log(authData, 'authData');
     updateUser.userType = userType;
     const validationResult = new LoginValidator(updateUser).validate();
     if (validationResult.valid) {

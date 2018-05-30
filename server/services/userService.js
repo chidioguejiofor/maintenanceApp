@@ -16,7 +16,6 @@ function getMapper(userType, userObj) {
 
 function errorHandler(error, callback, properties = '') {
   if (+error.code === 23505) { // duplicate key
-    console.log(error.number, 'gotHere, errnum');
     callback({
       statusCode: 404,
       respObj: {
@@ -130,10 +129,8 @@ class UserService {
   static emailExists(email, userType, callback) {
     const tableName = userType === 'engineer' ? 'Engineers' : 'Clients';
     UserMapper.findMail(email, tableName, (result) => {
-      console.log(result);
       callback(result.rowCount > 0);
-    }, (err) => {
-      console.log(err);
+    }, () => {
       callback(false);
     });
   }
@@ -160,7 +157,6 @@ class UserService {
         });
       }
     }, (error) => {
-      console.log(error, 'it is the same ', errorHandler);
       errorHandler(error, callback, 'username');
     });
   }

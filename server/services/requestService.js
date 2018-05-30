@@ -31,7 +31,6 @@ function handleGetRequests(rows, callback, oneRow) {
 }
 
 function errorHandler(error, callback) {
-  console.log(error);
   if (+error.number === 23503) {
     callback({
       statusCode: 404,
@@ -42,6 +41,7 @@ function errorHandler(error, callback) {
 
     });
   } else {
+    console.log(error);
     callback({
       statusCode: 500,
       message: 'Unknown error occured. Please check your parameters and try again',
