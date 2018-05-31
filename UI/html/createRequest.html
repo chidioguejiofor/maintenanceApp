@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Create Request Page</title>
-    <script src ="../js/requestPage.js">
+    <script src ="../js/shared-functions.js"></script>
+    <script src ="../js/requestPage.js"></script>
+    <script src ="../js/createRequests.js">
+   
     </script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/requestPage.css">
@@ -26,44 +29,55 @@
                     
         
             </div>
-
+            <div id ="status" class ="bottom-div">
+                    The request was created successfully    
+            </div>
            
     <div class = "main">
         <div class =" box-11">
                 
 
-            <div  onclick ="handleImageClick(event)">
-                <input id ="image-file" type="file" onchange =" handleImageChange(event)" hidden>
-                <div>
-
-                        <div class = "box" > 
-                            <h1>MAKE A NEW REQUEST</h1>
-                        </div>
-                       
-                        <div >
-                            <ul class= "create-fields">
-                                <li></li>
-                                    <li><label for="image-file"><img src="../images/no-image.png" alt="">
-                                        <div>Click to Add image</div>
-                                    </label></li>
-                                <li><input type="text" placeholder="Title"></li>
-                                <li><input type="text" placeholder="Location"></li>
-                              
-                                <li><textarea name="" id="" cols="30" rows="10" placeholder="Description"></textarea></li>
-                                <li><button class ="primary-btn">Make Request</button></li>
+            <div>
+                <form action="#" id = "request-form" onsubmit="createRequest(event)">
+                        <input id ="image-file" type="file" onchange =" handleImageChange(event)" 
+                            name = "image" hidden>
+                        <div>
+        
+                                <div class = "box" > 
+                                    <h1>MAKE A NEW REQUEST</h1>
+                                </div>
                                
-                            </ul>
-                            
-                        </div>
+                                <div onkeydown="resetClass(event)">
+                                    <ul class= "create-fields">
+                                        <li></li>
+                                            <li><label for="image-file"><img src="../images/no-image.png" alt="">
+                                                <div>Click to Add image</div>
+                                            </label></li>
+                                        <li><input name ="title" type="text" placeholder="Title"></li>
+                                        <li><input name= "location" type="text" placeholder="Location"></li>
+                                      
+                                        <li><textarea name="description" id="" cols="30" rows="10" placeholder="Description"></textarea></li>
+                                        <li><button type ="submit" class ="primary-btn">Make Request</button></li>
+                                       
+                                    </ul>
+                                    
+                                </div>
+                                   
+                                   
+                                  
+                            </div>     
                            
-                           
-                          
-                    </div>     
-                   
+                </form>
+               
             
             </div>
             
+            
         </div>
+        
     </div>
+    
+   
+
 </body>
 </html>

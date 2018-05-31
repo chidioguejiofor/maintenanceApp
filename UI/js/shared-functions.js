@@ -18,6 +18,7 @@ function getParameterByName(name, url) {
 
 function consumeAPI(endPoint, requestOptions, callback, errorHandler) {
   const url = `${apiHost}/api/v1${endPoint}`;
+  console.log(requestOptions.method +  url);
   fetch(url, requestOptions)
     .then((res) => {
       res.json()
@@ -28,4 +29,15 @@ function consumeAPI(endPoint, requestOptions, callback, errorHandler) {
         });
     })
     .catch(error => errorHandler(error, false));
+}
+
+function getDataFromForm(form) {
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    console.log(key, value);
+    data[key] = value;
+  });
+
+  return data;
 }
