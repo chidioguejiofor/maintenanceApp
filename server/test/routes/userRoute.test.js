@@ -126,7 +126,7 @@ describe('User Routes', () => {
         });
 
         describe('response body', () => {
-          it('should have a success property that is false and a invalidData property that is a array', (done) => {
+          it('should have a success property that is false and a invalidData property that is a object', (done) => {
             request
               .post(SIGNUP_ROUTE)
               .set('Accept', 'application/json')
@@ -134,7 +134,9 @@ describe('User Routes', () => {
               .send(invalidObj)
               .end((error, resp) => {
                 expect(resp.body).property('success').to.be.false;
-                expect(resp.body).property('invalidData').to.be.a('array');
+                expect(resp.body).property('invalidData').to.be.a('object');
+                const keys = Object.keys(resp.body.invalidData);
+                expect(keys.length > 0).to.be.true;
                 done();
               });
           });
@@ -154,9 +156,9 @@ describe('User Routes', () => {
           it('should return status 201', (done) => {
             request
               .post(LOGIN_ROUTE)
-              .send(validClient)
               .set('Accept', 'application/json')
               .set('Content-Type', 'application/x-www-form-urlencoded')
+              .send(validClient)
               .expect(201, done);
           });
         });
@@ -231,7 +233,7 @@ describe('User Routes', () => {
         });
 
         describe('response body', () => {
-          it('should have a success property that is false and a invalidData property that is a array', (done) => {
+          it('should have a success property that is false and a invalidData property that is a object', (done) => {
             request
               .post(LOGIN_ROUTE)
               .set('Accept', 'application/json')
@@ -243,7 +245,9 @@ describe('User Routes', () => {
               })
               .end((error, resp) => {
                 expect(resp.body).property('success').to.be.false;
-                expect(resp.body).property('invalidData').to.be.a('array');
+                expect(resp.body).property('invalidData').to.be.a('object');
+                const keys = Object.keys(resp.body.invalidData);
+                expect(keys.length > 0).to.be.true;
                 done();
               });
           });
@@ -591,10 +595,9 @@ describe('User Routes', () => {
                   .send(invalidObj)
                   .end((err, resp) => {
                     expect(resp.body).property('invalidData')
-                      .to.be.an('array');
-                    const arr = resp.body.invalidData;
-                    expect(arr.every(item => typeof item === 'object'))
-                      .to.be.true;
+                      .to.be.an('object');
+                    const keys = Object.keys(resp.body.invalidData);
+                    expect(keys.length > 0).to.be.true;
                     done();
                   });
               });
