@@ -40,7 +40,10 @@ before((done) => {
     .set('Content-Type', 'application/x-www-form-urlencoded')
     .end((err, res) => {
       clientToken = res.body.data.token;
+      done();
     });
+});
+before((done) => {
   request.post('/api/v1/auth/login')
     .send({
       username: 'superEngineer',
@@ -171,7 +174,7 @@ describe('Request Routes', () => {
                 });
             });
           });
-          describe('if the request some fields are missing in the request', () => {
+          describe('if the request some fields are invalid in the request', () => {
             describe('response status code', () => {
               it('should return status 400', (done) => {
                 request
@@ -193,7 +196,9 @@ describe('Request Routes', () => {
                   .send(invalidRequest)
                   .end((error, resp) => {
                     expect(resp.body).property('success').to.be.false;
-                    expect(resp.body).property('invalidData').to.be.a('array');
+                    expect(resp.body).property('invalidData').to.be.an('object');
+                    const keys = Object.keys(resp.body.invalidData);
+                    expect(keys.length > 0).to.be.true;
                     done();
                   });
               });
@@ -275,7 +280,7 @@ describe('Request Routes', () => {
                   });
               });
 
-              it('should have status property that equals "created"', (done) => {
+              it('should have status property that equals "pending"', (done) => {
                 request.put(updateRoute)
                   .send(validObj)
                   .set('x-access-token', clientToken)
@@ -284,7 +289,7 @@ describe('Request Routes', () => {
                   .end((err, resp) => {
                     expect(resp.body).property('data')
                       .property('status')
-                      .equals('created');
+                      .equals('pending');
                     done();
                   });
               });

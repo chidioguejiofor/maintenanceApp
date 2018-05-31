@@ -13,6 +13,7 @@ function handleGetRequests(rows, callback, oneRow) {
       respObj: {
         success: true,
         data,
+        message: 'Request retrieval succeeded',
       },
     });
   } else if (oneRow) {
@@ -90,18 +91,30 @@ class RequestService {
           respObj: {
             success: true,
             data: result.rows[0],
+            message: 'New request was successfully created',
           },
+
         });
       }
     }, (error) => {
-      console.log(error);
-      callback({
-        statusCode: 400,
-        respObj: {
-          success: false,
-          message: 'Unknown error',
-        },
-      });
+      if (+error.code === 23503) {
+        callback({
+          statusCode: 404,
+          respObj: {
+            success: false,
+            message: 'The token you provided is invalid. Please recheck and try again',
+          },
+        });
+      } else {
+        console.log(error);
+        callback({
+          statusCode: 400,
+          respObj: {
+            success: false,
+            message: 'Unknown error',
+          },
+        });
+      }
     });
   }
 
@@ -112,14 +125,16 @@ class RequestService {
       if (result.rowCount > 0) {
         const previousRequest = result.rows[0];
 
-        if (previousRequest.status === 'created') {
+        if (previousRequest.status === 'pending') {
           mapperObj.update(username, (res) => {
             callback({
               statusCode: 201,
               respObj: {
                 success: true,
                 data: res.rows[0],
+                message: 'Request was successfully modified',
               },
+
             });
           }, error => errorHandler(error, callback));
         } else {
@@ -153,6 +168,7 @@ class RequestService {
           respObj: {
             success: true,
             data: rows[0],
+            message: 'Request updated successfully',
           },
         });
       } else {
@@ -176,6 +192,7 @@ class RequestService {
         respObj: {
           success: true,
           data: result.rows[0],
+          message: 'Statistics of the requests was successfully retrieved',
         },
       });
     }, (error) => {

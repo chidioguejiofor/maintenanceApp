@@ -139,7 +139,7 @@ export default class ReqeustMapper extends TableMapper {
                COUNT(status) FILTER (where status= 'disapproved') as disapproved,
                COUNT(status) FILTER (where status= 'resolved') as resolved,
                COUNT(status) FILTER (where status= 'resolved' OR status= 'disapproved' OR status= 'approved') as responded,
-               COUNT(status) FILTER (where status= 'created') as "notResponded"
+               COUNT(status) FILTER (where status= 'pending') as "notResponded"
         FROM "Requests";
       `;
     ReqeustMapper.executeUpdateHelper(sql, [], callback, errorHandler);

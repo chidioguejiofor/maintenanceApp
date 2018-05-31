@@ -7,10 +7,10 @@ import UserValidator from '../validators/UserValidator';
 
 function getUser(body) {
   const {
-    email, username, password, userType,
+    email, username, password,
   } = body;
   const user = {
-    email, username, password, userType,
+    email, username, password, userType: 'client',
   };
 
   const validationResult = new SignUpValidator(user).validate();

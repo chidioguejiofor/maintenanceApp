@@ -13,7 +13,7 @@ export default class RequestValidator extends ModelValidator {
         pattern: /[A-Z][a-z0-9\s]{5,20}/i,
       },
       image: {
-        message: 'iamge must be a URI with the pattern <scheme>:\\\\<authority>',
+        message: 'must be a URI with the pattern <scheme>:\\\\<authority>',
         pattern: /.{1,}:\/\/.{1,}/,
       },
       location: {

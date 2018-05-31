@@ -45,6 +45,7 @@ class UserService {
           respObj: {
             success: true,
             data: result.rows[0],
+            message: 'Login successful',
           },
         };
       } else {
@@ -89,6 +90,7 @@ class UserService {
           respObj: {
             success: true,
             data: result.rows[0],
+            message: 'Sign up successful',
           },
         };
       } else {
@@ -145,6 +147,7 @@ class UserService {
           respObj: {
             success: true,
             data: result.rows[0],
+            message: 'User password has been successfully updated',
           },
         });
       } else {
