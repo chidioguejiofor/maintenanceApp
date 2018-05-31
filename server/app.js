@@ -1,5 +1,6 @@
 /** eslint no-console: off */
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import apiRouter from './routes/apiV1Router';
 import dbInit from './database/initScript';
@@ -10,9 +11,12 @@ const port = process.env.PORT || 3232;
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
-app.use(bodyParser.json());
 
+app.use(cors());
+app.use(bodyParser.json());
 app.use('/api/v1/', apiRouter);
+
+
 app.all('/*', (req, resp) => {
   resp.status(404).json({
     success: false,

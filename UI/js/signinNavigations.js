@@ -26,16 +26,7 @@ window.addEventListener('load', () => {
   initPage();
 });
 
-function getDataFromForm(form) {
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-    console.log(key, value);
-    data[key] = value;
-  });
 
-  return data;
-}
 
 function handleFalseSucces(action, result) {
   const arr = Array.from(document.getElementById(action).querySelectorAll('div[data-name]'));

@@ -44,7 +44,7 @@ li a, li, div{
 .top-nav div:last-of-type{
     border-right-width: 0;
 }
-.top-nav{
+.top-nav, .bottom-div{
     display: flex;
     text-align: center;
     padding: 10px;
@@ -53,6 +53,20 @@ li a, li, div{
     box-shadow: 3px 1px 9px rgba(255, 255, 255, 0.6);
     color: white;
     
+}
+.okayStatus{
+    opacity: 1;
+    background-color:  rgb( 79,152, 43);
+}
+
+.failedStatus{
+    background-color:  rgb(240, 89, 80);
+    opacity: 1;
+}
+.bottom-div{
+    font-size: 1.2em;
+    margin-top: 1px;
+    transition: opacity 400ms ease-in;
 }
 
 h3{
@@ -259,4 +273,15 @@ html, body{
 :-ms-input-placeholder, ::-webkit-input-placeholder, 
 ::-moz-placeholder{
     color:white;
+}
+
+
+.badData:-moz-placeholder, .badData::-webkit-input-placeholder, 
+.badData::-ms-input-placeholder, .badData::-webkit-input-placeholder, 
+.badData::-moz-placeholder{
+    color:red;
+}
+
+.badData{
+    background-color: rgba(241, 70, 70, 0.116);
 }

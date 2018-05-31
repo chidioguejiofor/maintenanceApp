@@ -11,10 +11,6 @@ function handleItemClick(event, user){
         
         window.location.href = link;
     }
-   
-    
-
-
 }
 
 function handleImageChange(event){
@@ -59,3 +55,4 @@ function handleControlsClick(event){
         window.location.href = 'rejectRequest.html';
     }
 }
+
