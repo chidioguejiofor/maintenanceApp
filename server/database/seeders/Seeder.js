@@ -2,11 +2,13 @@
 import DatabaseManager from '../databaseManager';
 import PasswordHasher from '../../helpers/PasswordHasher';
 
+/**
+ * A seeder contains static methods for seeding the database with new value
+ */
 export default class Seeder {
   /**
-   *
-   * @param {*} user
-   * @param {*} callback
+   * Seeds a client into the database and logs a result message
+   * @param {object} user
    */
   static addClient(user) {
     const sql =
@@ -24,6 +26,9 @@ export default class Seeder {
     );
   }
 
+  /**
+   * This adds the defualt engineer into the database
+   */
   static seedEngineer() {
     const passwordHash = PasswordHasher.hash('super123456');
     DatabaseManager.executeStream(`

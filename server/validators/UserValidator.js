@@ -1,6 +1,8 @@
 import ModelValidator from './ModelValidator';
 
-
+/**
+ * This contains code for validating all the user properties
+ */
 class UserValidator extends ModelValidator {
   constructor(model, ...requiredProperties) {
     const userProperties = {

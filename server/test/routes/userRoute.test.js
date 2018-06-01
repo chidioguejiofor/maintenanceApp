@@ -445,22 +445,6 @@ describe('User Routes', () => {
                     done();
                   });
               });
-
-              it(`username must equal ${newClient.username}`, (done) => {
-                request
-                  .put(RESET_ROUTE)
-                  .set('x-access-token', resetToken)
-                  .set('Accept', 'application/json')
-                  .set('Content-Type', 'application/x-www-form-urlencoded')
-                  .send(newClient)
-                  .end((err, resp) => {
-                    expect(resp.body)
-                      .property('data')
-                      .property('username')
-                      .to.equal(newClient.username);
-                    done();
-                  });
-              });
             });
           });
         });
@@ -525,6 +509,7 @@ describe('User Routes', () => {
                   .set('Content-Type', 'application/x-www-form-urlencoded')
                   .send({})
                   .end((err, resp) => {
+                    console.log(resp.body, 'Error');
                     expect(resp.body).property('missingData')
                       .to.be.an('array');
                     done();

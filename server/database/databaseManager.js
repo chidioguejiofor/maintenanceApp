@@ -2,15 +2,13 @@
 
 import { Pool } from 'pg';
 
-let user = 'maintenance_app_client';
-
 const productionConfig = {
   connectionString: process.env.DATABASE_URL,
   max: 1,
 };
 
 const testConfig = {
-  user,
+  user: 'maintenance_app_client',
   database: process.env.DATABASE_URL || 'maintenance_app_db',
   password: process.env.DATABASE_PASSWORD || null,
   port: process.env.DATABASE_PORT || null,
@@ -27,9 +25,15 @@ let pool;
 class DatabaseManager {
   /**
    * This is used to executes sql statements in the databresult @param {*} sql
-   * @param {*} callback
-   * @param {*} errorHandler
-   * @param {*} [values]  */
+   * @param {function callback(result - contains the result of the request) {
+     this fubction is called if there was no error in the server.
+   }}
+   *  @param {function errorHandler(error) {
+     This is called with the error object if an error occured while executing the
+     sql statem
+   }}
+   *  @param {Array} [values]  this optional params should be used when executing
+   *  prepared statemaned */
 
 
   static executeQuery(sql, callback, errorHandler, values) {
@@ -49,6 +53,20 @@ class DatabaseManager {
   }
 
 
+  /**
+   * Executes sql statement with any available client. This should be used when
+   * only one call needs to be made
+   * @param {string} sql syntatically correct SQL statement to be executed
+   * @param {function callback(result) {
+     called with the result of the call when the query executes successfully
+   }}
+   * @param {function errorHandler(params) {
+   * called with an error object if an error occurs
+
+   }}
+   * @param {Array} [values]  this optional params should be used when executing
+   *  prepared statemaned
+   */
   static executeStream(sql, callback, errorHandler, values) {
     pool.query(sql, values, (err, res) => {
       if (err) {
@@ -59,15 +77,8 @@ class DatabaseManager {
       }
     });
   }
-
-  static user() {
-    return user;
-  }
-
-
   static initTestConfig() {
     pool = new Pool(testConfig);
-    user = 'maintenance_app_client';
   }
 
   static initProductionConfig() {

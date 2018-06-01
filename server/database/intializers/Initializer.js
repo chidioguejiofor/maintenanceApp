@@ -21,6 +21,10 @@ class Initializer {
   }
 
 
+  /**
+   * Creates the database using the data provided by the concrete implementation
+   * It logs success messages and errors if any occured
+   */
   create() {
     DatabaseManager.executeQuery(this.createSql, () => {
       console.log(`Successfully created "${this.modelName}" table`);

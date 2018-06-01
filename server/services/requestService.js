@@ -1,6 +1,14 @@
 
 import ReqeustMapper from '../database/mappers/RequestMapper';
 
+/**
+ * This helper function aids the interpretation of all get requests in this
+ * requestService. It calls the callback with a response object with appropriate
+ * data.
+ * @param {Array} rows
+ * @param {Function} callback
+ * @param {boolean}[ oneRow ]
+ */
 function handleGetRequests(rows, callback, oneRow) {
   let data;
   if (oneRow) [data] = rows;
@@ -25,12 +33,17 @@ function handleGetRequests(rows, callback, oneRow) {
       },
     });
   } else {
-    callback({
-      statusCode: 204,
-    });
+    callback({ statusCode: 204 });
   }
 }
 
+/**
+ * This errorHandler is called when an error occurs in a request.
+ * it uses the error to generate a response object and makes a call to the
+ * callback function with the response object
+ * @param {object} error the error object
+ * @param {Function} callback called with a response object
+ */
 function errorHandler(error, callback) {
   if (+error.number === 23503) {
     callback({
@@ -49,6 +62,15 @@ function errorHandler(error, callback) {
     });
   }
 }
+
+
+/**
+ * The RequestService class acts as a layer between a RequestController and
+ * RequestMapper classes. RequestService contains static methods for
+ * performing the different actions that a RequestController may want to do.
+ * RequestService has the responsibility of making calls to the RequestMapper and
+ * converting the result of those calls to http responses
+ */
 class RequestService {
   static getByUsername(clientUsername, callback) {
     ReqeustMapper.getByUsername(clientUsername, (result) => {
@@ -59,6 +81,11 @@ class RequestService {
     });
   }
 
+  /**
+   * This gets all the request in the database and creates a response object
+   * which the request controller can inteprete easily
+   * @param {function} callback called with a response object
+   */
   static getAll(callback) {
     ReqeustMapper.getAll((result) => {
       handleGetRequests(result.rows, callback);
@@ -82,6 +109,12 @@ class RequestService {
   }
 
 
+  /**
+   * Attempts to add a new request in the database and creates a response object
+   * that contains the result of the operation.
+   * @param {object} request  the new request to be added
+   * @param {Function} callback called with the response object
+   */
   static makeRequest(request, callback) {
     const mapperObj = new ReqeustMapper(request);
     mapperObj.create((result) => {
@@ -118,6 +151,13 @@ class RequestService {
     });
   }
 
+  /**
+   * Modifies a request using the username and id of the request
+   * @param {string} username username of the reques
+   * @param {object} request the new request
+   * @param {number} id an integer containing the id
+   * @param {function} callback called with the response object
+   */
   static modify(username, request, id, callback) {
     const mapperObj = new ReqeustMapper(request, id);
 
@@ -158,6 +198,13 @@ class RequestService {
       }
     }, error => errorHandler(error, callback));
   }
+
+  /**
+   * This updates the status of a request
+   * @param {boolean} status the new status of the request
+   * @param {number} requestId the id of the request to be updated
+   * @param {function} callback a function called with the generated response object
+   */
   static updateStatus(status, requestId, callback) {
     ReqeustMapper.updateStatus(requestId, status, (result) => {
       const { rows } = result;
@@ -185,6 +232,11 @@ class RequestService {
     });
   }
 
+  /**
+   * Gets the statistics of all the requests in the database and creates a
+   * response object with the value
+   * @param {function} callback called with the response of the operation
+   */
   static getStatistics(callback) {
     ReqeustMapper.getStats((result) => {
       callback({
