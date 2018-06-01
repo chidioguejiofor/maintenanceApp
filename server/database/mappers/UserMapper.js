@@ -41,19 +41,19 @@ export default class UserMapper extends TableMapper {
   }
 
 
-  static findMail(email, tableName, callback, errorHandler) {
+  static findByMail(email, tableName, callback, errorHandler) {
     const sql = `SELECT username, email FROM "${tableName}" 
             WHERE email = $1; `;
 
     UserMapper.executeUpdateHelper(sql, [email], callback, errorHandler);
   }
 
-  static updateCredentials(user, tableName, callback, errorHandler) {
+  static updatePassword(user, tableName, callback, errorHandler) {
     const sql =
     `UPDATE "${tableName}" 
-        SET username = $1, password = $2
-        WHERE email = $3 RETURNING username, email;`;
-    const values = [user.username, user.password, user.email];
+        SET  password = $1
+        WHERE email = $2 AND username =$3 RETURNING username, email;`;
+    const values = [user.password, user.email, user.username];
     UserMapper.executeUpdateHelper(sql, values, callback, errorHandler);
   }
 }

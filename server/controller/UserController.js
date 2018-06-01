@@ -24,11 +24,11 @@ export default class UserController extends Controller {
   }
 
 
-  static createToken(data, userType, callback) {
+  static createToken(data, userType, callback, expires = '3days') {
     const payload = {
       [userType]: data,
     };
-    authenticator.createToken(payload, '3days', callback);
+    authenticator.createToken(payload, expires, callback);
   }
 
   static login(req, resp) {
@@ -76,9 +76,9 @@ export default class UserController extends Controller {
     const validationResult = validator.validate();
 
     if (validationResult.valid) {
-      userService.emailExists(email, userType, (exists) => {
-        if (exists) {
-          UserController.createToken(email, userType, (err, token) => {
+      userService.emailExists(email, userType, (data) => {
+        if (data) {
+          UserController.createToken(data, userType, (err, token) => {
             if (err) {
               resp.status(500).json({
                 success: false,
@@ -91,7 +91,7 @@ export default class UserController extends Controller {
                 message: 'Use this token to reset password of the specified email',
               });
             }
-          }, '');
+          }, '120s');
         } else {
           resp.status(404).json({
             success: false,
@@ -100,25 +100,28 @@ export default class UserController extends Controller {
         }
       });
     } else {
-      resp.status(400).json(SignUpValidator.handleBadData(validationResult));
+      resp.status(400).json(UserValidator.handleBadData(validationResult));
     }
   }
 
   static acceptReset(req, resp) {
-    const { body: { username, password }, authData } = req;
+    const { body: { password }, authData } = req;
 
     const userType = authData.client ? 'client' : 'engineer';
-    const updateUser = { username, password };
-    updateUser.email = authData[userType];
-    updateUser.userType = userType;
-    const validationResult = new LoginValidator(updateUser).validate();
+    const updateUser = {
+      userType,
+      password,
+      email: authData[userType].email,
+      username: authData[userType].username,
+    };
+    const validationResult = new UserValidator(updateUser, 'password', 'email').validate();
     if (validationResult.valid) {
-      userService.updateUser(updateUser, userType, (response) => {
+      userService.updateUser(updateUser, (response) => {
         resp.status(response.statusCode)
           .json(response.respObj);
       });
     } else {
-      resp.status(400).json(LoginValidator.handleBadData(validationResult));
+      resp.status(400).json(UserValidator.handleBadData(validationResult));
     }
   }
 }

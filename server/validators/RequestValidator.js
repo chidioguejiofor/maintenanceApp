@@ -1,6 +1,8 @@
 import ModelValidator from './ModelValidator';
 
-
+/**
+ * A RequestValidator contains logic for validating a new request
+ */
 export default class RequestValidator extends ModelValidator {
   constructor(model) {
     super(model, {

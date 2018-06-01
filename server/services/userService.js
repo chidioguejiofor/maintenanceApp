@@ -17,7 +17,7 @@ function getMapper(userType, userObj) {
 function errorHandler(error, callback, properties = '') {
   if (+error.code === 23505) { // duplicate key
     callback({
-      statusCode: 404,
+      statusCode: 409,
       respObj: {
         success: false,
         message: `The specified ${properties} already exists`,
@@ -31,7 +31,22 @@ function errorHandler(error, callback, properties = '') {
     });
   }
 }
+
+/**
+ * The UserService class acts as a layer between a UserController and
+ * UserMapper classes. UserService contains static methods for
+ * performing the different actions that a UserController may want to do.
+ * UserService has the responsibility of making calls to the UserMapper and
+ * converting the result of those calls to http responses
+ */
 class UserService {
+  /**
+   * Gets a user using the credentials provided
+   * @param {string} username the user's usernam
+   * @param {string} password the user's password
+   * @param {string} userType equal to engineer or client
+    * @param {string} callback called with the response object created
+   */
   static getByCredentials(username, password, userType, callback) {
     let response;
     let mapper = ClientMapper;
@@ -41,7 +56,7 @@ class UserService {
     mapper.loginQuery(username, PasswordHasher.hash(password), (result) => {
       if (result.rows.length > 0) {
         response = {
-          statusCode: 201,
+          statusCode: 200,
           respObj: {
             success: true,
             data: result.rows[0],
@@ -60,14 +75,7 @@ class UserService {
 
       callback(response);
     }, (err) => {
-      response = {
-        statusCode: 500,
-        respObj: {
-          success: false,
-          message: 'The specified user was not found',
-        },
-      };
-      callback(response, err);
+      errorHandler(err, callback);
     });
   }
 
@@ -105,42 +113,36 @@ class UserService {
 
       callback(response);
     }, (err) => {
-      if (+err.code === 23505) {
-        response = {
-          statusCode: 409,
-          respObj: {
-            success: false,
-            message: 'The specified username or email already exists',
-          },
-        };
-      } else {
-        console.log(err);
-        response = {
-          statusCode: 400,
-          respObj: {
-            success: false,
-            message: 'Unknown error occured',
-          },
-        };
-      }
-
-      callback(response);
+      errorHandler(err, callback, 'username or email');
     });
   }
 
+  /**
+   * Checks if a specified email exists and calls the callback with the result
+   * @param {string} email the email address of the user
+   * @param {string} userType the userType of the user
+   * @param {function} callback called with the response object
+   */
   static emailExists(email, userType, callback) {
     const tableName = userType === 'engineer' ? 'Engineers' : 'Clients';
-    UserMapper.findMail(email, tableName, (result) => {
-      callback(result.rowCount > 0);
-    }, () => {
+    UserMapper.findByMail(email, tableName, (result) => {
+      callback(result.rows[0]);
+    }, (error) => {
+      console.log(error);
       callback(false);
     });
   }
 
-  static updateUser(user, userType, callback) {
-    const hashedUser = user;
-    hashedUser.password = PasswordHasher.hash(user.password);
-    UserMapper.updateCredentials(hashedUser, getTableName(userType), (result) => {
+  /**
+   * Updates a user password using the username and email specified in the updateObject
+   * and creates a response object with the result
+   * @param {object} updateObj a new user object containing user credentials
+   * @param {function} callback called with the result response object created
+   */
+  static updateUser(updateObj, callback) {
+    const hashedUser = updateObj;
+    hashedUser.password = PasswordHasher.hash(updateObj.password);
+    UserMapper.updatePassword(hashedUser, getTableName(updateObj.userType), (result) => {
       if (result.rowCount > 0) {
         callback({
           statusCode: 201,
