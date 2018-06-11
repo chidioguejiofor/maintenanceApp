@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Request Page</title>
-    <script src ="../js/requestPage.js">
+    <title>Create Request Page</title>
+    <script src='../js/shared-functions.js'>
+    </script>
+    <script src ="../js/manageRequests.js">
     </script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/requestPage.css">
 </head>
-<body class ="engineer">
+<body>
     
 
         <div class="top-nav">
@@ -21,56 +23,42 @@
                         <a href="engineerRequestsPage.html">View All Requests</a>
                     </div>
                     <div>
-                            <a href="index.html">Sign Out</a>
+                            <a href="index.html?signout=true">Sign Out</a>
                     </div>
                     
         
             </div>
 
+
            
-    <div class = "manage-request main">
-        <div class ="requests box-7">
-                
+    <div class = "main">
+        <div class =" box-11">
 
             <div>
-                    <h3>Title: Broken Windows </h3><div><img src="../images/background.jpg" alt="iit"></div>
-                    <ul class= "request-details">
-                        <li >Fault ID: <span>1122-abcd-3344</span></li>
-                        <li >Date of request: <span>1st June 2018</span></li>
-                            <li >Description: <div> As I was on my way home I say a broken Lorem ipsum </div></li>
-                            <li >Status: <span>Pending</span></li>
-                            <li>Fault Location: <span>In the bootcamp space of the 3rd floor of Andela EPIC tower</span></li>
-                        </ul>
+                <div>
+
+                        <div class = "box" > 
+                            <h1 id= "header" class="manage-header">REJECT REQUEST</h1>
+                        </div>
+                       
+                        <div >
+                                <ul class= "create-fields">
+                                    <li><textarea name="message" id="" cols="30" rows="10" placeholder="Why are you rejecting the request"></textarea></li>
+                                    <li><button onclick = "changeStatus(event)" class ="primary-btn danger">Reject Request</button></li>
+                                </ul>
+                           
+                           
+                            
+                        </div>
+                           
+                           
+                          
+                    </div>     
+                   
+            
             </div>
-           
             
         </div>
-        <div class = " requests controls box-5">
-                <div >
-                     <ul  onclick= "handleControlsClick(event)">
-                         <li><button name ="manage-request" class="primary-btn">Manage Requests</button></li>
-                         <li class ="controls-li">
-                             
-                            <span id="initial-controls" class ="control-group">
-                                <button  name="approve" class="okay primary-btn">Approve</button>
-                                <button  name="reject" class="primary-btn danger">Reject</button>
-                            </span>
-                            <span id="approved-controls" hidden  class ="control-group" >
-                                <button  name="begin" class="okay primary-btn" >Begin</button>
-                               
-                            </span>
-                            
-                            <span id="begin-controls"  class ="control-group" hidden>
-                                <button  name="resolved" class="okay primary-btn" >Resolved</button>
-                                <button  name="cancel" class="danger primary-btn" >Cancel</button>
-                            </span>
-                           
-                             
-                        </li>
-                         <li id="status" hidden>Request has been successfully Approved</li>
-                   </ul>
-                </div>
-             </div>
     </div>
 </body>
 </html>

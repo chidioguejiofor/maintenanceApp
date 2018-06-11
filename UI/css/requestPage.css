@@ -17,6 +17,13 @@
     }
 }
 
+@media( max-width: 414px){
+    .modal .brief-requests a{
+      margin-left: 0;
+    
+    }
+}
+
 li a, li, div{
     
     
@@ -47,20 +54,13 @@ li a, li, div{
 h3{
     color:white;
 }
-.requests, .statistics{
+.requests{
    
     width: 70%;
 
 }
 
-.statistics h1{
-    text-align: center;
-    padding-left: 25%;
-}
 
-.statistics div{
-    margin-top: 5%;
-}
 
 .selected{
    font-size: 1.3em;
@@ -68,7 +68,7 @@ h3{
 }
 
 
-.statistics div li, .requests div li{
+.requests div li{
     margin-top: 15px;
     color: white;
     
@@ -84,7 +84,7 @@ h3{
 
 }
 
-.filter-group input[type=search], select{
+.filter-group input[type=search], select, input[type=date]{
     background-color: rgba(253, 252, 252, 0.116);
     color:white;
     border: 0;
@@ -95,6 +95,22 @@ h3{
     width: 10%;
     font-size:18px;
     
+}
+
+input::-webkit-calendar-picker-indicator{
+    color: white;
+    background-color: inherit;
+}
+
+@media(max-width: 500px){
+    .filter-group span{
+        display: block;
+        margin-left: 0;
+    }
+}
+.filter-group input[type=date]::-webkit-inner-spin-button{
+    display: none;
+    width: auto;
 }
 .filter-group input[type=search]{
     width: 20%;
@@ -123,26 +139,32 @@ select option{
 .requests div .brief-requests li{
     margin-left: 20%;
     width: 60%;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family:  Helvetica, sans-serif;
 }
 
+.modal-content .brief-requests li{
+    font-size: 16px;
+    font-family:  Helvetica, sans-serif;
+
+}
 h1,h2,h3,h4{
     color: white;
 }
 
-.controls{
-    background-color: rgba(176, 94, 50, 0.048);
-}
-
-.statistics div li {
-    text-align: center;
+.brief-requests .controls{
     background-color: inherit;
-    margin-left: 20%;
-    text-align: left;
+    text-align: center;
+    border: none;
+
 }
 
+.modal .statistics{
+    top: 3%;
+}
 
-
+.manage-header{
+    text-transform: uppercase;
+}
 .requests .request-details  li:hover{
     background-color: inherit;
    
@@ -186,15 +208,14 @@ input[type =text], textarea{
     border: solid 0 black;
     border-left-width: 1px;
  }
-.controls-li{
-    opacity: 0;
-    transition: opacity 400ms ease-in;
-}
-.danger{
+
+
+
+.danger, .brief-requests .disapproved{
     background-color: rgb(240, 89, 80);
 }
 
-.danger:hover{
+.danger:hover, .brief-requests .disapproved:hover{
     background-color: rgb(250, 29, 80);
 }
 .okay{
@@ -220,6 +241,7 @@ input[type =text], textarea{
     font-size: 0.7em;
 }
 
+
 @media(min-width:500px){
     .brief-requests span{
         position: absolute;
@@ -227,20 +249,43 @@ input[type =text], textarea{
     }
 }
 
-.brief-requests .update{
+.controls span{
+    position: static;
+}
+.brief-requests .pending{
     background-color: rgb(240, 86,  0);
 }
-.brief-requests .update:hover{
+.brief-requests .pending:hover{
     background-color: rgb(208, 78,  5) ;
 }
 .brief-requests a:hover, .green-btn:hover{
     background-color:rgb(42, 129, 1);
 }
 
-.control-group, #approved-controls{
-    transition:  opacity 400ms ease-in;
+.modal .brief-requests a{
+    font-size: inherit;
+   text-transform: capitalize;
+   margin-left: 10%;
+   
+
+}
+.brief-requests .resolved{
+    background-color:rgba(81, 255, 1, 0.712);
+  
+}
+.brief-requests .resolved:hover{
+    background-color:rgba(72, 216, 6, 0.712);
+}
+.brief-requests .approved{
+    background-color:rgb(252, 128, 13);
+}
+.brief-requests .approved:hover{
+    background-color:rgb(255, 157, 65);
 }
 
+.controls span{
+    transition: opacity 400ms ease-in;
+}
 img{
     width: 200px;
     height: 200px;
@@ -337,22 +382,24 @@ html, body{
 
 .modal {
     display: none;
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    position: fixed; 
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%; 
     height: 100%;
     overflow: scroll; 
     background-color: rgba(10, 9, 9, 0.959); /* Black w/ opacity */
+    
 }
 
 .modal-content {
     background-color: #fefefe13;
     margin-left: 15%;
     padding: 20px;
-   
+    font-family:  Helvetica, sans-serif;
     width: 80%; 
+    min-height: 90%;
 }
 
 .close {

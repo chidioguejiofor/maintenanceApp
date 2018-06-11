@@ -28,15 +28,17 @@ window.addEventListener('load', () => {
 });
 
 
-
 function handleFalseSucces(action, response) {
   showStatusOnFailed(statusDiv, response);
 }
 
 function handlePass(action, result) {
   localStorage.setItem('loginToken', result.data.token);
-
-  location = `requestsPage.html?user=${user}`;
+  const loggedUser = getParameterByName('user');
+  if (loggedUser === 'engineer') location = 'engineerRequestsPage.html';
+  else {
+    location = 'requestsPage.html';
+  }
 }
 
 function handleClick(event) {
@@ -52,13 +54,15 @@ function handleSubmit(event) {
   event.stopPropagation();
   event.preventDefault();
   const action = event.target.id;
-  console.dir(event.target);
   statusDiv = event.target.querySelector('div[name=status] ,textarea[name=status] ');
 
   if (action === 'signup' || action === 'login') {
     const form = document.getElementById(action);
     const data = getDataFromForm(form);
-    data.userType = 'client';
+    if (user === 'engineer') data.userType = 'engineer';
+    else {
+      data.userType = 'client';
+    }
     if (action === 'login' || (action === 'signup' && data.password === data.confirmPassword)) {
       const options = {
         method: 'POST',
@@ -71,21 +75,19 @@ function handleSubmit(event) {
       };
 
       consumeAPI(`/auth/${action}`, options, (result) => {
-        console.log('success', result);
         if (result.success === false) {
           handleFalseSucces(action, result);
         } else {
           handlePass(action, result, form.action);
         }
       }, (error) => {
-        console.log(error);
-        alert('Error');
+        handleError(error, statusDiv);
       });
     } else {
-      statusDiv.className= 'status-div failedStatus';
+      statusDiv.className = 'status-div failedStatus';
       statusDiv.textContent = 'The two passwords are not the same';
-      setTimeout(()=> {
-          statusDiv.className= 'status-hide';
+      setTimeout(() => {
+        statusDiv.className = 'status-hide';
       }, 7000);
     }
   }

@@ -27,12 +27,19 @@ function errorHandler(error, callback, properties = '') {
   } else if (error.code === 'ENOENT') {
     callback({
       statusCode: 500,
-      message: 'A connection error occured. Please check and try again',
+      respObj: {
+        message: 'That action is currently unavailable ',
+        success: false,
+      },
+
     });
   } else {
     callback({
       statusCode: 500,
-      message: 'Unknown error occured. Please check your parameters and try again',
+      respObj: {
+        success: false,
+        message: 'Unknown error occured. Please check your parameters and try again',
+      },
     });
   }
 }

@@ -45,12 +45,20 @@ function handleGetRequests(rows, callback, oneRow) {
  * @param {Function} callback called with a response object
  */
 function errorHandler(error, callback) {
-  if (+error.number === 23503) {
+  if (+error.code === 23503) {
     callback({
       statusCode: 404,
       respObj: {
         success: false,
-        message: 'The clientUsername you specified does not exists',
+        message: 'The token you provided is invalid. Please recheck and try again',
+      },
+    });
+  } else if (error.code === 'ENOENT') {
+    callback({
+      statusCode: 500,
+      respObj: {
+        success: false,
+        message: 'A connection error occured. Please check and try again',
       },
 
     });
@@ -63,7 +71,11 @@ function errorHandler(error, callback) {
     console.log(error);
     callback({
       statusCode: 500,
-      message: 'Unknown error occured. Please check your parameters and try again',
+      respObj: {
+        success: false,
+        message: 'Unknown error occured. Please check your parameters and try again',
+      },
+
     });
   }
 }
@@ -91,8 +103,8 @@ class RequestService {
    * which the request controller can inteprete easily
    * @param {function} callback called with a response object
    */
-  static getAll(callback) {
-    ReqeustMapper.getAll((result) => {
+  static getAll(date, callback) {
+    ReqeustMapper.getAll(date, (result) => {
       handleGetRequests(result.rows, callback);
     }, (error) => {
       errorHandler(error, callback);
@@ -105,14 +117,22 @@ class RequestService {
    * @param {string} clientUsername the clientUsername in the reques
    * @param {string} requestId the id of the request
    */
-  static getById(clientUsername, requestId, callback) {
-    ReqeustMapper.getById(clientUsername, requestId, (result) => {
+  static getByUsernameAndId(clientUsername, requestId, callback) {
+    ReqeustMapper.getByUsernameAndId(clientUsername, requestId, (result) => {
       handleGetRequests(result.rows, callback, true);
     }, (error) => {
       errorHandler(error, callback);
     });
   }
 
+
+  static getById(requestId, callback) {
+    ReqeustMapper.getById(requestId, (result) => {
+      handleGetRequests(result.rows, callback, true);
+    }, (error) => {
+      errorHandler(error, callback);
+    });
+  }
 
   /**
    * Attempts to add a new request in the database and creates a response object
@@ -135,24 +155,7 @@ class RequestService {
         });
       }
     }, (error) => {
-      if (+error.code === 23503) {
-        callback({
-          statusCode: 404,
-          respObj: {
-            success: false,
-            message: 'The token you provided is invalid. Please recheck and try again',
-          },
-        });
-      } else {
-        console.log(error);
-        callback({
-          statusCode: 400,
-          respObj: {
-            success: false,
-            message: 'Unknown error',
-          },
-        });
-      }
+      errorHandler(error);
     });
   }
 
@@ -166,7 +169,7 @@ class RequestService {
   static modify(username, request, id, callback) {
     const mapperObj = new ReqeustMapper(request, id);
 
-    ReqeustMapper.getById(username, id, (result) => {
+    ReqeustMapper.getByUsernameAndId(username, id, (result) => {
       if (result.rowCount > 0) {
         const previousRequest = result.rows[0];
 
@@ -210,8 +213,8 @@ class RequestService {
    * @param {number} requestId the id of the request to be updated
    * @param {function} callback a function called with the generated response object
    */
-  static updateStatus(status, requestId, callback) {
-    ReqeustMapper.updateStatus(requestId, status, (result) => {
+  static updateStatus(status, requestId, callback, message) {
+    ReqeustMapper.updateStatus(requestId, status, message, (result) => {
       const { rows } = result;
 
       if (rows.length > 0) {
