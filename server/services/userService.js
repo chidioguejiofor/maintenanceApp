@@ -24,6 +24,11 @@ function errorHandler(error, callback, properties = '') {
       },
 
     });
+  } else if (error.code === 'ENOENT') {
+    callback({
+      statusCode: 500,
+      message: 'A connection error occured. Please check and try again',
+    });
   } else {
     callback({
       statusCode: 500,

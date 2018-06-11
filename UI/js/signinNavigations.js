@@ -22,53 +22,17 @@ function initPage(url) {
     document.querySelector('form').action = 'engineerRequestsPage.html';
   }
 }
+let statusDiv;
 window.addEventListener('load', () => {
   initPage();
 });
 
 
 
-function handleFalseSucces(action, result) {
-  const arr = Array.from(document.getElementById(action).querySelectorAll('div[data-name]'));
-  console.log(arr);
-  arr.forEach((input) => {
-    const status = input;
-    status.hidden = true;
-    status.className = 'box';
-  });
-
-  if (result.missingData) {
-    result.missingData.forEach((elem) => {
-      const str = `div[data-name=${elem}-status]`;
-      if (elem !== 'userType') {
-        console.log(action);
-        const dataStatus = document.getElementById(action).querySelector(str);
-        dataStatus.className = 'badData danger-text';
-        dataStatus.innerHTML = `The ${elem} was not specified`;
-      }
-    });
-  } else if (result.invalidData) {
-    arr.forEach((input) => {
-      const dataStatus = input;
-      const [property] = input.dataset.name.split('-');
-      const message = result.invalidData[[property]];
-      if (message) {
-        dataStatus.className = 'badData danger-text';
-        dataStatus.innerHTML = `${property} ${message}`;
-      }
-    });
-  } else if (+result.statusCode === 409) {
-    const emailInput = document.getElementById(action)
-      .querySelector('div[data-name=email-status]');
-    emailInput.className = 'box badData danger-text';
-    emailInput.innerHTML = 'The username or email you specified already exists';
-  } else if (+result.statusCode === 404) {
-    const emailInput = document.getElementById(action)
-      .querySelector('div[data-name=username-status]');
-    emailInput.className = 'box badData danger-text';
-    emailInput.innerHTML = 'The username and password combination does not exists';
-  }
+function handleFalseSucces(action, response) {
+  showStatusOnFailed(statusDiv, response);
 }
+
 function handlePass(action, result) {
   localStorage.setItem('loginToken', result.data.token);
 
@@ -88,7 +52,8 @@ function handleSubmit(event) {
   event.stopPropagation();
   event.preventDefault();
   const action = event.target.id;
-
+  console.dir(event.target);
+  statusDiv = event.target.querySelector('div[name=status] ,textarea[name=status] ');
 
   if (action === 'signup' || action === 'login') {
     const form = document.getElementById(action);
@@ -117,11 +82,11 @@ function handleSubmit(event) {
         alert('Error');
       });
     } else {
-      const dataStatus =
-        document.getElementById(action)
-          .querySelector('div[data-name=password-status]');
-      dataStatus.className = 'badData';
-      dataStatus.innerHTML = 'The two passwords are not the same ';
+      statusDiv.className= 'status-div failedStatus';
+      statusDiv.textContent = 'The two passwords are not the same';
+      setTimeout(()=> {
+          statusDiv.className= 'status-hide';
+      }, 7000);
     }
   }
 }

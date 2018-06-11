@@ -261,3 +261,77 @@ input, textarea{
     text-align: center;
 }
 
+
+
+
+.top-nav, .status-div{
+    display: flex;
+    text-align: center;
+    padding: 10px;
+    justify-content: center;
+    background-color:rgba(208, 79, 5, 0.877);
+    box-shadow: 3px 1px 9px rgba(255, 255, 255, 0.6);
+    color: white;
+    
+}
+
+
+.okayStatus{
+    opacity: 1;
+    background-color:  rgb( 79,152, 43);
+}
+
+.failedStatus{
+    background-color:  rgb(240, 89, 80);
+    opacity: 1;
+}
+
+.status-hide{
+    opacity: 0;
+    z-index: -1;
+   
+}
+
+#status, div[name="status"]{
+    position: fixed;
+    font-size: 1.2em;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: opacity 400ms ease-in;
+    font-family: monospace;
+}
+.status-div{
+    z-index: 1;
+    opacity: 1;
+}
+
+.status-div ul li{
+    list-style-type: none;
+    text-align: left;
+}
+.status-div ul li:first-of-type{
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+}
+
+input[type=email], input[type=password],  input[name=username]{
+    text-align: left;
+    background-image: url(../images/At_sign.svg) ;
+    background-position: 95% center;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-size: 25px;
+    padding-right: 5%;
+}
+
+
+input[type=password]{
+    background-image: url(../images/lock.svg) ;
+}
+
+
+input[name=username]{
+    background-image: url(../images/user-head.png) ;
+}
