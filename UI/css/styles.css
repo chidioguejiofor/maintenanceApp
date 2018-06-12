@@ -141,14 +141,27 @@ html, body{
 
 .welcome-page{
     background-image: linear-gradient(
-        rgba(0, 0, 0, 0.5), 
-        rgba(0, 0, 0, 0.5)
+        rgba(0, 0, 0, 0.6), 
+        rgba(0, 0, 0, 0.6)
       ),
       url('../images/background.jpg');
       display: flex;
       justify-content: center;
       align-items: center;
+     
 }
+.welcome-page h1{
+    font-size: 40px;
+    font-family: monospace;
+}
+
+.welcome-page h3{
+    font-size: 20px;
+}
+.welcome-page em{
+    font-size: 30px;
+}
+
 body{
     
     /* background-image: url('../images/background.jpg'); */
@@ -201,7 +214,6 @@ h3{
 }
 h3{
     font-size: 30px;
-    font-style: italic;
     margin-bottom: 50px;
 }
 
@@ -221,7 +233,7 @@ h3{
 .secondary-btn{
     background-color: inherit;
     border: solid 0 rgb(208, 78,  5);
-    border-bottom-width: 1px;
+    border-bottom-width: 2px;
     border-radius: 1px;
 }
 .primary-btn:hover{

@@ -78,11 +78,19 @@ export default class ReqeustMapper extends TableMapper {
         called when an error occurs. It takes the error object as its argument
      }} errorHandler
      */
-  static getById(username, id, callback, errorHandler) {
+  static getByUsernameAndId(username, id, callback, errorHandler) {
     const sql =
       `SELECT ${requestColumns}  FROM "Requests"
           WHERE clientusername = $1 AND id = $2 `;
     ReqeustMapper.executeUpdateHelper(sql, [username, id], callback, errorHandler);
+  }
+
+
+  static getById(id, callback, errorHandler) {
+    const sql =
+      `SELECT ${requestColumns}  FROM "Requests"
+          WHERE  id = $1 `;
+    ReqeustMapper.executeUpdateHelper(sql, [id], callback, errorHandler);
   }
 
   /**
@@ -95,10 +103,15 @@ export default class ReqeustMapper extends TableMapper {
         called when an error occurs. It takes the error object as its argument
      }} errorHandler
      */
-  static getAll(callback, errorHandler) {
+  static getAll(date = new Date(), callback, errorHandler) {
+    let fromDate = date;
+    if (fromDate === null) fromDate = new Date();
+    fromDate.setHours(0, 0, 0);
     const sql =
-      `SELECT ${requestColumns}  FROM "Requests"`;
-    ReqeustMapper.executeUpdateHelper(sql, [], callback, errorHandler);
+      `SELECT ${requestColumns}  FROM "Requests"
+      WHERE  $1 <= date
+      ORDER BY date`;
+    ReqeustMapper.executeUpdateHelper(sql, [fromDate], callback, errorHandler);
   }
 
   /**
@@ -113,12 +126,12 @@ export default class ReqeustMapper extends TableMapper {
         called when an error occurs. It takes the error object as its argument
      }} errorHandler
      */
-  static updateStatus(requestId, newStatus, callback, errorHandler) {
+  static updateStatus(requestId, newStatus, message, callback, errorHandler) {
     const sql =
-      `UPDATE  "Requests" SET status = $1
+      `UPDATE  "Requests" SET status = $1, message = $3
         WHERE id = $2  
         RETURNING  ${requestColumns}`;
-    ReqeustMapper.executeUpdateHelper(sql, [newStatus, requestId], callback, errorHandler);
+    ReqeustMapper.executeUpdateHelper(sql, [newStatus, requestId, message], callback, errorHandler);
   }
 
   /**

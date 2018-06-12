@@ -26,13 +26,18 @@
                         <a href="#">View All Requests</a>
                     </div>
                     <div>
-                            <a href="index.html">Sign Out</a>
+                            <a href="index.html?signout=true">Sign Out</a>
                     </div>
                     
         
             </div>
 
-           
+    <div id ="status"  class ="status-hide">
+        The request was created successfully 
+        <ul>
+            
+        </ul>   
+    </div>           
     <div id="modal" class="modal">
 
         <div class="modal-content">
@@ -51,19 +56,25 @@
                                
                                 
                                 <ul class="brief-requests">
-                                        <li data-name ="date">
-                                            Date: 3rd March
-                                        </li>
-                                       
-                                        <li data-name ="description"> 
-                                            Description: Lorem ipsum had a great fall
-                                        </li>   
-                                        <li data-name ="status">Status: Pending</li> 
-                                        
-                                        <li data-name ="location">Fault Location: In the bootcamp space of the 3rd floor of Andela EPIC tower</li>
-                                        <li data-name ="message">
-                                                Message:You did not provide the real values
-                                        </li>
+                                        <li>
+                                                <strong>Date: </strong><em  data-name ="date"></em>
+                                            </li>
+                                           
+                                            <li > 
+
+                                                <strong> Description: </strong><em data-name ="description"></em>
+                                            </li>   
+                                            <li >
+                                                <strong >Status:</strong> <em data-name ="status"></em>
+                                            </li> 
+                                            
+                                            <li>
+                                                    <strong> Location: </strong><em data-name ="location"></em>
+                                            </li>
+                                            <li>
+                                                    <strong> Message: </strong><em data-name ="message"></em>
+                                            </li>
+
                                 </ul>
                         </div>
                         
@@ -84,12 +95,12 @@
                 <div class = "filter-group" >
                         <span>Filter By: </span>
                         <select id="status-option" onchange="filterRequests(event)" name="filter" id="filter" value ="all">
-                                <option value="all">All</option>
-                                <option value="approved">Approved</option>
-                                <option value="disapproved">Disapproved</option>
-                                <option value="accepted">Accepted</option>
-                                <option value="pending">Not Responded</option>
-                               
+                            <option value="all">All</option>
+                            <option value="approved">Approved</option>
+                            <option value="disapproved">Disapproved</option>
+                            <option value="resolved">Resolved</option>
+                            <option value="pending">Not Responded</option>
+                            
                     
                         </select>  
                         <span>Search By: </span> 

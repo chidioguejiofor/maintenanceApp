@@ -66,22 +66,35 @@ export default class RequestController extends Controller {
 
   static getAll(req, resp) {
     if (!RequestController.verifyUser(req, resp, 'engineer')) return;
-    requestService.getAll((result) => {
+    const { params: { date } } = req;
+    let dateObj = new Date(date);
+    if (!Number.isFinite(dateObj.getDate())) {
+      dateObj = new Date(2018, 0, 1);
+    }
+    requestService.getAll(dateObj, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
 
 
   static getById(req, resp) {
+    if (!RequestController.verifyUser(req, resp, 'engineer')) return;
+    const { params: { id } } = req;
+    if (!RequestController.validateId(id, resp)) return;
+    requestService.getById(id, (result) => {
+      resp.status(result.statusCode).json(result.respObj);
+    });
+  }
+  static userGetRequestById(req, resp) {
     if (!RequestController.verifyUser(req, resp, 'client')) return;
     const { params: { id } } = req;
     if (!RequestController.validateId(id, resp)) return;
-    requestService.getById(req.authData.client.username, id, (result) => {
+    requestService.getByUsernameAndId(req.authData.client.username, id, (result) => {
       resp.status(result.statusCode).json(result.respObj);
     });
   }
   static updateStatus(req, resp) {
-    const { params: { status, id } } = req;
+    const { params: { status, id }, body: { message } } = req;
     if (!RequestController.validateId(id, resp)) return;
     if (!RequestController.verifyUser(req, resp, 'engineer')) return;
     const statusValue = getStatus(status);
@@ -89,7 +102,7 @@ export default class RequestController extends Controller {
     if (statusValue) {
       requestService.updateStatus(statusValue, id, (result) => {
         resp.status(result.statusCode).json(result.respObj);
-      });
+      }, message);
     } else {
       resp.status(404).json({
         success: false,
