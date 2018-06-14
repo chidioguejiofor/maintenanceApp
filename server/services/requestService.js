@@ -1,6 +1,6 @@
 
 import ReqeustMapper from '../database/mappers/RequestMapper';
-
+import mailManager from '../helpers/mailManager';
 /**
  * This helper function aids the interpretation of all get requests in this
  * requestService. It calls the callback with a response object with appropriate
@@ -154,6 +154,7 @@ class RequestService {
 
         });
       }
+      mailManager.sendNewRequestNotification(result.rows[0]);
     }, (error) => {
       errorHandler(error);
     });
@@ -184,6 +185,8 @@ class RequestService {
               },
 
             });
+
+            mailManager.sendUpdateRequestNotification(result.rows[0]);
           }, error => errorHandler(error, callback));
         } else {
           callback({

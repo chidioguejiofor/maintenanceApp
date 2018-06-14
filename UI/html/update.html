@@ -5,22 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Create Request Page</title>
-    <script src ="../js/shared-functions.js"></script>
-    <script src ="../js/requestPage.js"></script>
     
-    <script src ="../js/createRequests.js">
-   
-    </script>
-     <script src ="../js/consumeRequests.js">
-   
-     </script>
      <script>
         window.addEventListener('load', (event)=> {
             const id = getParameterByName('id');
             getById(id);
-        });
-
-     </script>
+        });</script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/requestPage.css">
 </head>
@@ -99,6 +89,9 @@
     </div>
     
    
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src ="../js/shared-functions.js"></script>
+    <script src ="../js/createRequests.js"></script>
+    <script src="../js/consumeRequests.js"></script>
 </body>
 </html>

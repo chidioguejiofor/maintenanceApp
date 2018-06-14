@@ -4,6 +4,7 @@ import LoginValidator from '../validators/LoginValidator';
 import authenticator from '../helpers/authenticator';
 import Controller from './Controller';
 import UserValidator from '../validators/UserValidator';
+import MailManager from '../helpers/mailManager';
 
 function getUser(body) {
   const {
@@ -20,7 +21,27 @@ function getUser(body) {
 
 export default class UserController extends Controller {
   static signup(req, resp) {
-    UserController.createUserHelper(req, resp);
+    const { token } = req.params;
+    authenticator.verifyToken(token, (user) => {
+      if (user) {
+        userService.createUser(user.client, (result) => {
+          if (result.respObj.data) {
+            UserController.createToken(result.respObj.data, 'client', (err, userToken) => {
+              const { respObj } = result;
+              respObj.data.token = userToken;
+              resp.redirect('https://chidiebere-maintenance-react.herokuapp.com/login');
+            });
+          } else {
+            resp.status(result.statusCode).json(result.respObj);
+          }
+        });
+      } else {
+        resp.status(404).json({
+          success: false,
+          message: 'The signup confirmation link is invalid',
+        });
+      }
+    });
   }
 
 
@@ -53,31 +74,54 @@ export default class UserController extends Controller {
     }
   }
 
-  static createUserHelper(req, resp) {
+
+  static makeSignupRequest(req, resp) {
     const { validationResult, user } = getUser(req.body);
     if (validationResult.valid) {
-      userService.createUser(user, (result) => {
-        if (result.respObj.data) {
-          UserController.createToken(result.respObj.data, 'client', (err, token) => {
-            result.respObj.data.token = token;// eslint-disable-line no-param-reassign
-            resp.status(result.statusCode).json(result.respObj);
+      userService.emailExists(user.email, 'client', (response) => {
+        if (response) {
+          resp.status(409).json({
+            success: false,
+            message: 'The email you specified already exists. Please reset your password to recover it',
           });
         } else {
-          resp.status(result.statusCode).json(result.respObj);
+          UserController.createToken(user, 'client', (err, token) => {
+            MailManager.confirmSignup(user.email, token, (success, error) => {
+              if (success) {
+                resp.status(200).json({
+                  success: true,
+                  message: `A confirmation mail was sent to ${user.email}. Please check your mail`,
+                });
+              } else if (error.code === 'ECONNECTION') {
+                resp.status(200).json({
+                  success: false,
+                  message: 'Connection error please check  your connection',
+                });
+              } else {
+                console.log(error, 'the error ');
+                resp.status(450).json({
+                  success: false,
+                  message: 'Problems occured while sending mail please check the email address you sent',
+                });
+              }
+            });
+          });
         }
-      });
+      }, '5min');
     } else {
-      resp.status(400).json(SignUpValidator.handleBadData(validationResult));
+      resp.status(400).json(UserValidator.handleBadData(validationResult));
     }
   }
   static reset(req, resp) {
-    const { body: { email, userType } } = req;
-    const validator = new UserValidator({ email, userType }, 'email', 'userType');
+    const { body: { password, email, userType } } = req;
+    const validator = new UserValidator({ password, email, userType }, 'password', 'email', 'userType');
     const validationResult = validator.validate();
 
     if (validationResult.valid) {
       userService.emailExists(email, userType, (data) => {
         if (data) {
+          const newUser = data;
+          newUser.password = password;
           UserController.createToken(data, userType, (err, token) => {
             if (err) {
               resp.status(500).json({
@@ -85,10 +129,18 @@ export default class UserController extends Controller {
                 message: 'An error occured while processing your request',
               });
             } else {
-              resp.status(201).json({
-                success: true,
-                data: { token },
-                message: 'Use this token to reset password of the specified email',
+              MailManager.sendConfirmResetMail(email, token, (success) => {
+                if (success) {
+                  resp.status(200).json({
+                    success: true,
+                    message: `Reset instructions was sent to ${email}. Please check your mail`,
+                  });
+                } else {
+                  resp.status(400).json({
+                    success: false,
+                    message: 'A connection error occured. Please check your connection',
+                  });
+                }
               });
             }
           }, '120s');
@@ -105,24 +157,25 @@ export default class UserController extends Controller {
   }
 
   static acceptReset(req, resp) {
-    const { body: { password }, authData } = req;
+    const { params: { token } } = req;
 
-    const userType = authData.client ? 'client' : 'engineer';
-    const updateUser = {
-      userType,
-      password,
-      email: authData[userType].email,
-      username: authData[userType].username,
-    };
-    const validationResult = new UserValidator(updateUser, 'password', 'email').validate();
-    if (validationResult.valid) {
-      userService.updateUser(updateUser, (response) => {
-        resp.status(response.statusCode)
-          .json(response.respObj);
-      });
-    } else {
-      resp.status(400).json(UserValidator.handleBadData(validationResult));
-    }
+    authenticator.verifyToken(token, (authData) => {
+      const userType = authData.client ? 'client' : 'engineer';
+      const updateUser = {
+        userType,
+        password: authData[userType].password,
+        email: authData[userType].email,
+        username: authData[userType].username,
+      };
+      const validationResult = new UserValidator(updateUser, 'password', 'email').validate();
+      if (validationResult.valid) {
+        userService.updateUser(updateUser, () => {
+          resp.status(200).redirect('https://chidiebere-maintenance-react.herokuapp.com/login');
+        });
+      } else {
+        resp.status(400).json(UserValidator.handleBadData(validationResult));
+      }
+    });
   }
 }
 

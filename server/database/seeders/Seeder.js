@@ -30,10 +30,10 @@ export default class Seeder {
    * This adds the defualt engineer into the database
    */
   static seedEngineer() {
-    const passwordHash = PasswordHasher.hash('super123456');
+    const passwordHash = PasswordHasher.hash(process.env.ENGINEER_PASSWORD || 'super123456');
     DatabaseManager.executeStream(`
       INSERT INTO "Engineers"(username, password, email, accessType)
-        SELECT 'superEngineer', $1, 'super@email.com', 'super'
+        SELECT $1, $2,$3 , 'super'
           WHERE 0 =
             (
               SELECT COUNT(*) FROM "Engineers"
@@ -42,6 +42,10 @@ export default class Seeder {
     }, (err) => {
       console.log(err);
       console.log('Error while seeding the engineer table');
-    }, [passwordHash]);
+    }, [
+      process.env.ENGINEER_USERNAME || 'superEngineer',
+      passwordHash,
+      process.env.ENGINEER_EMAIL || 'super@email.com',
+    ]);
   }
 }

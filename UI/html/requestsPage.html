@@ -5,22 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Request Page</title>
-    <script src ="../js/shared-functions.js">
-    </script>
-    <script src ="../js/consumeRequests.js">
-    </script>
-    <script src ="../js/requestPage.js">
-    </script>
+    
   
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/requestPage.css">
 </head>
 <body>
-    
-
         <div class="top-nav">
                 <div>
-                    <a href="createRequest.html">Create Request</a>
+                    <a href="create.html">Create Request</a>
                 </div>
                 <div class="selected">
                         <a href="#">View All Requests</a>
@@ -50,7 +43,7 @@
                         <div>
                                 <h3 data-name="title">Broken Shaft in Bathroom</h3> 
                             <div class = "filter-group" >
-                                    <img src="../images/background.jpg" alt="iit"> 
+                                    <img data-name="image" src="../images/background.jpg" alt="iit"> 
                                      
                             </div>
                                
@@ -103,8 +96,18 @@
                             
                     
                         </select>  
-                        <span>Search By: </span> 
-                        <input id="search-input" onkeyup="filterRequests(event)"  type="search" placeholder="Search">
+                       
+                       <select id="since-option" onchange="filterRequests(event, 'date')" name="filter" id="filter" value ="all">
+                            
+                            <option value="today">Today</option>
+                            <option value="7">Past Week</option>
+                            <option value="21">Past 3 Weeks</option>
+                            <option value="30">Past Month </option>
+                            <option value="90">Past 3 months </option>
+                            <option value="all">All</option>
+                        </select> 
+                        <span><input id="search-input" onkeyup="filterRequests(event)"  type="search" placeholder="Search">
+                        </span>  
                 </div>
                    
                     
@@ -114,5 +117,16 @@
             
         </div>
     </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src ="../js/shared-functions.js"></script>
+    <script src ="../js/consumeRequests.js"></script>
+    <script>
+    let requestList;
+    let statusDiv;
+    window.addEventListener('load', () => {
+        requestList = document.getElementById('requests-ul');
+        statusDiv = document.getElementById('status');
+        getRequest();
+      });</script>
 </body>
 </html>

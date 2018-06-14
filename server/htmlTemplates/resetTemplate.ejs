@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Request Template</title>
+    <style>
+       
+        li{
+            list-style-type: none;
+            margin: 0;
+           
+        }
+        ul{
+            margin: 0;
+            padding:0;
+        }
+
+        strong{
+            text-align: center;
+            display: block;
+        }
+        li strong{
+            display: inline;
+        }
+        li{
+            padding:8px;
+        }
+      
+    </style>
+</head>
+<body style = "
+        width:70%; 
+        margin-left: 15%; 
+        color:black;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.5em;
+        padding:10px;">
+    <h1 style ="text-align: center; ">  RESET PASSWORD</h1>
+    <div>
+        <script>
+            function handleSubmit(event){
+                event.target.innerHtml = '<strong>Password Reset Successful</strong>'
+            }    
+        </script>
+            
+            <p style=" text-align: center;padding:4px;">
+               You recently sent a request to reset your password. 
+            </p>
+            <form action=<%= anchor %> method="POST" onsubmit= "handleSubmit(event)">
+                   To reset password <button type ="submit">Click Here</button>
+            </form>
+            <p>
+               <strong>If you did not send this request, please ignore this mail</strong>
+            </p>
+    </div>
+    
+    
+
+</body>
+</html>

@@ -5,34 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title> Sign In</title>
-    <script src= "../js/shared-functions.js">
-    </script>
-    <script src= "../js/signinNavigations.js">
-    </script>
+   
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/signup-signin.css">
 </head>
 <body  onclick="handleClick(event)">
-                
+                <div id = "status" class ="status-hide">
+                                Login successful
+                </div>  
                 <main>
                
                 <div class ="reset-group" hidden>
-                        <div name = "status" class ="status-hide">
-                                Login successful
-                        </div>  
-                        <div class = "box" > 
-                                <h1>RECOVER ACCOUNT</h1>
-                        </div>
-                        <div class ="box">
-                                <input name ="email" type="email" placeholder="Email Address">
-                        </div>
-                        <div class ="box">
-                                <button id='reset-password' class = "primary-btn" type= 'submit'>Reset Password </button>
-                        </div>
-                        <ul class="links">
-                                <li>  Already have an account?  <a href="?action=signin">Login</a></li>
-                                <li class ="signup-link-li">   Create account<a href="?action=signup"> Here </a></li>
-                        </ul>
+                        <form action="" id= 'reset' onsubmit="handleSubmit(event)">
+                               
+                                <div class = "box" > 
+                                        <h1>RESET</h1>
+                                </div>
+                                <div class ="box">
+                                        <input name ="email" type="email" placeholder="Email Address">
+                                </div>
+                                <div class ="box">
+                                        <input name ="password" type="password" placeholder="New Password">
+                                </div>
+                               
+                                <div class ="box">
+                                        <button id='reset-password' class = "primary-btn" type= 'submit'>Reset Password </button>
+                                </div>
+                                <ul class="links">
+                                        <li>  Already have an account?  <a href="?action=signin">Login</a></li>
+                                        <li class ="signup-link-li">   Create account<a href="?action=signup"> Here </a></li>
+                                </ul>
+                        </form>
+                       
 
                 </div>     
                          
@@ -102,6 +106,7 @@
                 </main>
 
        
-
+                <script src= "../js/shared-functions.js"></script>
+                <script src= "../js/signinNavigations.js"></script>
 </body>
 </html>

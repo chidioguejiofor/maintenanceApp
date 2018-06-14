@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Request Template</title>
+   
+    <style>
+       
+        li{
+            list-style-type: none;
+            margin: 0;
+           
+        }
+        ul{
+            margin: 0;
+            padding:0;
+        }
+
+        strong{
+            text-align: center;
+            display: block;
+        }
+        li strong{
+            display: inline;
+        }
+        li{
+            padding:8px;
+        }
+      
+    </style>
+</head>
+<body style = "
+        width:70%; 
+        margin-left: 15%; 
+        color:black;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.5em;
+        padding:10px;">
+    <h1 style ="text-align: center; ">SIGNUP CONFIRMATION</h1>
+    <div>
+           
+            <p style=" text-align: center;padding:4px;">
+                A request was made to join our maintenance site https://chidiebere-maintenance-react.herokuapp.com/login
+                Please confirm this by clicking on the link below
+                
+            </p>
+           <p>
+                <form action=<%= anchor %> method= "POST" onsubmit = "handleSubmit(event)">
+                        To confirm your mail  
+                        <button type ="submit">Click Here</button>
+                </form>
+           </p>
+            <p>
+                <strong>If you did not send this request, please ignore this mail</strong>
+            </p>
+    </div>
+    
+    
+
+</body>
+</html>

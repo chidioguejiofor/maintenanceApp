@@ -1,120 +1,62 @@
-const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/chidioguejiofor/image/upload';
-const CLOUDINARY_PRESET = 'wnqidleo';
-const DEFAULT_IMAGE = 'http://no_image.png';
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/maintenance-site/image/upload';
+const CLOUDINARY_PRESET = 'vhlxwjgx';
+
+const DEFAULT_IMAGE = '../images/no-image.png';
 let statusDiv;
 window.addEventListener('load', (event) => {
   if (!localStorage.getItem('loginToken')) {
-    location.href = 'signinSignup.html?action=login';
+    window.location.href = 'signinSignup.html?action=login';
   }
   statusDiv = document.getElementById('status');
 });
 
-function createRequest(event) {
-  event.stopPropagation();
-  event.preventDefault();
+function uploadFile(callback) {
   const form = document.getElementById('request-form');
   const data = getDataFromForm(form);
-  const reader = new FileReader();
   const file = document.querySelector('input[type=file]');
-  console.log(file.files[0]);
-  // const formData = new FormData();
-  // formData.append('file', file.files[0]);
-  // formData.append('upload_preset', CLOUDINARY_PRESET);
-  // fetch(CLOUDINARY_URL, {
-  //     headers:{
-  //         'Content-Type': 'x-www-form-urlencoded',
-  //     },
-  //     method: 'POST',
-  //     body:formData,
-  //     data: formData,
-  //     mode: 'cors',
-  // })
-  // .then((res)=> {
-  //     return res.json();
-  // })
-  // .then(data => {
-  //     console.log(data);
-  // });
-
+  const formData = new FormData();
+  if (!file.files[0]) {
+    statusDiv.className = 'status-div failedStatus';
+    statusDiv.innerText = 'You must select an image';
+    setTimeout(() => {
+      statusDiv.className = 'status-hide';
+    }, 4000);
+    return;
+  }
+  formData.append('file', file.files[0]);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
   data.image = DEFAULT_IMAGE;
-  const options = {
+  statusDiv.className = 'status-div okayStatus';
+  statusDiv.innerText = 'Uploading Image...';
+  axios({
+    url: CLOUDINARY_URL,
     method: 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Accept: '*/*',
-      'x-access-token': localStorage.getItem('loginToken'),
-    }),
-    mode: 'cors',
-    body: JSON.stringify(data),
-  };
-
-  console.dir(options.body);
-  consumeAPI('/users/requests', options, (response) => {
-    handleCreateSuccess(response);
-  }, (error) => {
-    handleError(error, statusDiv);
+    data: formData,
+    headers: {
+      'Content-Type': 'x-www-form-urlencoded',
+    },
+  }).then((res) => {
+    data.image = res.data.secure_url;
+    statusDiv.className = 'status-hide';
+    callback(data);
+  }).catch(() => {
+    data.image = DEFAULT_IMAGE;
+    callback(data);
   });
 }
 
 
-function updateRequest(event) {
-  event.stopPropagation();
-  event.preventDefault();
-  const form = document.getElementById('request-form');
-  const data = getDataFromForm(form);
-  const reader = new FileReader();
-  const file = document.querySelector('input[type=file]');
-  console.log(file.files[0]);
-  // const formData = new FormData();
-  // formData.append('file', file.files[0]);
-  // formData.append('upload_preset', CLOUDINARY_PRESET);
-  // fetch(CLOUDINARY_URL, {
-  //     headers:{
-  //         'Content-Type': 'x-www-form-urlencoded',
-  //     },
-  //     method: 'POST',
-  //     body:formData,
-  //     data: formData,
-  //     mode: 'cors',
-  // })
-  // .then((res)=> {
-  //     return res.json();
-  // })
-  // .then(data => {
-  //     console.log(data);
-  // });
-
-  data.image = DEFAULT_IMAGE;
-  const options = {
-    method: 'PUT',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Accept: '*/*',
-      'x-access-token': localStorage.getItem('loginToken'),
-    }),
-    mode: 'cors',
-    body: JSON.stringify(data),
-  };
-  const id = getParameterByName('id');
-  console.dir(options.body);
-  consumeAPI(`/users/requests/${id}`, options, (response) => {
-    handleCreateSuccess(response);
-  }, (error) => {
-    handleError(error, statusDiv);
-  });
-}
 function handleCreateSuccess(response) {
-  const className = statusDiv.className;
   if (response.success) {
     statusDiv.className = 'status-div okayStatus';
 
     statusDiv.innerText = 'Successfully created the new request';
     setTimeout(() => {
       statusDiv.className = 'status-hide';
-      location.href = 'requestsPage.html';
+      window.location.href = 'requestsPage.html';
     }, 3000);
   } else if (response.statusCode === 404) {
-    location.href = 'signinSignup.html?user=client';
+    window.location.href = 'signinSignup.html?user=client';
   } else if (response.statusCode === 400) {
     showStatusOnFailed(statusDiv, response);
   }
@@ -122,6 +64,53 @@ function handleCreateSuccess(response) {
 
 function resetClass(event) {
   if (!event.target.tagName.match(/button/i)) event.target.className = '';
+}
+function createRequest(event) {
+  event.stopPropagation();
+  event.preventDefault();
+  uploadFile((data) => {
+    const options = {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Accept: '*/*',
+        'x-access-token': localStorage.getItem('loginToken'),
+      }),
+      mode: 'cors',
+      body: JSON.stringify(data),
+    };
+
+    statusDiv.className = 'status-div okayStatus';
+    statusDiv.innerText = 'Creating Request...';
+    consumeAPI('/users/requests', options, (response) => {
+      handleCreateSuccess(response);
+    }, (error) => {
+      handleError(error, statusDiv);
+    });
+  });
+}
+
+function updateRequest(event) {
+  event.stopPropagation();
+  event.preventDefault();
+  uploadFile((data) => {
+    const options = {
+      method: 'PUT',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Accept: '*/*',
+        'x-access-token': localStorage.getItem('loginToken'),
+      }),
+      mode: 'cors',
+      body: JSON.stringify(data),
+    };
+    const id = getParameterByName('id');
+    consumeAPI(`/users/requests/${id}`, options, (response) => {
+      handleCreateSuccess(response);
+    }, (error) => {
+      handleError(error, statusDiv);
+    });
+  });
 }
 
 function hideHeader(event) {
@@ -145,6 +134,31 @@ function showHeader(event) {
     setTimeout(() => {
       header.style.opacity = 1;
     }, 2);
+  }
+}
+
+
+function handleItemClick(event, user) {
+  let link;
+  if (event.target.tagName.toLowerCase() === 'a') {
+    event.preventDefault();
+    const { dataset: { id } } = event.target;
+    if (user === 'engineer') link = `../html/manageRequest.html?id=${id}`;
+    else {
+      link = `../html/requestStatus.html?id=${id}`;
+    }
+
+    window.location.href = link;
+  }
+}
+
+function handleImageChange(event) {
+  const image = event.target.files[0];
+  const imgElem = document.querySelector('img');
+  if (image) {
+    imgElem.src = URL.createObjectURL(image);
+  } else {
+    imgElem.src = '../images/no-image.png';
   }
 }
 

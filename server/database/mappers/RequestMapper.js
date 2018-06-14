@@ -1,6 +1,6 @@
 import TableMapper from './TableMapper';
 
-const requestColumns = 'date , id, title, description, location, image, status, message';
+const requestColumns = 'date , id, title, description, location, image, status, message, clientusername AS "clientUsername"';
 /**
  * An ReqeustMapper makes inserting and updating rows in the "Reqeuests" table
  * easier and more convenient
@@ -11,7 +11,7 @@ export default class ReqeustMapper extends TableMapper {
       create: {
         sql:
                   `INSERT INTO "Requests"( title, description, location, image, clientusername)
-                      VALUES($1, $2, $3, $4, $5 ) RETURNING id, title, description, location, image, status, message;`,
+                      VALUES($1, $2, $3, $4, $5 ) RETURNING ${requestColumns};`,
         values: [
           newRequest.title, newRequest.description,
           newRequest.location, newRequest.image,

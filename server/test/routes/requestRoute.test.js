@@ -5,13 +5,14 @@ import supertest from 'supertest';
 import { expect } from 'chai';
 import app from '../../app';
 import initScript from '../../database/initScript';
+import Seeder from '../../database/seeders/Seeder';
 
 const request = supertest(app);
 
 const client = {
   username: 'client',
   password: 'password',
-  email: 'email@email.com',
+  email: 'chidimaintenance@gmail.com',
   userType: 'client',
 };
 const validObj = {
@@ -34,7 +35,8 @@ initScript();
 let clientToken = 'emptyToken';
 let engineerToken = '';
 before((done) => {
-  request.post('/api/v1/auth/signup')
+  Seeder.addClient(client);
+  request.post('/api/v1/auth/login')
     .send(client)
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/x-www-form-urlencoded')

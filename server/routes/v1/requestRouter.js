@@ -3,7 +3,7 @@ import RequestController from '../../controller/RequestController';
 import authenticator from '../../helpers/authenticator';
 
 const requestRouter = Router();
-requestRouter.use(authenticator.verifyToken);
+requestRouter.use(authenticator.verifyTokenMiddleware);
 
 requestRouter.post('/users/requests', RequestController.create);
 requestRouter.get('/users/requests', RequestController.getAllClientRequests);

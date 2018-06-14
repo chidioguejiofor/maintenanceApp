@@ -16,7 +16,11 @@ function getParameterByName(name, url) {
 }
 
 
-function consumeAPI(endPoint, requestOptions, callback, errorHandler) {
+function consumeAPI(endPoint, requestOptions, callback, errorHandler, validateToken = true, user = 'client') {
+  if (validateToken && !localStorage.getItem('loginToken')) {
+    window.location.href = `signinSignup.html?action=signin&user=${user}`;
+    return;
+  }
   const url = `${apiHost}/api/v1${endPoint}`;
   fetch(url, requestOptions)
     .then((res) => {
@@ -67,7 +71,6 @@ function capitalise(str) {
 
 
 function handleError(error, statusDiv) {
-  console.log(error);
   statusDiv.className = 'status-div failedStatus';
   statusDiv.innerText = 'Failed to send request please check your connection';
   setTimeout(() => {
@@ -112,8 +115,6 @@ function showStatusOnFailed(statusContainer, response) {
     });
   }
 
-
-  console.dir(badList);
   statusDiv.className = 'status-div failedStatus';
   const firstList = document.createElement('li');
 
@@ -129,7 +130,7 @@ function showStatusOnFailed(statusContainer, response) {
 
 
 function updateModalHelper(response, buttonsExists = false) {
-  const displays = Array.from(document.body.querySelectorAll('*[data-name]'));
+  const displays = document.body.querySelectorAll('*[data-name]');
   let hideControls;
   let showControls;
   displays.forEach((newDisplay) => {
@@ -146,6 +147,8 @@ function updateModalHelper(response, buttonsExists = false) {
     } else if (property === 'status') {
       display.innerHTML =
             `<a class = "${value}">${value}</a>`;
+    } else if (display.dataset.name === 'image') {
+      display.src = response.data.image;
     } else {
       display.textContent =
       `${value}`;

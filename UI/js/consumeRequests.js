@@ -2,12 +2,11 @@
 
 let requests = {};
 const user = window.location.href.includes('engineer') ? 'engineer' : 'client';
-let requestList = {};
-let statusDiv;
+
 function addRequestToList(request) {
   const { id } = request;
 
-  const updateLink = `updateRequest.html?id=${id}`;
+  const updateLink = `update.html?id=${id}`;
 
   const li = document.createElement('li');
   if (user === 'client') {
@@ -37,12 +36,19 @@ function addRequestToList(request) {
 }
 
 
-function handleFetchSuccess(response, regex) {
+function handleFetchSuccess(response, regex, status) {
   if (response.statusCode === 200) {
     requests = response.data;
     let arr = requests;
     if (regex) {
-      arr = requests.filter(request => regex.test(request.title));
+      arr = requests.filter((request) => {
+        console.log(status);
+        if (status) {
+          return regex.test(request.title) &&
+          status === request.status;
+        }
+        return regex.test(request.title);
+      });
     }
 
     if (arr.length === 0) {
@@ -56,14 +62,18 @@ function handleFetchSuccess(response, regex) {
       addRequestToList(request);
     });
   } else if (response.statusCode === 204 && user === 'client') {
-    window.location.href = '../html/createRequest.html';
+    window.location.href = '../html/create.html';
   }
 }
 
 function handleFailed(response) {
-  console.log(response);
+  statusDiv.className = 'status-div failedStatus';
+  statusDiv.innerText = response.message;
+  setTimeout(() => {
+    statusDiv.className = 'status-hide';
+  }, 7000);
 }
-function getAllRequests(regex, date = new Date()) {
+function getRequest(regex = new RegExp('', 'i'), date = new Date(), status) {
   const options = {
     method: 'GET',
     headers: new Headers({
@@ -74,42 +84,52 @@ function getAllRequests(regex, date = new Date()) {
   };
   let endPoint = `/users/requests/date/${date.toDateString()}`;
   if (user === 'engineer') endPoint = `/requests/date/${date.toDateString()}`;
+
+  statusDiv.textContent = 'Retrieving Requests...';
+  statusDiv.className = 'status-div okayStatus';
   consumeAPI(endPoint, options, (response) => {
     if (response.success) {
-      handleFetchSuccess(response, regex);
+      handleFetchSuccess(response, regex, status);
+      statusDiv.className = 'status-hide';
     } else {
       handleFailed(response);
     }
-  }, error => handleError(error, statusDiv));
+  }, error => handleError(error, statusDiv), true, user);
 }
 
-
-function filterRequests(event) {
-  const status = document.getElementById('status-option').value;
-  const requestList = document.getElementById('requests-ul');
+function filterRequests(event, filterBy) {
+  let status = document.getElementById('status-option').value;
   const searchValue = document.getElementById('search-input').value;
+  const sinceValue = document.getElementById('since-option').value;
   const regex = new RegExp(searchValue, 'i');
-  regex.ignoreCase = true;
-  regex.ignoreCase = true;
+  const searchDate = new Date();
+  searchDate.setDate(searchDate.getDate() - (+sinceValue));
   requestList.innerHTML = '';
-  if (status === 'all') {
-    getAllRequests(regex);
-    return;
-  }
-
-  const filteredRequests =
-          requests.filter(request =>
-            request.status === status && regex.test(request.title));
-
-  if (filteredRequests.length > 0) {
-    filteredRequests.forEach((request) => {
-      addRequestToList(request);
-    });
+  if (status === 'all') status = undefined;
+  if (filterBy === 'date') {
+    getRequest(regex, searchDate, status);
   } else {
-    const li = document.createElement('li');
-    li.innerHTML = 'No available requests';
-    li.style.textAlign = 'center';
-    requestList.appendChild(li);
+    let arr = requests;
+    if (status) {
+      arr = requests.filter(request =>
+        request.status === status &&
+        regex.test(request.title));
+    } else {
+      arr = requests.filter(request =>
+        regex.test(request.title));
+    }
+
+
+    if (arr.length === 0) {
+      const li = document.createElement('li');
+      li.innerHTML = 'No available requests';
+      li.style.textAlign = 'center';
+      requestList.appendChild(li);
+    } else {
+      arr.forEach((request) => {
+        addRequestToList(request);
+      });
+    }
   }
 }
 
@@ -134,7 +154,7 @@ function getById(id) {
     if (response.statusCode === 200) {
       updateModalHelper(response, updateButtons);
     }
-  }, error => handleError(error, statusDiv));
+  }, error => handleError(error, statusDiv), true, user);
 }
 
 function showRequest(event, id) {
@@ -148,7 +168,7 @@ function handleControlsClick(event) {
   const { dataset: { id } } = event.currentTarget;
   const button = event.target;
   if (button.name.match(/resolve|disapprove/i)) {
-    window.location.href = `manageRequest.html?id=${id}&action=${button.name}`;
+    window.location.href = `manage.html?id=${id}&action=${button.name}`;
   } else {
     const status = button.name;
     updateStatus(id, status);
@@ -166,12 +186,6 @@ function showStats(event) {
   };
   consumeAPI('/requests/stats', options, (response) => {
     updateModalHelper(response);
-  });
+  }, error => handleError(error, statusDiv), true, 'engineer');
   showModal(event, 'stats-modal');
 }
-// event listeners
-window.addEventListener('load', () => {
-  requestList = document.getElementById('requests-ul');
-  getAllRequests();
-  statusDiv = document.getElementById('status');
-});

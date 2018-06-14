@@ -46,6 +46,7 @@ body{
     display: flex;
 }
 
+
 .box{
     
     margin-bottom: 10px;
@@ -88,11 +89,11 @@ ul{
 }
 input{
     height: 200%;
-    width: 120%;
-    margin-left: -10%;
+    width: 100%;
     flex-basis: 100%;
-    font-size: 1.4em;
+    font-size: 1.3em;
     padding: 10px;
+    padding-right: 5%;
     border-radius: 7px;
     font-family:  Georgia, 'Times New Roman', Times, serif;
 }

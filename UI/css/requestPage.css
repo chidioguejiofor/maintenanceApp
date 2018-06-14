@@ -1,7 +1,7 @@
 .main{
     display: flex;
     padding: 3px;
-    height: 90%;
+    min-height: 50%;
   
     flex-flow: row;
     margin-top: 3%;
@@ -92,7 +92,7 @@ h3{
     margin-left: 3px;
     text-align-last: center;
     height: 100%;
-    width: 10%;
+   
     font-size:18px;
     
 }
@@ -113,7 +113,6 @@ input::-webkit-calendar-picker-indicator{
     width: auto;
 }
 .filter-group input[type=search]{
-    width: 20%;
     text-align: left;
     background-image: url(../images/lens.svg) ;
     background-position: 4px center;

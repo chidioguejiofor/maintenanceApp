@@ -25,18 +25,18 @@ class Authenticator {
   /**
    * This middleware function checks if a token exists. If it does it decodes it
    * and adds the decoded object to the req object via authData property and calls the
-   * next function. 
+   * next function.
    * If the verification fails it returns a 403 "Forbidden" status to the user
    * and appropriate error messsage
    * @param {object} req a request object
    * @param {object} resp the response object
-   * @param {function} next called when the verification passes 
+   * @param {function} next called when the verification passes
    */
-  static verifyToken(req, resp, next) {
+  static verifyTokenMiddleware(req, resp, next) {
     const token = req.headers['x-access-token'];
     if (token) {
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
+      Authenticator.verifyToken(token, (decoded) => {
+        if (!decoded) {
           resp.status(401).json({
             success: false,
             message: 'The token you provided was invalid',
@@ -52,6 +52,22 @@ class Authenticator {
         message: 'Authorization token was not included in your request. Put this in the header parameter x-access-token',
       });
     }
+  }
+
+  /**
+   * This function verifies a token and calls the callback with the decoded value or undefined
+   * if an error occured
+   * @param {object} token
+   * @param {*} callback
+   */
+  static verifyToken(token, callback) {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        callback();
+      } else {
+        callback(decoded);
+      }
+    });
   }
 }
 
