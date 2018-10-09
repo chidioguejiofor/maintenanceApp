@@ -1,0 +1,16 @@
+engines:
+  eslint:
+    enabled: true
+    checks:
+      import/extensions:
+        enabled: false
+
+ratings:
+  paths:
+  - server/**
+
+exclude_paths: 
+  - "node_modules/"
+  - "UI/"
+  - server/test/
+

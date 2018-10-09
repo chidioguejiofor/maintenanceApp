@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Requests</title>
+   
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/requestPage.css">
+</head>
+<body class ="engineer">
+    
+
+    <div class="top-nav">
+        <div>
+            <a href="engineerStats.html" onclick =showStats(event)>Statistics</a>
+        </div>
+        <div class="selected">
+                <a href="#">View All Requests</a>
+            </div>
+            <div>
+                    <a href="index.html?signout=true">Sign Out</a>
+            </div>
+    </div>
+
+    <div id ="status"  class ="status-hide">
+        The request was created successfully 
+        <ul>
+            
+        </ul>   
+    </div>   
+    <div class = "main">
+        <div class ="requests box-11">
+                <div>
+                    <h3>List of all Requests</h3>
+                    <div class = "filter-group" >
+                        <span><select id="status-option" onchange="filterRequests(event)" name="filter" id="filter" value ="all">
+                                <option value="all">All</option>
+                                <option value="approved">Approved</option>
+                                <option value="disapproved">Disapproved</option>
+                                <option value="resolved">Accepted</option>
+                                <option value="pending">Not Responded</option>
+                                
+                    
+                        </select>  
+                        </span>
+                        <select id="since-option" onchange="filterRequests(event, 'date')" name="filter" id="filter" value ="all">
+                            
+                            <option value="today">Today</option>
+                            <option value="7">Past Week</option>
+                            <option value="21">Past 3 Weeks</option>
+                            <option value="30">Past Month </option>
+                            <option value="90">Past 3 months </option>
+                            <option value="all">All</option>
+                        </select> 
+                        <span><input id="search-input" onkeyup="filterRequests(event)"  type="search" placeholder="Search">
+                        </span> 
+                        
+                    </div>
+                        
+                        
+                        <ul id= "requests-ul" class="brief-requests">
+                        </ul>
+                </div>
+        
+        </div>
+    </div>
+    <div id="stats-modal" class= "modal" >
+            <div class = "statistics modal-content" >
+                    <span onclick ="closeModal(event, 'stats-modal')" class="close">&times;</span>
+                <div class ="main">
+            
+        
+                        <div class="requests">
+                            <div>
+                                <h1>REQUEST STATISTICS</h1>
+                                <ul class= "brief-requests">
+                                    <li> Total Requests Received:  <span data-name="totalRequests">18</span></li>
+                                    <li >Total Request responded to: <span data-name="responded">10</span></li>
+                                    <li >Pending requests: <span data-name="notResponded">4</span></li>
+                                    <li>Requests Rejected: <span data-name="disapproved">2</span></li>
+                                    <li>Requests Approved: <span data-name="approved">2</span></li>
+                                </ul>
+                            </div>
+                                
+                        </div>
+                        
+                        
+                    </div>
+            </div>
+        </div>
+
+
+     
+    <div id="modal" class="modal" >
+
+            <div class="modal-content">
+                <span onclick ="closeModal(event)" class="close">&times;</span>
+        
+            <div class = "manage-request main">
+                    <div class ="requests box-7">
+                        <div>
+                                <h3 data-name="title">Broken Shaft in Bathroom</h3> 
+                                <div class = "filter-group" >
+                                        <img src="../images/background.jpg" alt="iit"> 
+                                         
+                                </div>
+                                   
+                                    
+                                    <ul class="brief-requests">
+                                            <li>
+                                                <strong>Date: </strong><em  data-name ="date"></em>
+                                            </li>
+                                           
+                                            <li > 
+
+                                                <strong> Description: </strong><em data-name ="description"></em>
+                                            </li>   
+                                            <li >
+                                                <strong >Status:</strong> <em data-name ="status"></em>
+                                            </li> 
+                                            
+                                            <li>
+                                                    <strong> Location: </strong><em data-name ="location"></em>
+                                            </li>
+                                            <li>
+                                                    <strong> Message: </strong><em data-name ="message"></em>
+                                            </li>
+
+                                            <li class = "controls"  onclick= "handleControlsClick(event)" >
+                                                <span id = "notRespondedControls" hidden>
+                                                        <button  name="approve" class="okay primary-btn">Start</button>
+                                                        <button  name="disapprove" class="primary-btn danger">Reject</button>    
+                                                </span>
+                                                <span id = "respondedControls">
+                                                        <button  name="resolve" class="okay primary-btn" >Finish</button>
+                                                        <button  name="pending" class="danger primary-btn" >Cancel</button>    
+                                                </span>
+                                                     
+                                                    
+                                            </li>
+                                    </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        
+        </div>
+        <script src ="../js/shared-functions.js"></script>
+        <script src ="../js/consumeRequests.js"></script>
+        <script src ="../js/requestPage.js"></script>
+        <script> 
+            let requestList;
+            let statusDiv;
+            window.addEventListener('load', () => {
+                requestList = document.getElementById('requests-ul');
+                statusDiv = document.getElementById('status');
+                getRequest();
+              });</script>
+</body>
+</html>

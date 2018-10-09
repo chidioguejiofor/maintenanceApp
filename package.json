@@ -1,0 +1,66 @@
+{
+  "name": "maintenanceapp",
+  "version": "1.0.0",
+  "description": "This API functionality that make it easy for a user to remotely send a maintenanec request to an admin",
+  "main": "server/app.js",
+  "scripts": {
+    "start-dev": "nodemon --exec npm start",
+    "start": "babel-node server/app.js --exec babel-node   ",
+    "start-static": "babel-node staticServer.js   ",
+    "start-file": "babel-node  ",
+    "test": "nyc mocha  --reporter progress --reporter progress --require babel-core/register -t 100000  \"server/test/**/**.test.js\" --exit || true",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "build": "babel ./server/ -d build --copy-files -s",
+    "drop-tables": "npm run start-file server/database/dropScript.js",
+    "temp": "babel-node minimist.js -production true",
+    "start-test": " babel-node  server/database/initTestConfig.js && npm run start",
+    "start-prod": " babel-node  server/database/initProduction.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chidioguejiofor/maintenanceApp.git"
+  },
+  "author": "Oguejiofor Chidiebere",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chidioguejiofor/maintenanceApp/issues"
+  },
+  "homepage": "https://github.com/chidioguejiofor/maintenanceApp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "hasha": "^3.0.0",
+    "jsonwebtoken": "^8.2.1",
+    "nodemailer": "^4.6.6",
+    "npm-run-all": "^4.1.3",
+    "pg": "^7.4.3",
+    "sha512": "0.0.1",
+    "supertest": "^3.0.0",
+    "uuid": "^3.2.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.8.2",
+    "gem": "^2.4.3",
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.4",
+    "nyc": "^11.7.1",
+    "travis": "^0.1.1"
+  }
+}

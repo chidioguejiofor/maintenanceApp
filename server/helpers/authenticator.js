@@ -1,0 +1,75 @@
+import jwt from 'jsonwebtoken';
+
+const secretKey = process.env.SECRET_KEY || 'secretKey';
+
+/**
+ * An authenticator contains static functions for creating and managing
+ * token based authentification implemented in the app.
+ */
+class Authenticator {
+  /**
+   * This creates a token using a payload and calls the result on the callback
+   * @param {object} payload an object that contains information to be tokenized
+   * @param {string} expires a string containing the expiry date of the token
+   * @param {function callback(err, token) {
+     called with an error object and token. The callback should handle both
+     error and token.
+   }}
+   */
+  static createToken(payload, expires, callback) {
+    jwt.sign(payload, secretKey, { expiresIn: expires }, (err, token) => {
+      callback(err, token);
+    });
+  }
+
+  /**
+   * This middleware function checks if a token exists. If it does it decodes it
+   * and adds the decoded object to the req object via authData property and calls the
+   * next function.
+   * If the verification fails it returns a 403 "Forbidden" status to the user
+   * and appropriate error messsage
+   * @param {object} req a request object
+   * @param {object} resp the response object
+   * @param {function} next called when the verification passes
+   */
+  static verifyTokenMiddleware(req, resp, next) {
+    const token = req.headers['x-access-token'];
+    if (token) {
+      Authenticator.verifyToken(token, (decoded) => {
+        if (!decoded) {
+          resp.status(401).json({
+            success: false,
+            message: 'The token you provided was invalid',
+          });
+        } else {
+          req.authData = decoded;
+          next();
+        }
+      });
+    } else {
+      resp.status(401).json({
+        success: false,
+        message: 'Authorization token was not included in your request. Put this in the header parameter x-access-token',
+      });
+    }
+  }
+
+  /**
+   * This function verifies a token and calls the callback with the decoded value or undefined
+   * if an error occured
+   * @param {object} token
+   * @param {*} callback
+   */
+  static verifyToken(token, callback) {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        callback();
+      } else {
+        callback(decoded);
+      }
+    });
+  }
+}
+
+
+export default Authenticator;

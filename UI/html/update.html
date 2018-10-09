@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Request Page</title>
+    
+     <script>
+        window.addEventListener('load', (event)=> {
+            const id = getParameterByName('id');
+            getById(id);
+        });</script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/requestPage.css">
+</head>
+<body>
+                
+
+
+        <div class="top-nav">
+                <div class="selected">
+                    <a href="#">Create Request</a>
+                </div>
+                <div >
+                        <a href="requestsPage.html">View All Requests</a>
+                    </div>
+                    <div>
+                            <a href="index.html?signout=true">Sign Out</a>
+                    </div>
+                    
+        
+            </div>
+            <div id ="status" class ="status-hide">
+                    The request was updated successfully 
+                    <ul>
+                        
+                    </ul>   
+            </div>
+           
+    <div class = "main">
+        <div class =" box-11">   
+            <div>
+                <form action="#" id = "request-form" onsubmit="updateRequest(event)">
+                        <input id ="image-file" type="file" onchange =" handleImageChange(event)" 
+                            name = "image" hidden>
+                           
+                            <div class = "box" > 
+                                <h1 id = "header">UPDATE  REQUEST</h1>
+                            </div>
+                            <div onkeydown="resetClass(event)">
+                                <ul class= "create-fields"  onfocusout = "hideHeader(event)"   onfocusin ="showHeader(event)" >
+                                    <li></li>
+                                        <li><label for="image-file"><img src="../images/no-image.png" alt="">
+                                            <div>Click to Add image</div>
+                                        </label></li>
+                                    <li>
+                                        <h4>Title</h4>
+                                        <input data-name = "title" name ="title" type="text" placeholder="Title">
+                                    </li>
+                                    <li>
+                                            <h4>Location</h4>
+                                        <input  data-name = "location"  name= "location" type="text" placeholder="Location">
+                                    </li>
+                                    
+                                    <li><h4>Description</h4>
+                                        <textarea data-name = "description" name="description" id="" cols="30" rows="10" placeholder="Description"></textarea></li>
+                                    <li>
+                                        
+                                        <button type ="submit" class ="primary-btn">Update</button>
+                                    </li>
+                                    
+                                </ul>
+                                
+                            </div>
+                                   
+                                   
+                                  
+                            </div>     
+                           
+                </form>
+               
+            
+            </div>
+            
+            
+        </div>
+        
+    </div>
+    
+   
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src ="../js/shared-functions.js"></script>
+    <script src ="../js/createRequests.js"></script>
+    <script src="../js/consumeRequests.js"></script>
+</body>
+</html>

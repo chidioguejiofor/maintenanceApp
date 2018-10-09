@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Maintenance Site</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        window.addEventListener('load', (event)=> {
+            if(location.href.includes('signout=true')){
+                localStorage.removeItem('loginToken');
+            }
+        });</script>
+</head>
+
+
+<body class ="engineer welcome-page">
+    <main>
+            <div class= "main-flex">
+                    <div class = "centered-box">
+                            <h1>Time to repair the roof is when the sun is shinning </h1>
+                            <h3> <em>- "John Kennedy"</em></h3>
+                            <h3>Register now and let us maintain your home or offices</h3>
+                           
+                    </div>
+                  
+                    <div class="container" >
+                        <a class = "box-1 secondary-btn" href="signinSignup.html?action=signup">Register  Now</a>
+                        <a class = "box-1 primary-btn" href="signinSignup.html?action=signin">User Login</a>
+                        <a class = "box-1 primary-btn" href="signinSignup.html?action=signin&user=engineer">Engineer Login</a>
+                    </div>
+                    
+            
+                  
+                </div>
+    </main>
+   
+</body>
+</html>
